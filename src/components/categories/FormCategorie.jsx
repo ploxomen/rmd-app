@@ -14,8 +14,9 @@ function FormCategorie({statusModal,handleSave,closeModal,categorieEdit,subCateg
     const [form,setForm] = useState(dataForm);
     const [subCategories,setSubCategories] = useState([]);
     const headers = getCookie();
+    const edit = Object.keys(categorieEdit).length;
     useEffect(()=>{
-        setForm(Object.keys(categorieEdit).length ? categorieEdit : dataForm);
+        setForm(edit ? categorieEdit : dataForm);
     },[categorieEdit]);
     useEffect(()=>{
         setSubCategories(subCategoriesEdit ? subCategoriesEdit : []);
@@ -72,7 +73,7 @@ function FormCategorie({statusModal,handleSave,closeModal,categorieEdit,subCateg
         formCategorie.click();
     }
     return (
-        <Modal status={statusModal} title="Nueva categoría" onSave={hanbleSendModal} handleCloseModal={closeModal}>
+        <Modal status={statusModal} title={edit ? 'Editar categoría' : 'Nuevo categoría'} onSave={hanbleSendModal} handleCloseModal={closeModal}>
             <form  className='grid grid-cols-6 gap-x-3 gap-y-0' onSubmit={handleSubmit}>
                 <div className="col-span-full">
                     <SeccionForm title="Datos categoría"/>

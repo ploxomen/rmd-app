@@ -26,11 +26,12 @@ function FormCustomer({statusModal,contries,customerEdit,contactsEdit,pronvinces
     const [provinces,setProvinces] = useState([]);
     const [districts,setDistricts] = useState([]);
     const [contacts,setContacts] = useState([]);
+    const edit = Object.keys(customerEdit).length;
     const filterLengthDocuments = typeDocumentsData.find(typeDocument => typeDocument.id == form.customer_type_document)
     const digitDocuments = {min:filterLengthDocuments && filterLengthDocuments.id == 5 ? 1 : (filterLengthDocuments && filterLengthDocuments.document_length),max: filterLengthDocuments && filterLengthDocuments.document_length};
     const headers = getCookie();
     useEffect(()=>{
-        setForm(Object.keys(customerEdit).length ? customerEdit : dataForm);
+        setForm(edit ? customerEdit : dataForm);
     },[customerEdit]);
     const handleChangeForm = async (e) => {
         const key = e.target.name;
@@ -133,7 +134,7 @@ function FormCustomer({statusModal,contries,customerEdit,contactsEdit,pronvinces
         }
     }
   return (
-    <Modal status={statusModal} title="Nuevo cliente" onSave={hanbleSendModal} handleCloseModal={closeModal}>
+    <Modal status={statusModal} title={edit ? 'Editar cliente' : 'Nuevo cliente'} onSave={hanbleSendModal} handleCloseModal={closeModal}>
         <form  className='grid grid-cols-6 gap-x-3 gap-y-0' onSubmit={handleSubmit}>
             <div className="col-span-full">
                 <SeccionForm title="Datos personales"/>

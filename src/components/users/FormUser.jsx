@@ -25,11 +25,12 @@ function FormUser({rolesData,typeDocumentsData,saveUser,dataUser,dataUserRol,sta
     const [roles,setRoles] = useState([]);
     const filterLengthDocuments = typeDocumentsData.find(typeDocument => typeDocument.id == form.user_type_document)
     const digitDocuments = {min:filterLengthDocuments && filterLengthDocuments.id == 5 ? 1 : (filterLengthDocuments && filterLengthDocuments.document_length),max: filterLengthDocuments && filterLengthDocuments.document_length};
+    const edit = Object.keys(dataUser).length;
     useEffect(()=>{
         setRoles(dataUserRol ? dataUserRol : [])
     },[dataUserRol])
     useEffect(()=>{
-        setForm(Object.keys(dataUser).length ? dataUser : dataForm);
+        setForm(edit ? dataUser : dataForm);
     },[dataUser])
     const handleChangeForm = (e) => {
         setForm({
@@ -63,7 +64,7 @@ function FormUser({rolesData,typeDocumentsData,saveUser,dataUser,dataUserRol,sta
         formUser.click();
     }
   return (
-    <Modal title="Nuevo usuario" status={statusModal} onSave={handleSaveModal} handleCloseModal={closeModal}>
+    <Modal title={edit ? 'Editar usuario' : 'Nuevo usuario'} status={statusModal} onSave={handleSaveModal} handleCloseModal={closeModal}>
         <form className='grid grid-cols-6 gap-x-3 gap-y-0' onSubmit={handleSave}>
             <div className="col-span-full">
                 <SeccionForm title="Datos personales"/>
