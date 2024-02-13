@@ -9,14 +9,14 @@ const dataForm = {
     id:null,
     user_type_document: "",
     user_number_document:"",
-    user_name:"de",
-    user_last_name:"de",
+    user_name:"",
+    user_last_name:"",
     user_cell_phone:"",
     user_phone:"",
     user_birthdate:"",
     user_gender:"",
     user_address:"",
-    user_email:"de",
+    user_email:"",
     user_password:"sistema123",
 }
 function FormUser({rolesData,typeDocumentsData,saveUser,dataUser,dataUserRol,statusModal,closeModal}) {

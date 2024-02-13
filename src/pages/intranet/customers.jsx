@@ -82,7 +82,6 @@ function customers({dataModules,nameUser,dataRoles}) {
     }
     getData();
   },[dataChange])
-
   const handleSaveCustomer = async (form,contacts) =>{
     try {
         const resp = !form.id ? await apiAxios.post('/customer',{...form,contacts},{headers}) : await apiAxios.put('/customer/'+form.id,{...form,contacts},{headers});
@@ -92,15 +91,10 @@ function customers({dataModules,nameUser,dataRoles}) {
         if(resp.data.error){
             return alert(resp.data.message);
         }
-        if(form.id){
-          dispatch({type:TYPES_CUSTOMERS.UPDATE_CUSTOMER,payload:resp.data.data});
-        }else{
-          // dispatch({type:TYPES_CUSTOMERS.ADD_CUSTOMER,payload:resp.data.data});
-          setDataChange({
-            ...dataChange,
+        setDataChange({
+          ...dataChange,
             reload:!dataChange.reload
-          })
-        }
+        })
         alert(resp.data.message);
         closeModal();
     } catch (error) {

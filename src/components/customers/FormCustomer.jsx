@@ -46,8 +46,21 @@ function FormCustomer({statusModal,contries,customerEdit,contactsEdit,pronvinces
         }else if(value == '' && key == 'customer_departament'){
             setProvinces([]);
             setDistricts([]);
+            setForm(form => {
+                return {
+                    ...form,
+                    customer_district:"",
+                    customer_province:""
+                }
+            });
         }else if(value == '' && key == 'customer_province'){
             setDistricts([]);
+            setForm(form => {
+                return {
+                    ...form,
+                    customer_district:""
+                }
+            });
         }
         if(['customer_departament','customer_province'].indexOf(key) >= 0 && value != ''){
             try {

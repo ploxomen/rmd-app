@@ -150,7 +150,7 @@ function quotationNew({nameUser,dataModules,dataRoles}) {
                     <InputPrimary label="Fecha de emisión" type='date' inputRequired='required' name="quotation_date_issue" value={form.quotation_date_issue||''} onChange={handleChangeForm}/>
                 </div>
                 <div className="col-span-3">
-                    <SelectPrimary label="Tipo meneda" inputRequired='required' name="quotation_type_money" value={form.quotation_type_money||''} onChange={handleChangeForm}>
+                    <SelectPrimary label="Tipo moneda" inputRequired='required' name="quotation_type_money" value={form.quotation_type_money||''} onChange={handleChangeForm}>
                         <option value="PEN">Soles (S/)</option>
                         <option value="USD">Dolares ($)</option>
                     </SelectPrimary>
