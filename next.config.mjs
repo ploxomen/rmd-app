@@ -10,8 +10,8 @@ const nextConfig = {
             },
             {
                 protocol:'https',
-                hostname:'https://apirmd.herramientaswp.com',
-                pathname:'/storage/products/**'
+                hostname:'apirmd.herramientaswp.com',
+                pathname:'/storage/**'
             }
         ]
     }
