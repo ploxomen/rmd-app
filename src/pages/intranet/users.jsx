@@ -61,7 +61,7 @@ function Users({dataModules,nameUser,dataRoles}) {
             }
         }
         getRoles();
-    },[])    
+    },[])
     useEffect(()=>{
         const getData = async () => {
             try {
@@ -103,15 +103,10 @@ function Users({dataModules,nameUser,dataRoles}) {
             if(resp.data.error){
                 return alert(resp.data.message);
             }
-            if(form.id){
-                dispatch({type:TYPES_USER.UPDATE_USER,payload:resp.data.data});
-            }else{
-                // dispatch({type:TYPES_USER.ADD_USER,payload:resp.data.data});
-                setDataChange({
-                    ...dataChange,
-                    reload:!dataChange.reload
-                })
-            }
+            setDataChange({
+                ...dataChange,
+                reload:!dataChange.reload
+            })
             alert(resp.data.message);
             closeModal();
         } catch (error) {
@@ -215,7 +210,6 @@ function Users({dataModules,nameUser,dataRoles}) {
                         }
                         </SelectPrimary>
                     </div>
-
                 </div>
             </div>
             <div className='w-full p-6 bg-white rounded-md shadow overflow-x-auto'>

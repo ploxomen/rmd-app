@@ -143,10 +143,6 @@ function customers({dataModules,nameUser,dataRoles}) {
         if(resp.data.error){
             return alert(resp.data.message);
         }
-        // dispatch({
-        //     type:TYPES_CUSTOMERS.DELETE_CUSTOMER,
-        //     payload:idCustomer
-        // });
         setDataChange({
           ...dataChange,
           reload:!dataChange.reload
@@ -165,22 +161,24 @@ function customers({dataModules,nameUser,dataRoles}) {
     }, 500);
   }
   return (
-    <LoyoutIntranet title="Clientes" description="Administración de clientes" names={nameUser} modules={dataModules} roles={dataRoles}>
-        <BanerModule imageBanner={workSpace} title="Administración de clientes"/>
-        <div className='w-full p-6 bg-white rounded-md shadow overflow-x-auto'>
-            <div className="flex items-center justify-between gap-2 flex-wrap mb-2">
-              <div>
-                <ButtonPrimary text="Agregar" icon={<PlusCircleIcon className='w-5 h-5'/>} onClick={handleOpenModal}/>
+    <>
+      <LoyoutIntranet title="Clientes" description="Administración de clientes" names={nameUser} modules={dataModules} roles={dataRoles}>
+          <BanerModule imageBanner={workSpace} title="Administración de clientes"/>
+          <div className='w-full p-6 bg-white rounded-md shadow overflow-x-auto'>
+              <div className="flex items-center justify-between gap-2 flex-wrap mb-2">
+                <div>
+                  <ButtonPrimary text="Agregar" icon={<PlusCircleIcon className='w-5 h-5'/>} onClick={handleOpenModal}/>
+                </div>
+                <div style={{width:"300px"}}>
+                  <InputSearch placeholder='¿Que estas buscando?' onInput={searchCustomer}/>
+                </div>
               </div>
-              <div style={{width:"300px"}}>
-                <InputSearch placeholder='¿Que estas buscando?' onInput={searchCustomer}/>
-              </div>
-            </div>
-            <TableCustomer customers={state.customers} getCustomer={getCustomer} deleteCustomer={handleDeleteCustomer}/>
-            <PaginationTable currentPage={dataChange.current} quantityRow={pagination.quantityRowData} totalData={pagination.totalPages} handleChangePage={handleChangePage}/>
-        </div>
-        <FormCustomer closeModal={closeModal} contries={state.contries} typeDocumentsData={state.typeDocuments} statusModal={modal} customerEdit={state.customerEdit} contactsEdit={state.customerContactsEdit} pronvincesData={state.provinces} districtsData={state.districts} departamentsData={state.departaments} handleSaveCustomer={handleSaveCustomer}/>
-    </LoyoutIntranet>
+              <TableCustomer customers={state.customers} getCustomer={getCustomer} deleteCustomer={handleDeleteCustomer}/>
+              <PaginationTable currentPage={dataChange.current} quantityRow={pagination.quantityRowData} totalData={pagination.totalPages} handleChangePage={handleChangePage}/>
+          </div>
+      </LoyoutIntranet>
+      <FormCustomer closeModal={closeModal} contries={state.contries} typeDocumentsData={state.typeDocuments} statusModal={modal} customerEdit={state.customerEdit} contactsEdit={state.customerContactsEdit} pronvincesData={state.provinces} districtsData={state.districts} departamentsData={state.departaments} handleSaveCustomer={handleSaveCustomer}/>
+    </>
   )
 }
 

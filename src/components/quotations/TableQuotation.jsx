@@ -43,10 +43,10 @@ function TableQuotation({products,formatMoney,handleDetailChange,handleDeleteDet
             <td className="py-2 px-2 max-w-8 w-6"><InputDetailsSm value={dataTotal.discount||""} name="quotation_discount" type="number" min="0" step="0.01" onChange={handleChangeDiscount}/></td>
         </tr>
         {
-            includeIgv =='true' && <tr className="bg-white dark:bg-gray-800">
+            includeIgv ? <tr className="bg-white dark:bg-gray-800">
                 <th colSpan={6} className='text-end'>I.G.V</th>
                 <td className="py-2 px-2 max-w-8 w-6">{parseMoney(dataTotal.igv,formatMoney)}</td>
-            </tr>
+            </tr> : null
         }
         <tr className="bg-white dark:bg-gray-800">
             <th colSpan={6} className='text-end'>TOTAL</th>

@@ -1,4 +1,4 @@
-import { ArrowRightCircleIcon, HomeModernIcon, UserIcon,HomeIcon, UsersIcon, TagIcon, CubeIcon, CurrencyDollarIcon} from '@heroicons/react/24/solid'
+import { ArrowRightCircleIcon, HomeModernIcon, UserIcon,HomeIcon, UsersIcon, TagIcon, CubeIcon, CurrencyDollarIcon, CurrencyBangladeshiIcon} from '@heroicons/react/24/solid'
 const classSizeIcon = "h-5 w-5";
 export const listIcons = [
     {
@@ -32,5 +32,9 @@ export const listIcons = [
     {
         name:'cotizacion-new',
         Icon: <CurrencyDollarIcon className={classSizeIcon}/> 
+    },
+    {
+        name:'cotizacion-all',
+        Icon: <CurrencyBangladeshiIcon className={classSizeIcon}/> 
     }
 ]

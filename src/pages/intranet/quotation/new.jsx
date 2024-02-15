@@ -13,6 +13,7 @@ import { verifUser } from '@/helpers/verifUser';
 import workSpace from '@/img/quotation.png';
 import { PaperAirplaneIcon } from '@heroicons/react/24/solid';
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
 import React, { useEffect, useRef, useState } from 'react'
 import Select from 'react-select';
 export async function getServerSideProps(context) {
@@ -20,15 +21,13 @@ export async function getServerSideProps(context) {
     return await verifUser(userCookie,'/quotation/new');
 }
 const initalForm = {
-    quotation_date_issue:"",
+    quotation_date_issue:new Date().toISOString().split('T')[0],
     quotation_type_money:"PEN",
     quotation_type_change:"",
-    quotation_include_igv:"true",
+    quotation_include_igv:true,
     quotation_customer:"",
     quotation_contact:"",
     quotation_address:"",
-    quotation_observations:"",
-    quotation_conditions:"",
     quotation_discount:"0.00"
 }
 const initialAmountDetails = {
@@ -45,6 +44,8 @@ function quotationNew({nameUser,dataModules,dataRoles}) {
     const [customers,setCustomers] = useState([]);
     const editorRefObservation = useRef(null);
     const editorRefCondition = useRef(null);
+    const route = useRouter();
+    const editorRefDescriptionProducts = useRef(null);
     const headers = getCookie();
     useEffect(()=>{
         const getData = async () => {
@@ -69,7 +70,7 @@ function quotationNew({nameUser,dataModules,dataRoles}) {
             amount += (parseFloat(product.price_aditional) + parseFloat(product.price_unit)) * product.quantity;
         });
         let subtotal = amount - form.quotation_discount;
-        let igv = form.quotation_include_igv == 'true' ? subtotal * 0.18 : 0;
+        let igv = form.quotation_include_igv ? subtotal * 0.18 : 0;
         let total = subtotal + igv;
         setAmountDetails({
             ...amountDetails,
@@ -96,7 +97,9 @@ function quotationNew({nameUser,dataModules,dataRoles}) {
                 setContacts(resq.data.data.contacts);
                 setForm(form => ({
                     ...form,
-                    quotation_address:resq.data.data.address
+                    quotation_address:resq.data.data.address,
+                    quotation_contact:resq.data.data.contacts.length === 1 ? resq.data.data.contacts[0].id : "",
+                    quotation_include_igv:resq.data.data.disabledIgv
                 }))
             } catch (error) {
                 alert('Error al obtener los contactos');
@@ -108,12 +111,6 @@ function quotationNew({nameUser,dataModules,dataRoles}) {
                 quotation_address:""
             }))
         }
-    }
-    const handleChangeDiscount = (e) => {
-        setForm({
-            ...form,
-            quotation_discount:e.target.value
-        })
     }
     const handleDetailChange = (value,id,column) => {
         setProducts(products.map(product => product.id == id ? {...product,[column] : value} : product))
@@ -138,40 +135,70 @@ function quotationNew({nameUser,dataModules,dataRoles}) {
             ])
         }
     }
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if(!products.length){
+            return alert('La cotización debe tener al menos un producto');
+        }
+        if(!window.confirm('¿Deseas generar una nueva cotización?')){
+            return
+        }
+        const data = {
+            ...form,
+            quotation_description_products:editorRefDescriptionProducts.current.getContent(),
+            quotation_conditions:editorRefCondition.current.getContent(),
+            quotation_observations:editorRefObservation.current.getContent(),
+            products
+        }
+        try {
+            const resp = await apiAxios.post('quotation',data,{headers})
+            if(resp.data.redirect !== null){
+                return route.replace(resp.data.redirect);
+            }
+            if(resp.data.error){
+                resp.data.data.forEach(error => {
+                    alert(error);
+                });
+                return
+            }
+            alert(resp.data.message);
+            setForm(initalForm);
+            setContacts([]);
+            setProducts([]);
+            editorRefDescriptionProducts.current.setContent("");
+            editorRefCondition.current.setContent("");
+            editorRefObservation.current.setContent("");
+        } catch (error) {
+            console.log(error);
+            alert('Error al generar una nueva cotización');
+        }
+    }
   return (
     <LoyoutIntranet title="Nueva cotización" description="Creación de nuevas cotizaciones" names={nameUser} modules={dataModules} roles={dataRoles}>
         <BanerModule imageBanner={workSpace} title="Nueva cotización"/>
-        <form  className=''>
-            <div className='w-full p-6 mb-4 bg-white rounded-md shadow overflow-x-auto grid grid-cols-12 gap-x-3 gap-y-0'>
+        <form id='form-quotation' onSubmit={handleSubmit}>
+            <div className='w-full p-6 mb-4 bg-white rounded-md shadow grid grid-cols-12 gap-x-3 gap-y-0'>
                 <div className="col-span-full">
                     <SeccionForm title="Datos de la cotización"/>
                 </div>
                 <div className="col-span-4">
-                    <InputPrimary label="Fecha de emisión" type='date' inputRequired='required' name="quotation_date_issue" value={form.quotation_date_issue||''} onChange={handleChangeForm}/>
+                    <InputPrimary label="Fecha de emisión" type='date' inputRequired='required' disabled="disabled" value={form.quotation_date_issue||''}/>
                 </div>
-                <div className="col-span-3">
+                <div className="col-span-4">
                     <SelectPrimary label="Tipo moneda" inputRequired='required' name="quotation_type_money" value={form.quotation_type_money||''} onChange={handleChangeForm}>
                         <option value="PEN">Soles (S/)</option>
                         <option value="USD">Dolares ($)</option>
                     </SelectPrimary>
                 </div>
-                <div className="col-span-3">
-                    <InputPrimary label="Tipo cambio" type='number' min="0" name="quotation_type_change" value={form.quotation_type_change||''} onChange={handleChangeForm}/>
-                </div>
-                <div className="col-span-2">
-                    <SelectPrimary label="IGV" inputRequired='required' name="quotation_include_igv" value={form.quotation_include_igv||''} onChange={handleChangeForm}>
-                        <option value="true">Si</option>
-                        <option value="false">No</option>
-                    </SelectPrimary>
+                <div className="col-span-4">
+                    <InputPrimary label="Tipo cambio" type='number' step="0.01" min="0" name="quotation_type_change" value={form.quotation_type_change||''} onChange={handleChangeForm}/>
                 </div>
             </div>
-            <div className='w-full p-6 mb-4 bg-white rounded-md shadow overflow-x-auto grid grid-cols-12 gap-x-3 gap-y-0'>
+            <div className='w-full p-6 mb-4 bg-white rounded-md shadow grid grid-cols-12 gap-x-3 gap-y-0'>
                 <div className="col-span-full">
                     <SeccionForm title="Datos del cliente"/>
                 </div>
                 <div className="col-span-6">
-                    {/* <label htmlFor='quotation_customer' className='text-sm mb-1 block dark:text-white text-placeholder'>Cliente</label>
-                    <Select instanceId='quotation_customer' name='quotation_customer' options={customers} onChange={handleChangeForm} placeholder="Seleccione un cliente" menuPosition='fixed'/> */}
                     <SelectPrimary label="Cliente" inputRequired='required' name="quotation_customer" value={form.quotation_customer||''} onChange={handleChangeForm}>
                         <option value="">Seleccione un cliente</option>
 
@@ -199,14 +226,20 @@ function quotationNew({nameUser,dataModules,dataRoles}) {
                 <div className="col-span-full mb-2">
                     <span className='text-sm mb-1 block dark:text-white text-placeholder'>Lista de productos</span>
                     <Select instanceId='quotation_products_list' name='quotation_products_list' options={productsList} onChange={handleProductSelect} placeholder="Buscar" menuPosition='fixed'/>
+                    {
+                        !form.quotation_include_igv && <p className='text-sm text-red-600 my-2'>Esta cotización no incluye I.G.V debido a que el cliente <strong className='font-bold'>NO ES DE PERÚ</strong></p>
+                    }
                 </div>
                 <div className="col-span-full">
-                    <TableQuotation products={products} formatMoney={form.quotation_type_money} handleDetailChange={handleDetailChange} handleDeleteDetail={handleDeleteDetail} includeIgv={form.quotation_include_igv} dataTotal={{discount:form.quotation_discount,igv:amountDetails.quotation_igv,amount:amountDetails.quotation_amount,total:amountDetails.quotation_total}} handleChangeDiscount={handleChangeDiscount}/>
+                    <TableQuotation products={products} formatMoney={form.quotation_type_money} handleDetailChange={handleDetailChange} handleDeleteDetail={handleDeleteDetail} includeIgv={form.quotation_include_igv} dataTotal={{discount:form.quotation_discount,igv:amountDetails.quotation_igv,amount:amountDetails.quotation_amount,total:amountDetails.quotation_total}} handleChangeDiscount={handleChangeForm}/>
                 </div>
             </div>
-            <div className='w-full p-6 mb-4 bg-white rounded-md shadow overflow-x-auto grid grid-cols-12 gap-x-3 gap-y-0'>
+            <div className='w-full p-6 mb-4 bg-white rounded-md shadow grid grid-cols-12 gap-x-3 gap-y-0'>
                 <div className="col-span-full">
                     <SeccionForm title="Datos adicionales"/>
+                </div>
+                <div className="col-span-full mb-2">
+                    <EditorText label="Descripción de productos" id="quotation_details_products" editorRef={editorRefDescriptionProducts}/>
                 </div>
                 <div className="col-span-full mb-2">
                     <EditorText label="Observaciones" id="quotation_observations" editorRef={editorRefObservation}/>
@@ -214,8 +247,8 @@ function quotationNew({nameUser,dataModules,dataRoles}) {
                 <div className="col-span-full mb-2">
                     <EditorText label="Condiciones" id="quotation_conditions" editorRef={editorRefCondition}/>
                 </div>
-                <div className="col-span-full">
-                    <ButtonPrimary text="Generar" icon={<PaperAirplaneIcon className='w-5 h-5'/>}/>
+                <div className="col-span-full text-center">
+                    <ButtonPrimary text="Generar" type='submit' icon={<PaperAirplaneIcon className='w-5 h-5'/>}/>
                 </div>
             </div>
         </form>
