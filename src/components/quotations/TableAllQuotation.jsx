@@ -1,8 +1,9 @@
 import React from 'react'
 import TableIntranet from '../TableIntranet'
 import { parseMoney } from '@/helpers/utilities'
-import { ButtonDangerSm, ButtonPrimarySm } from '../Buttons'
-import { PencilIcon, TrashIcon } from '@heroicons/react/24/solid'
+import { ButtonDangerSm, ButtonPrimarySm, ButtonSecondarySm } from '../Buttons'
+import { EyeIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/solid'
+import Link from 'next/link'
 
 function TableAllQuotation({quotations,status,getQuotation,deleteQuotation}) {
     const columns = [
@@ -29,6 +30,9 @@ function TableAllQuotation({quotations,status,getQuotation,deleteQuotation}) {
                             {
                                 quotation.quotation_status !== 0 ?
                                 <div className='flex gap-1 flex-wrap justify-center'>
+                                    <Link href={'/intranet/quotation/view/' + quotation.id} target='_blank'>
+                                        <ButtonSecondarySm text="Pdf" icon={<EyeIcon className='w-4 h-4'/>}/>
+                                    </Link>
                                     <ButtonPrimarySm text="Editar" onClick={e=> getQuotation(quotation.id)} icon={<PencilIcon className='w-4 h-4'/>}/>
                                     <ButtonDangerSm text="Anular" onClick={e => deleteQuotation(quotation.id)} icon={<TrashIcon className='w-4 h-4'/>}/>
                                 </div> : <strong className='text-red-500 font-bold block text-center'>Sin acciones</strong>

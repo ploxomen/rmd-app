@@ -181,7 +181,7 @@ function FormQuotation({statusModal,customers,quotationEdit,contactsList,product
                 </SelectPrimary>
             </div>
             <div className="col-span-6">
-                <SelectPrimary label="Contacto" name="quotation_contact" value={form.quotation_contact||''} onChange={handleChangeForm}>
+                <SelectPrimary label="Contacto" name="quotation_contact" inputRequired="required" value={form.quotation_contact||''} onChange={handleChangeForm}>
                     <option value="">Seleccione un contacto</option>
                     {
                         contacts.map(contact => <option key={contact.id} value={contact.id}>{contact.contact_name}</option>)

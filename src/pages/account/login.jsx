@@ -1,4 +1,4 @@
-import { Checkbox, InputLogin, InputPrimary } from '@/components/Inputs';
+import { Checkbox, InputLogin } from '@/components/Inputs';
 import '@/app/globals.css';
 import { ButtonLogin } from '@/components/Buttons';
 import Header from '@/components/Header';
@@ -7,7 +7,6 @@ import apiAxios from '@/axios';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/solid';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation'
-
 const defaultValueForm = {
     username:'jeanpi.jpct@gmail.com',
     password:'jeanpier04'
@@ -55,7 +54,7 @@ export default function Login(){
     return(
         <>
             <Header title="Iniciar sesión" description='Accede al sistema integrado'/>
-            <div className='bg-layout p-5 flex justify-center items-center min-h-screen'>
+            <div className='bg-layout p-5 flex justify-center items-center min-h-dvh'>
                 <div className='bg-white px-4 py-7 max-w-md rounded-lg shadow-md'>
                     {
                         incorrectUser && <div className='px-6 pt-2 pb-3 bg-red-100 rounded flex gap-2 items-center'>

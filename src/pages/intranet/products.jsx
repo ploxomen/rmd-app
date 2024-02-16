@@ -1,7 +1,7 @@
 import '@/app/globals.css';
 import apiAxios from '@/axios';
 import BanerModule from '@/components/BanerModule';
-import { ButtonPrimary } from '@/components/Buttons';
+import { ButtonDanger, ButtonPrimary } from '@/components/Buttons';
 import { InputSearch } from '@/components/Inputs';
 import LoyoutIntranet from '@/components/LoyoutIntranet';
 import PaginationTable from '@/components/PaginationTable';
@@ -12,7 +12,7 @@ import { verifUser } from '@/helpers/verifUser';
 import { useModal } from '@/hooks/useModal';
 import workSpace from '@/img/delivery-box.png';
 import { TYPES_PRODUCTS, initialStateProduct, reducerProducts } from '@/reducers/crudProducts';
-import { PlusCircleIcon } from '@heroicons/react/24/solid';
+import { DocumentArrowDownIcon, PlusCircleIcon } from '@heroicons/react/24/solid';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useReducer, useState } from 'react'
 const quantityRowData = 25;
@@ -161,6 +161,29 @@ function products({dataModules,nameUser,dataRoles}) {
         dispatch({type:TYPES_PRODUCTS.NO_PRODUCTS});
     }
   }
+  const exportProducts = async () => {
+    try {
+      const resp = await apiAxios.get('/product-export',{
+        headers,
+        responseType:'blob'
+      })
+      if(resp.status !== 200){
+        return route.replace('/intranet/home');
+      }
+      const url = window.URL.createObjectURL(new Blob([resp.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'productos.xlsx');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      if(error.status !== 200){
+        return route.replace('/intranet/home');
+      }
+      alert('Error al exportar el excel');
+    }
+  }
   return (
     <>
     <LoyoutIntranet title="Productos" description="Administracion de productos" names={nameUser} modules={dataModules} roles={dataRoles}>
@@ -168,7 +191,8 @@ function products({dataModules,nameUser,dataRoles}) {
           <div className='w-full p-6 bg-white rounded-md shadow overflow-x-auto'>
             <div className="flex w-full items-center justify-between gap-2 flex-wrap mb-2">
               <div>
-                <ButtonPrimary text="Agregar" icon={<PlusCircleIcon className='w-5 h-5'/>} onClick={handleOpenModal}/>
+                <ButtonDanger text="Agregar" icon={<PlusCircleIcon className='w-5 h-5'/>} onClick={handleOpenModal}/>
+                <ButtonPrimary text="Exportar" icon={<DocumentArrowDownIcon className='w-5 h-5'/>} onClick={exportProducts}/>
               </div>
               <div style={{width:"300px"}}>
                 <InputSearch placeholder='¿Que estas buscando?' onInput={searchCustomer}/>
