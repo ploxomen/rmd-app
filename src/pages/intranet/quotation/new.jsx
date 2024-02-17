@@ -28,7 +28,21 @@ const initalForm = {
     quotation_customer:"",
     quotation_contact:"",
     quotation_address:"",
-    quotation_discount:"0.00"
+    quotation_discount:"0.00",
+    quotation_observations:`<p><span style="font-size: 10pt;"><strong>OBSERVACIONES:</strong> NO INCLUYE INSTALACI&Oacute;N Y TRANSPORTE</span></p>
+    <p><strong><span style="font-size: 10pt;">Plazo de Fabricaci&oacute;n:</span></strong></p>
+    <p><strong><span style="font-size: 10pt;">Plazo de Entrega:&nbsp;</span></strong></p>`,
+    quotation_conditions:`<ul>
+    <li style="font-size: 10pt;"><span style="font-size: 10pt;"><strong>Superficies para la instalaci&oacute;n:</strong> La superficie destinada a la instalaci&oacute;n deber&aacute; presentar una base de CONCRETO s&oacute;lida, nivelada, limpia, seca y libre de obstrucciones.</span></li>
+    <li style="font-size: 10pt;"><span style="font-size: 10pt;"><strong>Seguro del personal de obra:</strong> El servicio de instalaci&oacute;n incluye seguro del personal de RMD (SCTR Y EPIS), proporcionado por la empresa durante la ejecuci&oacute;n de los trabajos contratados.</span></li>
+    <li style="font-size: 10pt;"><span style="font-size: 10pt;"><strong>Suministro de fluido el&eacute;ctrico y almacenamiento:</strong> El cliente deber&aacute; suministrar el fluido el&eacute;ctrico requerido, as&iacute; como almac&eacute;n seguro para guardar materiales y maquinas, permisos municipales o cuota sindical.</span></li>
+    <li style="font-size: 10pt;"><span style="font-size: 10pt;"><strong>Entrega de productos o insumos: </strong>A menos que se acuerde lo contrario, los productos y/o insumos ser&aacute;n entregados una vez que se haya reflejado la cancelaci&oacute;n correspondiente en la cuenta bancaria. El cliente deber&aacute; efectuar el pago seg&uacute;n los t&eacute;rminos acordados para garantizar la entrega oportuna de los productos y/o insumos. El horario establecido para la recogida de los productos ser&aacute; de lunes a viernes de 9:00 h a 17:00 h.</span></li>
+    </ul>
+    <p><span style="font-size: 10pt;"><strong><span style="line-height: 107%; font-family: Calibri, sans-serif;">GARANTIA:</span></strong><span style="line-height: 107%; font-family: Calibri, sans-serif;"> Defecto de f&aacute;brica, reemplazo inmediato.</span></span></p>
+    <p><span style="font-size: 10pt;"><span style="line-height: 107%; font-family: Calibri, sans-serif;"><strong>NO INCLUYE:</strong> Otro tipo de documentaci&oacute;n (pdr, examenes m&eacute;dicos y/o requisitos adicionales, ni costes para charlas de inducci&oacute;n, etc)</span></span></p>
+    <p><span style="font-size: 10pt;"><span style="line-height: 107%; font-family: Calibri, sans-serif;"><strong>LUGAR DE ENTREGA:</strong> ALMACEN RMD / No incluye prueba covid</span></span></p>
+    <p><span style="font-size: 10pt;"><span style="line-height: 107%; font-family: Calibri, sans-serif;"><strong>FORMA DE PAGO:</strong> </span></span></p>
+    <p><span style="font-size: 10pt;"><span style="line-height: 107%; font-family: Calibri, sans-serif;"><strong>TIEMPO DE VALIDEZ DE COTIZACI&Oacute;N:</strong> 15 D&Iacute;AS HABILES</span></span></p>`
 }
 const initialAmountDetails = {
     quotation_amount:"0.00",
@@ -241,10 +255,10 @@ function quotationNew({dataUser,dataModules,dataRoles}) {
                     <EditorText label="Descripción de productos" id="quotation_details_products" editorRef={editorRefDescriptionProducts}/>
                 </div>
                 <div className="col-span-full mb-2">
-                    <EditorText label="Observaciones" id="quotation_observations" editorRef={editorRefObservation}/>
+                    <EditorText label="Observaciones" initialValue={form.quotation_observations} id="quotation_observations" editorRef={editorRefObservation}/>
                 </div>
                 <div className="col-span-full mb-2">
-                    <EditorText label="Condiciones" id="quotation_conditions" editorRef={editorRefCondition}/>
+                    <EditorText label="Condiciones" initialValue={form.quotation_conditions} id="quotation_conditions" editorRef={editorRefCondition}/>
                 </div>
                 <div className="col-span-full text-center">
                     <ButtonPrimary text="Generar" type='submit' icon={<PaperAirplaneIcon className='w-5 h-5'/>}/>
