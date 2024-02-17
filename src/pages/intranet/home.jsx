@@ -19,24 +19,44 @@ export async function getServerSideProps(context) {
     }
     let dataModules = [];
     let dataRoles = [];
+    let dataUser = {
+        user_name:"",
+        user_last_name:"",
+        user_avatar:null
+    };
     try {
-      const req = await apiAxios.get('/user/modules-roles',{headers});
+      const req = await apiAxios.get('/user/modules-roles',{headers,params:{url:'/home'}});
+      if(req.data.redirect){
+        return {
+            redirect : {
+                destination: req.data.redirect,
+                permanent:false
+            }
+        }
+      }
       dataModules = req.data.modules;
       dataRoles = req.data.roles;
+      dataUser = req.data.user;
       return {
-          props:{dataModules,dataRoles,nameUser:contentCookieUser.user.user_name}
-      }
-    } catch (error) {
-      console.error(error);
-      console.log(error)
+        props:{
+            dataModules,
+            dataRoles,
+            dataUser            
+        }
     }
-    return {
-        props:{}
+    } catch(error) {
+        return {
+            props:{
+              dataModules,
+              dataRoles,
+              dataUser            
+          }
+        }
     }
 }
-export default function Home({dataModules,dataRoles,nameUser}){
+export default function Home({dataModules,dataRoles,dataUser}){
     return(
-        <LoyoutIntranet title="Inicio" description="Inicio de la intranet" names={nameUser} modules={dataModules} roles={dataRoles}>
+        <LoyoutIntranet title="Inicio" description="Inicio de la intranet" user={dataUser} modules={dataModules} roles={dataRoles}>
             <div className='grid grid-cols-4 gap-4 mb-6'>
                 <CartHome title="Clientes" quantity="150" backgroundIcon="bg-violet-200" Icon={UserGroupIcon} colorIcon="text-violet-500"/>
                 <CartHome title="Cotizaciones" quantity="150" backgroundIcon="bg-yellow-200" Icon={DocumentChartBarIcon} colorIcon="text-yellow-500"/>

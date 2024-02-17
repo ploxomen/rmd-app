@@ -17,7 +17,7 @@ export async function getServerSideProps(context) {
     const userCookie = context.req.cookies;
     return await verifUser(userCookie,'/modules');
 }
-export default function Roles({dataModules,dataRoles,nameUser}){
+export default function Roles({dataModules,dataRoles,dataUser}){
     const headers = getCookie();
     const route = useRouter();
     const [state,dispatch] = useReducer(reducerModules,crudModulesInitialState);
@@ -45,7 +45,7 @@ export default function Roles({dataModules,dataRoles,nameUser}){
             dispatch({type:TYPES_MODULE.GET_MODULE_ROLE,payload:{roles:resp.data.data,module}});
             handleOpenModal();
         } catch (error) {
-            console.log(error);
+            console.error(error);
             dispatch({type:TYPES_MODULE.NO_MODULES});
         }
     }
@@ -63,12 +63,12 @@ export default function Roles({dataModules,dataRoles,nameUser}){
             closeModal();
         } catch (error) {
             dispatch({type:TYPES_MODULE.NO_MODULES});
-            console.log(error);
+            console.error(error);
         }
     }
     return(
         <>
-        <LoyoutIntranet title="Módulos" description="Administracion de roles" names={nameUser} modules={dataModules} roles={dataRoles}>
+        <LoyoutIntranet title="Módulos" description="Administracion de roles" user={dataUser} modules={dataModules} roles={dataRoles}>
             <BanerModule imageBanner={workSpace} title="Administración de módulos"/>
             <div className='w-full p-6 bg-white rounded-md shadow md:flex-1 overflow-x-auto'>
                 <TableModule modules={state.modules} getRoles={getRoles}/>

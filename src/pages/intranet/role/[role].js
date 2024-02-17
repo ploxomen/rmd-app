@@ -1,12 +1,9 @@
 import apiAxios from '@/axios';
-import { verifUser } from '@/helpers/verifUser';
 import React from 'react'
 
 export async function getServerSideProps(context) {
     let userCookie = context.req.cookies;
     const {role} = context.params
-    // console.log(role,userCookie);
-
     if(!userCookie.authenticate){
         return {
             redirect : {
@@ -15,20 +12,24 @@ export async function getServerSideProps(context) {
             }
         }
     }
-    // console.log(first)
     userCookie = JSON.parse(userCookie.authenticate);
     const headers = {'Authorization':'Bearer ' + userCookie.access_token};
-    const resp = await apiAxios.get('/module',{headers});
-    if(resp.data.redirect !== null){
-        return route.replace(resp.data.redirect);
-    }
-    return {
-        props:{}
-    }
-
+    try {
+        const resp = await apiAxios.get('/user/change-role/' + role,{headers});
+        if(resp.data.redirect !== null){
+            return {
+                redirect : {
+                    destination: resp.data.redirect,
+                    permanent:false
+                }
+            }
+        }
+    }catch{
+        return {
+            props:{}
+        }
+    }   
 }
-
-
 function Data() {
     // window.location.href = '/account/login';
   return (

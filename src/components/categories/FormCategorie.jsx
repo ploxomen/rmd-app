@@ -55,7 +55,7 @@ function FormCategorie({statusModal,handleSave,closeModal,categorieEdit,subCateg
                 }
                 alert(resp.data.message);
             } catch (error) {
-                console.log(error);
+                console.error(error);
                 alert('Ocurrió un error al eliminar la subcategoría');
             }
         }

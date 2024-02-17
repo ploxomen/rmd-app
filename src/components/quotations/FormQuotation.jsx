@@ -79,7 +79,7 @@ function FormQuotation({statusModal,customers,quotationEdit,contactsList,product
                     quotation_include_igv:resq.data.data.disabledIgv
                 }))
             } catch (error) {
-                console.log(error)
+                console.error(error)
                 alert('Error al obtener los contactos');
             }
         }else if(key == 'quotation_customer' && !value){

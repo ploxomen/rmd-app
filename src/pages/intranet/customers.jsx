@@ -15,14 +15,16 @@ import FormCustomer from '@/components/customers/FormCustomer';
 import { useModal } from '@/hooks/useModal';
 import { InputSearch } from '@/components/Inputs';
 import PaginationTable from '@/components/PaginationTable';
+import { useRouter } from 'next/navigation';
 
 export async function getServerSideProps(context) {
   const userCookie = context.req.cookies;
   return await verifUser(userCookie,'/customers');
 }
 const quantityRowData = 25;
-function customers({dataModules,nameUser,dataRoles}) {
+function customers({dataModules,dataUser,dataRoles}) {
   const [state,dispatch] = useReducer(reducerCustomers,customersIntialState);
+  const route = useRouter();
   const [dataChange,setDataChange] = useState({current:1,search:"",reload:false});
   const [pagination,setPagination] = useState({quantityRowData,totalPages:0});
   const headers = getCookie();
@@ -98,7 +100,8 @@ function customers({dataModules,nameUser,dataRoles}) {
         alert(resp.data.message);
         closeModal();
     } catch (error) {
-        console.log(error)
+        console.error(error)
+        alert("Error al guardar los datos del cliente");
     }
   }
   const getCustomer = async (idCustomer) => {
@@ -118,7 +121,7 @@ function customers({dataModules,nameUser,dataRoles}) {
         handleOpenModal();
     } catch (error) {
         dispatch({type:TYPES_CUSTOMERS.NO_CUSTOMERS});
-        console.log(error);
+        console.error(error);
     }
   }
   const closeModal = async () => {
@@ -150,7 +153,7 @@ function customers({dataModules,nameUser,dataRoles}) {
         return alert(resp.data.message);
     } catch (error) {
         dispatch({type:TYPES_CUSTOMERS.NO_CUSTOMERS});
-        console.log(error);
+        console.error(error);
     }
   }
   let timer = null;
@@ -162,7 +165,7 @@ function customers({dataModules,nameUser,dataRoles}) {
   }
   return (
     <>
-      <LoyoutIntranet title="Clientes" description="Administración de clientes" names={nameUser} modules={dataModules} roles={dataRoles}>
+      <LoyoutIntranet title="Clientes" description="Administración de clientes" user={dataUser} modules={dataModules} roles={dataRoles}>
           <BanerModule imageBanner={workSpace} title="Administración de clientes"/>
           <div className='w-full p-6 bg-white rounded-md shadow overflow-x-auto'>
               <div className="flex items-center justify-between gap-2 flex-wrap mb-2">

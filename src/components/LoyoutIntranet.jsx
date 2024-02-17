@@ -3,13 +3,13 @@ import Header from './Header'
 import NavegationFull from './Navegation'
 import ContentWrapper from './ContentWrapper'
 
-function LoyoutIntranet({title,description,children,modules,names,roles}) {
+function LoyoutIntranet({title,description,children,modules,user,roles}) {
   return (
     <>
       <Header title={title} description={description}/>
       <div>
-        <NavegationFull listModules={modules} names={names}/>
-        <ContentWrapper page={children} roles={roles}/>
+        <NavegationFull listModules={modules} user={user}/>
+        <ContentWrapper page={children} roles={roles} user={user}/>
       </div>
     </>
   )

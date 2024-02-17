@@ -35,7 +35,7 @@ const initialAmountDetails = {
     quotation_igv:"0.00",
     quotation_total:"0.00"
 }
-function quotationNew({nameUser,dataModules,dataRoles}) {
+function quotationNew({dataUser,dataModules,dataRoles}) {
     const [form,setForm] = useState(initalForm);
     const [products,setProducts] = useState([]);
     const [productsList,setProductsList] = useState([]);
@@ -57,9 +57,8 @@ function quotationNew({nameUser,dataModules,dataRoles}) {
                 setCustomers(all[0].data.data);
                 setProductsList(all[1].data.data);
             } catch (error) {
-                // console.log(error);
+                console.error(error);
                 alert('Error al obtener los clientes y productos')
-                // dispatch({type:TYPES_USER.NO_USERS});
             }
         }
         getData();
@@ -169,12 +168,12 @@ function quotationNew({nameUser,dataModules,dataRoles}) {
             editorRefCondition.current.setContent("");
             editorRefObservation.current.setContent("");
         } catch (error) {
-            console.log(error);
+            console.error(error);
             alert('Error al generar una nueva cotización');
         }
     }
   return (
-    <LoyoutIntranet title="Nueva cotización" description="Creación de nuevas cotizaciones" names={nameUser} modules={dataModules} roles={dataRoles}>
+    <LoyoutIntranet title="Nueva cotización" description="Creación de nuevas cotizaciones" user={dataUser} modules={dataModules} roles={dataRoles}>
         <BanerModule imageBanner={workSpace} title="Nueva cotización"/>
         <form id='form-quotation' onSubmit={handleSubmit}>
             <div className='w-full p-6 mb-4 bg-white rounded-md shadow grid grid-cols-12 gap-x-3 gap-y-0'>

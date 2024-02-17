@@ -8,8 +8,8 @@ import { ExclamationTriangleIcon } from '@heroicons/react/24/solid';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation'
 const defaultValueForm = {
-    username:'jeanpi.jpct@gmail.com',
-    password:'jeanpier04'
+    username:'',
+    password:''
 }
 export async function getServerSideProps(context) {
     const userCookie = context.req.cookies;

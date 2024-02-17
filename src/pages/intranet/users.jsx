@@ -26,7 +26,7 @@ const initialFilter = {
     role:"all"
 }
 const quantityRowData = 25;
-function Users({dataModules,nameUser,dataRoles}) {
+function Users({dataModules,dataUser,dataRoles}) {
     const headers = getCookie();
     const route = useRouter();
     const [filter,setFilter] = useState(initialFilter);
@@ -126,7 +126,7 @@ function Users({dataModules,nameUser,dataRoles}) {
             handleOpenModal();
         } catch (error) {
             dispatch({type:TYPES_USER.NO_USERS});
-            console.log(error);
+            console.error(error);
         }
     }
     const handleChangePage = (number)=>{
@@ -164,7 +164,7 @@ function Users({dataModules,nameUser,dataRoles}) {
             closeModalReset();
         } catch (error) {
             dispatch({type:TYPES_USER.NO_USERS});
-            console.log(error);
+            console.error(error);
         }
     }
     const deleteUser = async (idUser) => {
@@ -187,7 +187,7 @@ function Users({dataModules,nameUser,dataRoles}) {
             alert(resp.data.message);
         } catch (error) {
             dispatch({type:TYPES_USER.NO_USERS});
-            console.log(error);
+            console.error(error);
         }
     }
     let timer;
@@ -199,7 +199,7 @@ function Users({dataModules,nameUser,dataRoles}) {
     }
   return (
     <>
-        <LoyoutIntranet title="Usuarios" description="Administración de usuarios" names={nameUser} modules={dataModules} roles={dataRoles}>
+        <LoyoutIntranet title="Usuarios" description="Administración de usuarios" user={dataUser} modules={dataModules} roles={dataRoles}>
             <BanerModule imageBanner={workSpace} title="Administración de usuarios"/>
             <div className='w-full p-6 bg-white rounded-md shadow mb-4'>
                 <div className="flex flex-auto">

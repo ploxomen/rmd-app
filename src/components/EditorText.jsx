@@ -19,7 +19,7 @@ function EditorText({label,editorRef,id,initialValue = ""}) {
                 'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
                 'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount'
               ],
-              toolbar: 'undo redo | blocks | ' +
+              toolbar: 'undo redo | blocks fontfamily fontsize | ' +
                   'bold italic forecolor | alignleft aligncenter ' +
                   'alignright alignjustify | bullist numlist outdent indent | ' +
                   'removeformat | help',

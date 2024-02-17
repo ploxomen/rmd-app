@@ -20,7 +20,7 @@ export async function getServerSideProps(context) {
   const userCookie = context.req.cookies;
   return await verifUser(userCookie,'/products');
 }
-function products({dataModules,nameUser,dataRoles}) {
+function products({dataModules,dataUser,dataRoles}) {
   const [state,dispatch] = useReducer(reducerProducts,initialStateProduct);
   const route = useRouter();
   const headers = getCookie();
@@ -63,7 +63,7 @@ function products({dataModules,nameUser,dataRoles}) {
             dispatch({type:TYPES_PRODUCTS.ALL_PRODUCTS,payload:resp.data.data});
         } catch (error) {
             dispatch({type:TYPES_PRODUCTS.NO_PRODUCTS});
-            console.log(error);
+            console.error(error);
         }
     }
     getData();
@@ -98,7 +98,7 @@ function products({dataModules,nameUser,dataRoles}) {
         alert(resp.data.message);
         closeModal();
     } catch (error) {
-        console.log(error);
+        console.error(error);
         alert("Ocurrió un error");
     }
   }
@@ -123,7 +123,7 @@ function products({dataModules,nameUser,dataRoles}) {
         handleOpenModal();
     } catch (error) {
         dispatch({type:TYPES_PRODUCTS.NO_PRODUCTS});
-        console.log(error);
+        console.error(error);
     }
   }
   let timer = null;
@@ -186,7 +186,7 @@ function products({dataModules,nameUser,dataRoles}) {
   }
   return (
     <>
-    <LoyoutIntranet title="Productos" description="Administracion de productos" names={nameUser} modules={dataModules} roles={dataRoles}>
+    <LoyoutIntranet title="Productos" description="Administracion de productos" user={dataUser} modules={dataModules} roles={dataRoles}>
           <BanerModule imageBanner={workSpace} title="Administración de productos"/>
           <div className='w-full p-6 bg-white rounded-md shadow overflow-x-auto'>
             <div className="flex w-full items-center justify-between gap-2 flex-wrap mb-2">

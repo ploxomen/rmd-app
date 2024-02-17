@@ -10,11 +10,17 @@ export const verifUser = async (userCookie,currentRoute) => {
         }
     }
     const contentCookieUser = JSON.parse(userCookie.authenticate);
+
     const headers = {
         'Authorization':'Bearer ' + contentCookieUser.access_token
     }
     let dataModules = [];
     let dataRoles = [];
+    let dataUser = {
+        user_name:"",
+        user_last_name:"",
+        user_avatar:null
+    };
     try {
       const req = await apiAxios.get('/user/modules-roles',{headers,params:{url:currentRoute}});
       if(req.data && req.data.redirect !== null){
@@ -27,14 +33,21 @@ export const verifUser = async (userCookie,currentRoute) => {
       }
       dataModules = req.data.modules;
       dataRoles = req.data.roles;
+      dataUser = req.data.user;
       return {
-          props:{dataModules,dataRoles,nameUser:contentCookieUser.user.user_name,lastNameUser:contentCookieUser.user.user_last_name}
-      }
-    } catch (error) {
-      console.error(error);
-      console.log(error);
-    }
-    return {
-        props:{}
+            props:{
+                dataModules,
+                dataRoles,
+                dataUser            
+            }
+        }
+    } catch {
+        return {
+            props:{
+              dataModules,
+              dataRoles,
+              dataUser            
+          }
+        }
     }
 }

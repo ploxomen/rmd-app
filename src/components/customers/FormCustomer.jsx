@@ -72,7 +72,7 @@ function FormCustomer({statusModal,contries,customerEdit,contactsEdit,pronvinces
                     setDistricts(resp.data.data);
                 }
             } catch (error) {
-                console.log(error);
+                console.error(error);
                 alert("Error al obtener el ubigeo");
             }
         }
@@ -110,7 +110,7 @@ function FormCustomer({statusModal,contries,customerEdit,contactsEdit,pronvinces
                 }
                 alert(resp.data.message);
             } catch (error) {
-                console.log(error);
+                console.error(error);
                 alert('Ocurrió un error al eliminar el contacto');
             }
         }

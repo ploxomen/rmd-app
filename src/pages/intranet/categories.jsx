@@ -21,7 +21,7 @@ export async function getServerSideProps(context) {
     return await verifUser(userCookie,'/categories');
 }
 const quantityRowData = 25;
-function categories({dataModules,nameUser,dataRoles}) {
+function categories({dataModules,dataUser,dataRoles}) {
     const [state,dispatch] = useReducer(reducerCategories,categoriesInitialState);
     const route = useRouter();
     const headers = getCookie();
@@ -49,7 +49,7 @@ function categories({dataModules,nameUser,dataRoles}) {
                 dispatch({type:TYPES_CATEGORIES.ALL_CATEGORIES,payload:resp.data.data});
             } catch (error) {
                 dispatch({type:TYPES_CATEGORIES.NO_CATEGORIES});
-                console.log(error);
+                console.error(error);
             }
         }
         getData();
@@ -83,7 +83,7 @@ function categories({dataModules,nameUser,dataRoles}) {
             handleOpenModal();
         } catch (error) {
             dispatch({type:TYPES_USER.NO_USERS});
-            console.log(error);
+            console.error(error);
         }
     }
     const deleteCategorie = async (idCategorie) => {
@@ -136,13 +136,13 @@ function categories({dataModules,nameUser,dataRoles}) {
             alert(resp.data.message);
             closeModal();
         } catch (error) {
-            console.log(error);
+            console.error(error);
             dispatch({type:TYPES_CATEGORIES.NO_CATEGORIES});
         }
     }
   return (
     <>
-    <LoyoutIntranet title="Categorias" description="Administración de categorías" names={nameUser} modules={dataModules} roles={dataRoles}>
+    <LoyoutIntranet title="Categorias" description="Administración de categorías" user={dataUser} modules={dataModules} roles={dataRoles}>
         <BanerModule imageBanner={workSpace} title="Administración de categorías"/>
         <div className='w-full p-6 bg-white rounded-md shadow overflow-x-auto'>
             <div className="flex items-center justify-between gap-2 flex-wrap mb-2">

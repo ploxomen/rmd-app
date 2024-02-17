@@ -53,7 +53,7 @@ const initialStateValueFilters = {
 }
 const quantityRowData = 25;
 
-function All({nameUser,dataModules,dataRoles}) {
+function All({dataUser,dataModules,dataRoles}) {
   const headers = getCookie();
   const route = useRouter();
   const [filters,setFilters] = useState(initialStateFilters);
@@ -136,7 +136,7 @@ function All({nameUser,dataModules,dataRoles}) {
       handleOpenModal();
     } catch (error) {
         dispatch({type:TYPES_QUOTATIONS.NO_QUOTATION});
-        console.log(error);
+        console.error(error);
     }
   }
 
@@ -160,7 +160,7 @@ function All({nameUser,dataModules,dataRoles}) {
     } catch (error) {
         alert('Error al eliminar la cotización');
         dispatch({type:TYPES_QUOTATIONS.NO_QUOTATION});
-        console.log(error);
+        console.error(error);
     }
   }
   let timer = null;
@@ -197,7 +197,7 @@ function All({nameUser,dataModules,dataRoles}) {
   }
     return (
       <>
-      <LoyoutIntranet title="Mis cotizaciones" description="Administración de cotizaciones" names={nameUser} modules={dataModules} roles={dataRoles}>
+      <LoyoutIntranet title="Mis cotizaciones" description="Administración de cotizaciones" user={dataUser} modules={dataModules} roles={dataRoles}>
           <BanerModule imageBanner={workSpace} title="Administración de cotizaciones"/>
           <div className='w-full p-6 bg-white rounded-md shadow mb-4 grid grid-cols-6 gap-x-2'>
               <div className='col-span-2'>

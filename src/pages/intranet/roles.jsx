@@ -18,7 +18,7 @@ export async function getServerSideProps(context) {
     const userCookie = context.req.cookies;
     return await verifUser(userCookie,'/roles');
 }
-export default function Roles({dataModules,dataRoles,nameUser}){
+export default function Roles({dataModules,dataRoles,dataUser}){
     const headers = getCookie();
     const route = useRouter();
     const [state,dispatch] = useReducer(reducerRoles,crudRoleInitialState);
@@ -63,7 +63,7 @@ export default function Roles({dataModules,dataRoles,nameUser}){
             dispatch({type:TYPES.GET_ROLE_MODULES,payload:{modules:resp.data.data,role}});
             handleOpenModal();
         } catch (error) {
-            console.log(error);
+            console.error(error);
             dispatch({type:TYPES.NO_ROLE});
         }
     }
@@ -81,7 +81,7 @@ export default function Roles({dataModules,dataRoles,nameUser}){
             closeModal();
         } catch (error) {
             dispatch({type:TYPES.NO_ROLE});
-            console.log(error);
+            console.error(error);
         }
     }
     const deleteRole = async (role) => {
@@ -98,13 +98,13 @@ export default function Roles({dataModules,dataRoles,nameUser}){
             }
             alert(resp.data.message);
         } catch (error) {
-            console.log(error);
+            console.error(error);
             dispatch({type:TYPES.NO_ROLE});
         }
     }
     return(
         <>
-        <LoyoutIntranet title="Roles" description="Administracion de roles" names={nameUser} modules={dataModules} roles={dataRoles}>
+        <LoyoutIntranet title="Roles" description="Administracion de roles" user={dataUser} modules={dataModules} roles={dataRoles}>
             <BanerModule imageBanner={workSpace} title="Administración de roles"/>
             <div className="md:flex flex-wrap gap-4">
                 <FormRole dataToEdit={dataToEdit} sendData={sendData} setDataToEdit={setDataToEdit}/>

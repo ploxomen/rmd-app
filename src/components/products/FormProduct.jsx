@@ -66,7 +66,7 @@ function FormProduct({statusModal,closeModal,handleSave,productEdit,categories,s
                 const resp = await apiAxios.get('/product-subcategorie/' + value,{headers});
                 setSubcategories(resp.data.data);
             } catch (error) {
-                console.log(error);
+                console.error(error);
                 alert('Ocurrió un error al obtener las subcategorías');
             }
         }
