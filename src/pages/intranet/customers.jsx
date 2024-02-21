@@ -4,7 +4,6 @@ import LoyoutIntranet from '@/components/LoyoutIntranet';
 import { verifUser } from '@/helpers/verifUser';
 import { TYPES_CUSTOMERS, customersIntialState, reducerCustomers } from '@/reducers/crudCustomers';
 import BanerModule from '@/components/BanerModule';
-import workSpace from '@/img/client.png';
 import { ButtonPrimary } from '@/components/Buttons';
 import {PlusCircleIcon } from '@heroicons/react/24/solid';
 import TableCustomer from '@/components/customers/TableCustomer';
@@ -166,7 +165,7 @@ function customers({dataModules,dataUser,dataRoles}) {
   return (
     <>
       <LoyoutIntranet title="Clientes" description="Administración de clientes" user={dataUser} modules={dataModules} roles={dataRoles}>
-          <BanerModule imageBanner={workSpace} title="Administración de clientes"/>
+          <BanerModule imageBanner='/baners/Group 12.jpg' title="Administración de clientes"/>
           <div className='w-full p-6 bg-white rounded-md shadow overflow-x-auto'>
               <div className="flex items-center justify-between gap-2 flex-wrap mb-2">
                 <div>

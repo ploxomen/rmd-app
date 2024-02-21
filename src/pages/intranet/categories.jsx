@@ -2,7 +2,6 @@ import '@/app/globals.css';
 import LoyoutIntranet from '@/components/LoyoutIntranet';
 import { verifUser } from '@/helpers/verifUser';
 import React, { useEffect, useReducer, useState } from 'react'
-import workSpace from '@/img/categories.png';
 import BanerModule from '@/components/BanerModule';
 import { PlusCircleIcon } from '@heroicons/react/24/solid';
 import { InputSearch } from '@/components/Inputs';
@@ -143,7 +142,7 @@ function categories({dataModules,dataUser,dataRoles}) {
   return (
     <>
     <LoyoutIntranet title="Categorias" description="Administración de categorías" user={dataUser} modules={dataModules} roles={dataRoles}>
-        <BanerModule imageBanner={workSpace} title="Administración de categorías"/>
+        <BanerModule imageBanner='/baners/Group 10.jpg' title="Administración de categorías"/>
         <div className='w-full p-6 bg-white rounded-md shadow overflow-x-auto'>
             <div className="flex items-center justify-between gap-2 flex-wrap mb-2">
                 <ButtonPrimary text="Agregar" icon={<PlusCircleIcon className='w-5 h-5'/>} onClick={e => openModalNew()}/>

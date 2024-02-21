@@ -8,7 +8,6 @@ import TableModule from '@/components/TableModule';
 import { getCookie } from '@/helpers/getCookie';
 import { verifUser } from '@/helpers/verifUser';
 import { useModal } from '@/hooks/useModal';
-import workSpace from '@/img/gravity.png';
 import { TYPES_MODULE, crudModulesInitialState, reducerModules } from '@/reducers/crudModule';
 import { useRouter } from 'next/navigation';
 import { useEffect, useReducer } from 'react';
@@ -69,7 +68,7 @@ export default function Roles({dataModules,dataRoles,dataUser}){
     return(
         <>
         <LoyoutIntranet title="Módulos" description="Administracion de roles" user={dataUser} modules={dataModules} roles={dataRoles}>
-            <BanerModule imageBanner={workSpace} title="Administración de módulos"/>
+            <BanerModule imageBanner='/baners/Group 13.jpg' title="Administración de módulos"/>
             <div className='w-full p-6 bg-white rounded-md shadow md:flex-1 overflow-x-auto'>
                 <TableModule modules={state.modules} getRoles={getRoles}/>
             </div>

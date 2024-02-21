@@ -10,7 +10,6 @@ import TableProduct from '@/components/products/TableProduct';
 import { getCookie } from '@/helpers/getCookie';
 import { verifUser } from '@/helpers/verifUser';
 import { useModal } from '@/hooks/useModal';
-import workSpace from '@/img/delivery-box.png';
 import { TYPES_PRODUCTS, initialStateProduct, reducerProducts } from '@/reducers/crudProducts';
 import { DocumentArrowDownIcon, PlusCircleIcon } from '@heroicons/react/24/solid';
 import { useRouter } from 'next/navigation';
@@ -187,7 +186,7 @@ function products({dataModules,dataUser,dataRoles}) {
   return (
     <>
     <LoyoutIntranet title="Productos" description="Administracion de productos" user={dataUser} modules={dataModules} roles={dataRoles}>
-          <BanerModule imageBanner={workSpace} title="Administración de productos"/>
+          <BanerModule imageBanner='/baners/Group 14.jpg' title="Administración de productos"/>
           <div className='w-full p-6 bg-white rounded-md shadow overflow-x-auto'>
             <div className="flex w-full items-center justify-between gap-2 flex-wrap mb-2">
               <div>

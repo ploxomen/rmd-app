@@ -135,11 +135,11 @@ function FormCustomer({statusModal,contries,customerEdit,contactsEdit,pronvinces
     }
   return (
     <Modal status={statusModal} title={edit ? 'Editar cliente' : 'Nuevo cliente'} onSave={hanbleSendModal} handleCloseModal={closeModal}>
-        <form  className='grid grid-cols-6 gap-x-3 gap-y-0' onSubmit={handleSubmit}>
+        <form  className='grid grid-cols-12 gap-x-3 gap-y-0' onSubmit={handleSubmit}>
             <div className="col-span-full">
                 <SeccionForm title="Datos personales"/>
             </div>
-            <div className="col-span-3">
+            <div className="col-span-6 md:col-span-4">
                 <SelectPrimary label="Paises" inputRequired='required' name="customer_contrie" value={form.customer_contrie||''} onChange={handleChangeForm}>
                     <option value="">Seleccione una opción</option>
                     {
@@ -147,7 +147,7 @@ function FormCustomer({statusModal,contries,customerEdit,contactsEdit,pronvinces
                     }
                 </SelectPrimary>
             </div>
-            <div className="col-span-3">
+            <div className="col-span-6 md:col-span-4">
                 <SelectPrimary label="Tipo documento" inputRequired='required' name="customer_type_document" value={form.customer_type_document||''} onChange={handleChangeForm}>
                     <option value="">Seleccione una opción</option>
                     {
@@ -155,16 +155,16 @@ function FormCustomer({statusModal,contries,customerEdit,contactsEdit,pronvinces
                     }
                 </SelectPrimary>
             </div>
-            <div className="col-span-2">
+            <div className="col-span-12 md:col-span-4">
                 <InputPrimary label="N° Documento" minLength={digitDocuments.min} maxLength={digitDocuments.max} inputRequired='required' name="customer_number_document" value={form.customer_number_document||''} onChange={handleChangeForm}/>
             </div>
-            <div className="col-span-4">
+            <div className="col-span-12">
                 <InputPrimary label="Razón social / Nombres completos" inputRequired='required' name="customer_name" value={form.customer_name} onChange={handleChangeForm}/>
             </div>
             {
                 form.customer_contrie == dataForm.customer_contrie &&
                 <>
-                <div className="col-span-2">
+                <div className="col-span-6 md:col-span-4">
                     <SelectPrimary label="Departamento" name="customer_departament" value={form.customer_departament} inputRequired={!form.customer_departament ? '' : 'required'} onChange={handleChangeForm}>
                         <option value="">Ninguno</option>
                         {
@@ -172,7 +172,7 @@ function FormCustomer({statusModal,contries,customerEdit,contactsEdit,pronvinces
                         }
                     </SelectPrimary>
                 </div>
-                <div className="col-span-2">
+                <div className="col-span-6 md:col-span-4">
                     <SelectPrimary label="Provincia" name="customer_province" inputRequired={!form.customer_departament ? '' : 'required'} value={form.customer_province||''} onChange={handleChangeForm}>
                         <option value="">Ninguno</option>
                         {
@@ -180,7 +180,7 @@ function FormCustomer({statusModal,contries,customerEdit,contactsEdit,pronvinces
                         }
                     </SelectPrimary>
                 </div>
-                <div className="col-span-2">
+                <div className="col-span-6 md:col-span-4">
                     <SelectPrimary label="Distrito" inputRequired={!form.customer_departament ? '' : 'required'} name="customer_district" value={form.customer_district||''} onChange={handleChangeForm}>
                         <option value="">Ninguno</option>
                         {

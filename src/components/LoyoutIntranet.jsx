@@ -1,16 +1,21 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import Header from './Header'
-import NavegationFull from './Navegation'
+import NavegationFull from './NavegationFull'
 import ContentWrapper from './ContentWrapper'
 
 function LoyoutIntranet({title,description,children,modules,user,roles}) {
+  const refMenu = useRef(null);
+  const handleCloseMenu = () => {
+    console.log(document.documentElement.clientWidth < 768, refMenu.current.classList.contains('menu-content'))
+    if(document.documentElement.clientWidth < 768 && refMenu.current.classList.contains('menu-content')){
+      refMenu.current.classList.remove('menu-content')
+    }
+  }
   return (
     <>
       <Header title={title} description={description}/>
-      <div>
-        <NavegationFull listModules={modules} user={user}/>
-        <ContentWrapper page={children} roles={roles} user={user}/>
-      </div>
+      <NavegationFull listModules={modules} user={user} closeMenu={handleCloseMenu} ref={refMenu}/>
+      <ContentWrapper page={children} roles={roles} user={user} menu={refMenu}/>
     </>
   )
 }

@@ -1,11 +1,11 @@
 import { ArrowLeftEndOnRectangleIcon, Bars3Icon, ChevronDownIcon, UserCircleIcon } from '@heroicons/react/24/solid'
 import Image from 'next/image'
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import Link from 'next/link';
 import { getCookie } from '@/helpers/getCookie2';
 import apiAxios from '@/axios';
 import { useRouter } from 'next/navigation';
-function HeaderIntranet({dataRoles,user}) {
+function HeaderIntranet({dataRoles,user,handleMenu}) {
   const route = useRouter();
   const handleClickRoles = (e) => {
     e.stopPropagation();
@@ -47,7 +47,7 @@ function HeaderIntranet({dataRoles,user}) {
   return (
     <header className='px-6 mb-2'>
       <div className='bg-white px-4 py-2 rounded-md shadow flex justify-between items-center relative'>
-        <button type='button' className='p-2 rounded-md text-placeholder hover:bg-slate-100 h-full focus:bg-slate-200'>
+        <button type='button' className='p-2 rounded-md text-placeholder hover:bg-slate-100 h-full focus:bg-slate-200' onClick={handleMenu}>
           <Bars3Icon className='w-7 h-7'/>
         </button>
         <button type='button' className='p-2 bg-white text-placeholder rounded-md' onClick={handleClickRoles}>

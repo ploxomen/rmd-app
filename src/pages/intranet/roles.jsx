@@ -9,7 +9,6 @@ import TableRole from '@/components/roles/TableRole';
 import { getCookie } from '@/helpers/getCookie';
 import { verifUser } from '@/helpers/verifUser';
 import { useModal } from '@/hooks/useModal';
-import workSpace from '@/img/workforce.png';
 import { TYPES, crudRoleInitialState, reducerRoles } from '@/reducers/crudRolesReducer';
 import { useRouter } from 'next/navigation';
 import { useEffect, useReducer, useState } from 'react';
@@ -105,7 +104,7 @@ export default function Roles({dataModules,dataRoles,dataUser}){
     return(
         <>
         <LoyoutIntranet title="Roles" description="Administracion de roles" user={dataUser} modules={dataModules} roles={dataRoles}>
-            <BanerModule imageBanner={workSpace} title="Administración de roles"/>
+            <BanerModule imageBanner='/baners/Group 15.jpg' title="Administración de roles"/>
             <div className="md:flex flex-wrap gap-4">
                 <FormRole dataToEdit={dataToEdit} sendData={sendData} setDataToEdit={setDataToEdit}/>
                 <div className='w-full p-6 bg-white rounded-md shadow md:flex-1 overflow-x-auto'>

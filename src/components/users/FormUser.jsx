@@ -65,11 +65,11 @@ function FormUser({rolesData,typeDocumentsData,saveUser,dataUser,dataUserRol,sta
     }
   return (
     <Modal title={edit ? 'Editar usuario' : 'Nuevo usuario'} status={statusModal} onSave={handleSaveModal} handleCloseModal={closeModal}>
-        <form className='grid grid-cols-6 gap-x-3 gap-y-0' onSubmit={handleSave}>
+        <form className='grid grid-cols-12 gap-x-3 gap-y-0' onSubmit={handleSave}>
             <div className="col-span-full">
                 <SeccionForm title="Datos personales"/>
             </div>
-            <div className="col-span-3">
+            <div className="col-span-full md:col-span-6">
                 <SelectPrimary label="Tipo documento" name="user_type_document" value={form.user_type_document||''} onChange={handleChangeForm}>
                     <option value="">Ninguno</option>
                     {
@@ -77,22 +77,22 @@ function FormUser({rolesData,typeDocumentsData,saveUser,dataUser,dataUserRol,sta
                     }
                 </SelectPrimary>
             </div>
-            <div className="col-span-3">
+            <div className="col-span-full md:col-span-6">
                 <InputPrimary label="N° Documento" name="user_number_document" minLength={digitDocuments.min} maxLength={digitDocuments.max} inputRequired={digitDocuments.min && 'required'} value={form.user_number_document||''} onChange={handleChangeForm}/>
             </div>
-            <div className="col-span-3">
+            <div className="col-span-full md:col-span-6">
                 <InputPrimary label="Nombres" name="user_name" inputRequired='required' value={form.user_name} onChange={handleChangeForm}/>
             </div>
-            <div className="col-span-3">
+            <div className="col-span-full md:col-span-6">
                 <InputPrimary label="Apellidos" name="user_last_name" inputRequired='required' value={form.user_last_name} onChange={handleChangeForm}/>
             </div>
-            <div className="col-span-2">
+            <div className="col-span-full md:col-span-6 lg:col-span-4">
                 <InputPrimary label="Celular" type='tel' inputRequired='required' name="user_cell_phone" value={form.user_cell_phone||''} onChange={handleChangeForm}/>
             </div>
-            <div className="col-span-2">
+            <div className="col-span-full md:col-span-6 lg:col-span-4">
                 <InputPrimary label="Fecha nacimiento" name="user_birthdate" type='date' value={form.user_birthdate||''} onChange={handleChangeForm}/>
             </div>
-            <div className="col-span-2">
+            <div className="col-span-full md:col-span-6 lg:col-span-4">
                 <SelectPrimary label="Género" name="user_gender" value={!form.user_gender ? 'N' : form.user_gender} onChange={handleChangeForm}>
                     <option value="N">No establecer</option>
                     <option value="M">Masculino</option>
@@ -106,10 +106,10 @@ function FormUser({rolesData,typeDocumentsData,saveUser,dataUser,dataUserRol,sta
                 <InputPrimary label="Correo" type='email' name="user_email" inputRequired='required' value={form.user_email} onChange={handleChangeForm}/>
             </div>
             {
-                form.hasOwnProperty('user_password') && <div className="col-span-3"><InputPrimary label="Contraseña" name="user_password" inputRequired='required' value={form.user_password} onChange={handleChangeForm}/></div>
+                form.hasOwnProperty('user_password') && <div className="col-span-full md:col-span-6"><InputPrimary label="Contraseña" name="user_password" inputRequired='required' value={form.user_password} onChange={handleChangeForm}/></div>
 
             }
-            <div className="col-span-3">
+            <div className="col-span-full md:col-span-6">
             <SelectPrimary label="Roles" name="user_role" value="" onChange={handleSelectRole}>
                 <option value="" disabled hidden>Seleccione una opción</option>
                 {

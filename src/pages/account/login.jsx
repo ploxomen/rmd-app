@@ -3,10 +3,12 @@ import '@/app/globals.css';
 import { ButtonLogin } from '@/components/Buttons';
 import Header from '@/components/Header';
 import { useState } from 'react';
+import workSpace from '@/img/logo.jpg';
 import apiAxios from '@/axios';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/solid';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation'
+import Image from 'next/image';
 const defaultValueForm = {
     username:'',
     password:''
@@ -54,15 +56,16 @@ export default function Login(){
     return(
         <>
             <Header title="Iniciar sesión" description='Accede al sistema integrado'/>
-            <div className='bg-layout p-5 flex justify-center items-center min-h-dvh'>
+            <div className='bg-layout p-5 flex justify-center items-center min-h-dvh' style={{backgroundImage:"url('/img/login-fondo.jpg')", backgroundRepeat:'no-repeat',backgroundPosition:'center', backgroundSize:'cover'}}>
                 <div className='bg-white px-4 py-7 max-w-md rounded-lg shadow-md'>
+                    <Image src={workSpace} width={120} height={120} className='m-auto'/>
                     {
                         incorrectUser && <div className='px-6 pt-2 pb-3 bg-red-100 rounded flex gap-2 items-center'>
                             <ExclamationTriangleIcon className='w-4 h-4 text-red-500'/>
                             <span className='text-red-500 text-sm'>{incorrectUser}</span>
                         </div>
                     }
-                    <div className='px-6 pt-2 pb-6'>
+                    <div className='px-6 pt-2 pb-6 text-center'>
                         <h1 className='mb-1 font-medium text-2xl text-title'>¡Bienvenido al Sistema Integrado!</h1>
                         <p className='text-base text-paragraph font-normal'>Por favor inicie sesión con su cuenta proporcionada</p>
                     </div>
@@ -70,10 +73,9 @@ export default function Login(){
                         <InputLogin name="username" label="Usuario" type="text" value={formUser.username} onChange={handleFormChange}/>
                         <InputLogin name="password" label="Contraseña" type="password" value={formUser.password} onChange={handleFormChange}/>
                         <div className="flex justify-between flex-wrap mb-2">
-                            <Checkbox name="remember" label="Recordarme"/>
-                            {/* <div className="mb-4">
-                                <a href="" className="text-green-500 font-medium">¿Olvidaste tu contraseña?</a>
-                            </div> */}
+                            <div className="flex items-center mb-4">
+                                <Checkbox name="remember" label="Recordarme"/>
+                            </div>
                         </div>
                         <div>
                             <ButtonLogin text="Iniciar sesión" type="submit"/>

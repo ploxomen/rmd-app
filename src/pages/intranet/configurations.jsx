@@ -8,7 +8,6 @@ import LoyoutIntranet from '@/components/LoyoutIntranet';
 import SeccionForm from '@/components/SeccionForm';
 import { getCookie } from '@/helpers/getCookie';
 import { verifUser } from '@/helpers/verifUser';
-import workSpace from '@/img/process.png';
 import { PaperAirplaneIcon } from '@heroicons/react/24/solid';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useRef, useState } from 'react'
@@ -81,22 +80,22 @@ function Configurations({dataRoles,dataUser,dataModules}) {
     }
   return (
     <LoyoutIntranet title="Mi negocio" description="Configuración de mi intranet" user={dataUser} modules={dataModules} roles={dataRoles}>
-        <BanerModule imageBanner={workSpace} title="Configuración de mi negocio"/>
+        <BanerModule imageBanner='/baners/Group 11.jpg' title="Configuración de mi negocio"/>
         <form id='form-quotation' onSubmit={handleSubmit}>
             <div className='w-full p-6 mb-4 bg-white rounded-md shadow grid grid-cols-12 gap-x-3 gap-y-0'>
                 <div className="col-span-full">
                     <SeccionForm title="Datos de la empresa"/>
                 </div>
-                <div className="col-span-2">
+                <div className="col-span-full md:col-span-6 lg:col-span-2">
                     <InputPrimary label="RUC" type='text' inputRequired='required' name="business_ruc" value={form.business_ruc||''} onChange={handleChange}/>
                 </div>
-                <div className="col-span-10">
+                <div className="col-span-full md:col-span-6 lg:col-span-10">
                     <InputPrimary label="Razon social" name="business_name" type='text' inputRequired='required' value={form.business_name||''} onChange={handleChange}/>
                 </div>
-                <div className="col-span-6">
+                <div className="col-span-full md:col-span-6 lg:col-span-6">
                     <InputPrimary label="Cel." name="business_cell_phone" type='text' value={form.business_cell_phone||''} onChange={handleChange}/>
                 </div>
-                <div className="col-span-6">
+                <div className="col-span-full md:col-span-6 lg:col-span-6">
                     <InputPrimary label="Correo" name="business_email" type='text' value={form.business_email||''} onChange={handleChange}/>
                 </div>
                 <div className="col-span-full">

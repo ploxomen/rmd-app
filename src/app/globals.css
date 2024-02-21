@@ -18,3 +18,23 @@ input,button,textarea,select{
 [type="checkbox"]:checked{
   background-image: url(/icons/checked.svg);
 }
+.menu-content-windows{
+  left: -260px !important;
+}
+.main-content-windows{
+  padding-left: 0 !important;
+}
+.menu-content {
+  width: 100%;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.433);
+}
+@media (min-width: 768px) {
+  .menu-content{
+    width: auto;
+    background-color: transparent;
+  }
+  /* .menu-content-windows{
+    left: 0 !important;
+  } */
+}

@@ -1,6 +1,5 @@
 import '@/app/globals.css';
 import apiAxios from '@/axios';
-import Badge from '@/components/Badge';
 import BanerModule from '@/components/BanerModule';
 import { InputSearch } from '@/components/Inputs';
 import LoyoutIntranet from '@/components/LoyoutIntranet';
@@ -9,9 +8,9 @@ import { SelectPrimary } from '@/components/Selects';
 import FormQuotation from '@/components/quotations/FormQuotation';
 import TableAllQuotation from '@/components/quotations/TableAllQuotation';
 import { getCookie } from '@/helpers/getCookie';
+import { statusQuotations } from '@/helpers/statusQuotations';
 import { verifUser } from '@/helpers/verifUser';
 import { useModal } from '@/hooks/useModal';
-import workSpace from '@/img/checklist.png';
 import { TYPES_QUOTATIONS, quotationInitialState, reducerQuotations } from '@/reducers/crudQuotations';
 import axios from 'axios';
 
@@ -25,23 +24,7 @@ const initialStateFilters = {
   products:[],
   customers:[],
   users:[],
-  status:[
-    {
-      value:"0",
-      label:"Anulado",
-      element:<Badge text="Anulado" colors="text-red-500 bg-red-100" />
-    },
-    {
-      value:"1",
-      label:"Generado",
-      element:<Badge text="Generado" colors="text-green-500 bg-green-100" />
-    },
-    {
-      value:"2",
-      label:"En pedido",
-      element:<Badge text="En pedido" colors="text-blue-500 bg-blue-100" />
-    }
-  ]
+  status:statusQuotations
 }
 const initialStateValueFilters = {
   customer:"",
@@ -198,9 +181,9 @@ function All({dataUser,dataModules,dataRoles}) {
     return (
       <>
       <LoyoutIntranet title="Mis cotizaciones" description="Administración de cotizaciones" user={dataUser} modules={dataModules} roles={dataRoles}>
-          <BanerModule imageBanner={workSpace} title="Administración de cotizaciones"/>
+          <BanerModule imageBanner='/baners/Group 9.jpg' title="Administración de cotizaciones"/>
           <div className='w-full p-6 bg-white rounded-md shadow mb-4 grid grid-cols-6 gap-x-2'>
-              <div className='col-span-2'>
+              <div className='col-span-6 md:col-span-4 lg:col-span-2'>
                 <SelectPrimary name="customer" label="Clientes" value={dataChange.customer} onChange={e => handleChangeFilter(e.target.name,e.target.value)}>
                   <option value="">Todos</option>
                   {
@@ -208,7 +191,7 @@ function All({dataUser,dataModules,dataRoles}) {
                   }
                 </SelectPrimary>
               </div>
-              <div className='col-span-2'>
+              <div className='col-span-6 md:col-span-4 lg:col-span-2'>
                 <SelectPrimary name="quoter" label="Cotizador" value={dataChange.quoter} onChange={e => handleChangeFilter(e.target.name,e.target.value)}>
                   <option value="">Todos</option>
                   {
@@ -216,7 +199,7 @@ function All({dataUser,dataModules,dataRoles}) {
                   }
                 </SelectPrimary>
               </div>
-              <div className='col-span-2'>
+              <div className='col-span-6 md:col-span-4 lg:col-span-2'>
                 <SelectPrimary name="status" label="Estado" value={dataChange.status} onChange={e => handleChangeFilter(e.target.name,e.target.value)}>
                   <option value="">Todos</option>
                   {
@@ -226,7 +209,7 @@ function All({dataUser,dataModules,dataRoles}) {
               </div>
           </div>
           <div className='w-full p-6 bg-white rounded-md shadow overflow-x-auto'>
-              <div style={{width:"300px"}} className='ml-auto'>
+              <div style={{width:"300px"}} className='ml-auto mb-4'>
                 <InputSearch placeholder='¿Que estas buscando?' onInput={e => handleChangeFilter('search',e.target.value)}/>
               </div>
               <TableAllQuotation quotations={state.quotations} deleteQuotation={deleteQuotation} getQuotation={getQuotation} status={filters.status}/>

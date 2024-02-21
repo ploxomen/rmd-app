@@ -57,7 +57,7 @@ export async function getServerSideProps(context) {
 export default function Home({dataModules,dataRoles,dataUser}){
     return(
         <LoyoutIntranet title="Inicio" description="Inicio de la intranet" user={dataUser} modules={dataModules} roles={dataRoles}>
-            <div className='grid grid-cols-4 gap-4 mb-6'>
+            <div className='grid grid-cols-12 gap-4 mb-6'>
                 <CartHome title="Clientes" quantity="150" backgroundIcon="bg-violet-200" Icon={UserGroupIcon} colorIcon="text-violet-500"/>
                 <CartHome title="Cotizaciones" quantity="150" backgroundIcon="bg-yellow-200" Icon={DocumentChartBarIcon} colorIcon="text-yellow-500"/>
                 <CartHome title="Cotizaciones aprobadas" quantity="150" backgroundIcon="bg-green-200" Icon={DocumentCheckIcon} colorIcon="text-green-500"/>

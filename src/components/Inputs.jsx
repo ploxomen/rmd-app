@@ -37,12 +37,12 @@ export function InputLogin({label,type,name,value,onChange}) {
         </div>
     )
 }
-export function Checkbox({label,name,ckeckedUser,onChange}) {
+export function Checkbox({label = "",name,checked,onChange}) {
     return (
-        <div className="flex items-center mb-4">
-            <input id={`id${name}`} type="checkbox" defaultChecked={ckeckedUser} onChange={onChange} className={`w-4 h-4 text-blue-600 border-2 p-2 bg-gray-200 border-white rounded focus:ring-blue-500 dark:focus:ring-blue-600 checked:bg-blue-500 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600`}/>
+        <>
+            <input id={`id${name}`} type="checkbox" checked={checked||false} onChange={onChange} className={`w-4 h-4 text-blue-600 border-2 p-2 bg-gray-200 border-white rounded focus:ring-blue-500 dark:focus:ring-blue-600 checked:bg-blue-500 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600`}/>
             <label htmlFor={`id${name}`} className="ms-2 font-medium text-placeholder dark:text-gray-300">{label}</label>
-        </div>
+        </>
     )
 }
 export function SubmitForm({id}) {

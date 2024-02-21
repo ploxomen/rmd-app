@@ -200,10 +200,10 @@ function Users({dataModules,dataUser,dataRoles}) {
   return (
     <>
         <LoyoutIntranet title="Usuarios" description="Administración de usuarios" user={dataUser} modules={dataModules} roles={dataRoles}>
-            <BanerModule imageBanner={workSpace} title="Administración de usuarios"/>
+            <BanerModule imageBanner='/baners/Group 17.jpg' title="Administración de usuarios"/>
             <div className='w-full p-6 bg-white rounded-md shadow mb-4'>
                 <div className="flex flex-auto">
-                    <div className='w-48'>
+                    <div className='max-w-48 w-full'>
                         <SelectPrimary name="role" label="Roles" value={filter.role} onChange={handleChangeFilter}>
                         {
                             state.roles.map(role => <option value={role.id} key={role.id}>{role.rol_name}</option>)

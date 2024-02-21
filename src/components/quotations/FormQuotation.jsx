@@ -157,22 +157,22 @@ function FormQuotation({statusModal,customers,quotationEdit,contactsList,product
             <div className="col-span-full">
                 <SeccionForm title="Datos de la cotización"/>
             </div>
-            <div className="col-span-4">
+            <div className="col-span-full md:col-span-4">
                 <InputPrimary label="Fecha de emisión" type='date' inputRequired='required' disabled="disabled" value={form.quotation_date_issue||''}/>
             </div>
-            <div className="col-span-4">
+            <div className="col-span-full md:col-span-4">
                 <SelectPrimary label="Tipo moneda" inputRequired='required' name="quotation_type_money" value={form.quotation_type_money||''} onChange={handleChangeForm}>
                     <option value="PEN">Soles (S/)</option>
                     <option value="USD">Dolares ($)</option>
                 </SelectPrimary>
             </div>
-            <div className="col-span-4">
-                <InputPrimary label="Tipo cambio" step="0.01" type='number' min="0" name="quotation_type_change" value={form.quotation_type_change||''} onChange={handleChangeForm}/>
+            <div className="col-span-full md:col-span-4">
+                <InputPrimary label="Tipo cambio" inputRequired={form.quotation_type_money == 'USD' ? 'required' : ''} step="0.01" type='number' min="0" name="quotation_type_change" value={form.quotation_type_change||''} onChange={handleChangeForm}/>
             </div>
             <div className="col-span-full">
                 <SeccionForm title="Datos del cliente"/>
             </div>
-            <div className="col-span-6">
+            <div className="col-span-full md:col-span-6">
                 <SelectPrimary label="Cliente" inputRequired='required' name="quotation_customer" value={form.quotation_customer||''} onChange={handleChangeForm}>
                     <option value="">Seleccione un cliente</option>
                     {
@@ -180,7 +180,7 @@ function FormQuotation({statusModal,customers,quotationEdit,contactsList,product
                     }
                 </SelectPrimary>
             </div>
-            <div className="col-span-6">
+            <div className="col-span-full md:col-span-6">
                 <SelectPrimary label="Contacto" name="quotation_contact" inputRequired="required" value={form.quotation_contact||''} onChange={handleChangeForm}>
                     <option value="">Seleccione un contacto</option>
                     {
@@ -201,7 +201,7 @@ function FormQuotation({statusModal,customers,quotationEdit,contactsList,product
                     !form.quotation_include_igv ? <p className='text-sm text-red-600 my-2'>Esta cotización no incluye I.G.V debido a que el cliente <strong className='font-bold'>NO ES DE PERÚ</strong></p> : null
                 }
             </div>
-            <div className="col-span-full">
+            <div className="col-span-full overflow-x-auto">
                 <TableQuotation products={products} formatMoney={form.quotation_type_money} handleDetailChange={handleDetailChange} handleDeleteDetail={handleDeleteDetail} includeIgv={form.quotation_include_igv} dataTotal={{discount:form.quotation_discount,igv:amountDetails.quotation_igv,amount:amountDetails.quotation_amount,total:amountDetails.quotation_total}} handleChangeDiscount={handleChangeForm}/>
             </div>
             <div className="col-span-full">

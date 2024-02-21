@@ -2,7 +2,7 @@ import React from 'react'
 
 function CartHome({title,quantity,Icon,backgroundIcon,colorIcon}) {
   return (
-    <div className='p-6 shadow bg-white rounded-md flex justify-between items-center'>
+    <div className='p-6 shadow col-span-12 sm:col-span-6 lg:col-span-4 xl:col-span-3 bg-white rounded-md flex justify-between items-center'>
         <div>
             <h1 className='text-paragraph'>{title}</h1>
             <strong className='text-gray-500'>{quantity}</strong>
