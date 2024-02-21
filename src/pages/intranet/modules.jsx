@@ -78,7 +78,7 @@ export default function Roles({dataModules,dataRoles,dataUser}){
                 {
                     state.roles.map(role => (
                         <li key={role.id}>
-                            <Checkbox label={role.rol_name} name={"module-"+role.id} ckeckedUser={role.checked} onChange={ e => dispatch({type:TYPES_MODULE.CHANGE_CHECKED_ROLES,payload:role.id})}/>
+                            <Checkbox label={role.rol_name} name={"module-"+role.id} checked={role.checked||false} onChange={ e => dispatch({type:TYPES_MODULE.CHANGE_CHECKED_ROLES,payload:role.id})}/>
                         </li>
                     ))
                 }
