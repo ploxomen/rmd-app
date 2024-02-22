@@ -9,6 +9,7 @@ import { getCookie } from '@/helpers/getCookie';
 import apiAxios from '@/axios';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
+import { sweetAlert } from '@/helpers/getAlert';
 export async function getServerSideProps(context) {
     const userCookie = context.req.cookies;
     if(!userCookie.authenticate){
@@ -50,8 +51,9 @@ function UserReset() {
     })
     const route = useRouter();
     const handleCloseSession = async () => {
-        if(!window.confirm('¿Deseas cerrar sesión?')){
-          return
+        const question = await sweetAlert({title : "Mensaje", text: "¿Deseas cerrar sesión?", icon : "question",showCancelButton:true});
+        if(!question.isConfirmed){
+        return
         }
         try {
         const resp = await apiAxios.delete('/user/logout',{headers});
@@ -61,27 +63,28 @@ function UserReset() {
         return route.replace('/account/login');
         } catch (error) {
             console.error(error);
-            alert("Error al cerrar la sesión");
+            sweetAlert({title : "Error", text: "Error al cerrar sesión", icon : "error"});            ;
         }
     }
     const handleSubmit = async (e) => {
         e.preventDefault();
         if(form.password_1.length < 8){
-            return alert("La contraseña debe contener al menos 8 caracteres");
+            return sweetAlert({title : "Alerta", text: 'La contraseña debe contener al menos 8 caracteres', icon : "warning"});            ;
         }
         if(form.password_1 != form.password_2){
-            return alert("Las contraseñas no coinciden");
+            return sweetAlert({title : "Alerta", text: 'Las contraseñas no coinciden', icon : "warning"});            ;
         }
         try {
             const resp = await apiAxios.put(`/user/change-password`,form,{headers});
             if(resp.data.error){
-                return alert(resp.data.message)
+                return sweetAlert({title : "Alerta", text: resp.data.message, icon : "warning"});            ;
             }
             Cookies.remove('authenticate',{ path: '' });
             Cookies.set('authenticate',JSON.stringify(resp.data.data),{path:'/'});
             return route.replace(resp.data.redirect);
         } catch (error) {
-            alert('Error al cambiar la contraseña');
+            console.error(error);
+            sweetAlert({title : "Error", text: 'Error al cambiar la contraseña', icon : "error"});            ;
         }
     }
     const handleChangeForm = (e) => {

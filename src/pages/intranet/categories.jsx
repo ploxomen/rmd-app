@@ -14,6 +14,7 @@ import PaginationTable from '@/components/PaginationTable';
 import FormCategorie from '@/components/categories/FormCategorie';
 import { useModal } from '@/hooks/useModal';
 import { getCookie } from '@/helpers/getCookie';
+import { sweetAlert } from '@/helpers/getAlert';
 
 export async function getServerSideProps(context) {
     const userCookie = context.req.cookies;
@@ -70,7 +71,7 @@ function categories({dataModules,dataUser,dataRoles}) {
                 return route.replace(resp.data.redirect);
             }
             if(resp.data.error){
-                return alert(resp.data.message);
+                return sweetAlert({title : "Alerta", text: resp.data.message, icon : "warning"});
             }
             dispatch({
                 type:TYPES_CATEGORIES.GET_CATEGORIE,
@@ -95,13 +96,13 @@ function categories({dataModules,dataUser,dataRoles}) {
                 return route.replace(resp.data.redirect);
             }
             if(resp.data.error){
-                return alert(resp.data.message);
+                return sweetAlert({title : "Alerta", text: resp.data.message, icon : "warning"});
             }
             setDataChange({
                 ...dataChange,
                 reload:!dataChange.reload
             })
-            alert(resp.data.message);
+            sweetAlert({title : "success", text: resp.data.message, icon : "success"});            ;
         } catch (error) {
             dispatch({type:TYPES_CATEGORIES.NO_CATEGORIES});
         }
@@ -124,7 +125,7 @@ function categories({dataModules,dataUser,dataRoles}) {
             }
             if(resp.data.error){
                 resp.data.data.forEach(error => {
-                    alert(error);
+                    sweetAlert({title : "Alerta", text: error, icon : "warning"});
                 });
                 return
             }
@@ -132,7 +133,7 @@ function categories({dataModules,dataUser,dataRoles}) {
                 ...dataChange,
                 reload:!dataChange.reload
             })
-            alert(resp.data.message);
+            sweetAlert({title : "Exitoso", text: resp.data.message, icon : "success"});            ;
             closeModal();
         } catch (error) {
             console.error(error);

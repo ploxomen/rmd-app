@@ -4,6 +4,7 @@ import { InputPrimary, SubmitForm } from '../Inputs'
 import { SelectPrimary } from '../Selects'
 import SeccionForm from '../SeccionForm'
 import { XMarkIcon } from '@heroicons/react/24/solid'
+import { sweetAlert } from '@/helpers/getAlert'
 
 const dataForm = {
     id:null,
@@ -41,7 +42,7 @@ function FormUser({rolesData,typeDocumentsData,saveUser,dataUser,dataUserRol,sta
     const handleSave = (e) => {
         e.preventDefault();
         if(!roles.length){
-            return alert("Debe seleccionar al menos un rol");
+            return sweetAlert({title : "Alerta", text: "Debes seleccionar al menos un rol", icon : "warning"});
         }
         saveUser(form,roles.map(role => role.id));
     }
@@ -51,7 +52,7 @@ function FormUser({rolesData,typeDocumentsData,saveUser,dataUser,dataUserRol,sta
     const handleSelectRole = (e) => {
         const roleSelect = rolesData.find(role => role.id == e.target.value);
         if(!roleSelect){
-            return alert('No se encontró el rol que seleccionó');
+            return sweetAlert({title : "Alerta", text: "No se encontró el rol seleccionado", icon : "warning"});
         }
         if(!roles.filter(role => role.id == roleSelect.id).length){
             setRoles(

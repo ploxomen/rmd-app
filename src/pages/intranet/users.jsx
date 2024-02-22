@@ -9,6 +9,7 @@ import { SelectPrimary } from '@/components/Selects';
 import FormResetPasswordUser from '@/components/users/FormResetPasswordUser';
 import FormUser from '@/components/users/FormUser';
 import TableUser from '@/components/users/TableUser';
+import { sweetAlert } from '@/helpers/getAlert';
 import { getCookie } from '@/helpers/getCookie';
 import { verifUser } from '@/helpers/verifUser';
 import { useModal } from '@/hooks/useModal';
@@ -101,13 +102,13 @@ function Users({dataModules,dataUser,dataRoles}) {
                 return route.replace(resp.data.redirect);
             }
             if(resp.data.error){
-                return alert(resp.data.message);
+                return sweetAlert({title : "Alerta", text: resp.data.message, icon : "warning"});
             }
             setDataChange({
                 ...dataChange,
                 reload:!dataChange.reload
             })
-            alert(resp.data.message);
+            sweetAlert({title : "Exitoso", text: resp.data.message, icon : "success"});
             closeModal();
         } catch (error) {
             dispatch({type:TYPES_USER.NO_USERS});
@@ -120,7 +121,7 @@ function Users({dataModules,dataUser,dataRoles}) {
                 return route.replace(resp.data.redirect);
             }
             if(resp.data.error){
-                return alert(resp.data.message);
+                return sweetAlert({title : "Alerta", text: resp.data.message, icon : "warning"});
             }
             dispatch({type:TYPES_USER.GET_USER,payload:{roles:resp.data.data.roles,user:resp.data.data.user}});
             handleOpenModal();
@@ -158,9 +159,9 @@ function Users({dataModules,dataUser,dataRoles}) {
                 return route.replace(resp.data.redirect);
             }
             if(resp.data.error){
-                return alert(resp.data.message);
+                return sweetAlert({title : "Alerta", text: resp.data.message, icon : "warning"});
             }
-            alert(resp.data.message);
+            sweetAlert({title : "Exitoso", text: resp.data.message, icon : "success"});
             closeModalReset();
         } catch (error) {
             dispatch({type:TYPES_USER.NO_USERS});
@@ -168,8 +169,9 @@ function Users({dataModules,dataUser,dataRoles}) {
         }
     }
     const deleteUser = async (idUser) => {
-        if(!window.confirm("¿Deseas eliminar este usuario?")){
-            return
+        const question = await sweetAlert({title : "Mensaje", text: "¿Deseas eliminar este usuario?", icon : "question",showCancelButton:true});
+        if(!question.isConfirmed){
+        r<eturn
         }
         try {
             const resp = await apiAxios.delete(`/users/${idUser}`,{headers});
@@ -177,14 +179,14 @@ function Users({dataModules,dataUser,dataRoles}) {
                 return route.replace(resp.data.redirect);
             }
             if(resp.data.error){
-                return alert(resp.data.message);
+                return sweetAlert({title : "Alerta", text: resp.data.message, icon : "warning"});
             }
             setDataChange({
                 ...dataChange,
                 reload:!dataChange.reload
             })
             // dispatch({type:TYPES_USER.DELETE_USER,payload:idUser});
-            alert(resp.data.message);
+            return sweetAlert({title : "Exitoso", text: resp.data.message, icon : "success"});
         } catch (error) {
             dispatch({type:TYPES_USER.NO_USERS});
             console.error(error);

@@ -5,6 +5,7 @@ import { Checkbox } from '@/components/Inputs';
 import LoyoutIntranet from "@/components/LoyoutIntranet";
 import Modal from '@/components/Modal';
 import TableModule from '@/components/TableModule';
+import { sweetAlert } from '@/helpers/getAlert';
 import { getCookie } from '@/helpers/getCookie';
 import { verifUser } from '@/helpers/verifUser';
 import { useModal } from '@/hooks/useModal';
@@ -58,7 +59,7 @@ export default function Roles({dataModules,dataRoles,dataUser}){
             if(resp.data.redirect !== null){
                 return route.replace(resp.data.redirect);
             }
-            alert(resp.data.message);
+            sweetAlert({title : "Exitoso", text: resp.data.message, icon : "success"});
             closeModal();
         } catch (error) {
             dispatch({type:TYPES_MODULE.NO_MODULES});

@@ -6,6 +6,7 @@ import EditorText from '@/components/EditorText';
 import { InputPrimary, TextareaPrimary } from '@/components/Inputs';
 import LoyoutIntranet from '@/components/LoyoutIntranet';
 import SeccionForm from '@/components/SeccionForm';
+import { sweetAlert } from '@/helpers/getAlert';
 import { getCookie } from '@/helpers/getCookie';
 import { verifUser } from '@/helpers/verifUser';
 import { PaperAirplaneIcon } from '@heroicons/react/24/solid';
@@ -48,7 +49,7 @@ function Configurations({dataRoles,dataUser,dataModules}) {
                 })
             } catch (error) {
                 console.error(error)
-                alert('Ocurrió un error al obtener los datos del negocio')
+                sweetAlert({title : "Error", text: "Ocurrió un error al obtener los datos del negocio", icon : "error"});
             }
         }
         getData()
@@ -62,14 +63,14 @@ function Configurations({dataRoles,dataUser,dataModules}) {
             }
             if(resp.data.error){
                 resp.data.data.forEach(error => {
-                    alert(error)
+                    sweetAlert({title : "Alerta", text: error, icon : "warning"});
                 });
                 return
             }
-            alert(resp.data.message);
+            sweetAlert({title : "Exitoso", text: resp.data.message, icon : "success"});
         } catch (error) {
             console.error(error)
-            alert('Error al actualizar los datos de mi negocio')
+            sweetAlert({title : "Error", text: "Ocurrió un error al actualizar los datos del negocio", icon : "error"});
         }
     }
     const handleChange = (e) => {

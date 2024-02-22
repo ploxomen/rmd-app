@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { getCookie } from '@/helpers/getCookie2';
 import apiAxios from '@/axios';
 import { useRouter } from 'next/navigation';
+import { sweetAlert } from '@/helpers/getAlert';
 function HeaderIntranet({dataRoles,user,handleMenu}) {
   const route = useRouter();
   const handleClickRoles = (e) => {
@@ -25,7 +26,8 @@ function HeaderIntranet({dataRoles,user,handleMenu}) {
     };
   }, []);
   const handleCloseSession = async () => {
-    if(!window.confirm('¿Deseas cerrar sesión?')){
+    const question = await sweetAlert({title : "Mensaje", text: "¿Deseas cerrar sesión?", icon : "question",showCancelButton:true});
+    if(!question.isConfirmed){
       return
     }
     const cookie = getCookie('authenticate');

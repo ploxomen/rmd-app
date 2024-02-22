@@ -7,6 +7,7 @@ import apiAxios from '@/axios';
 import { getCookie } from '@/helpers/getCookie';
 import { ButtonDanger,  ButtonSecondarySm } from '../Buttons';
 import { PlusCircleIcon, TrashIcon } from '@heroicons/react/24/solid';
+import { sweetAlert } from '@/helpers/getAlert';
 const dataForm = {
     id:null,
     customer_type_document: "",
@@ -73,7 +74,7 @@ function FormCustomer({statusModal,contries,customerEdit,contactsEdit,pronvinces
                 }
             } catch (error) {
                 console.error(error);
-                alert("Error al obtener el ubigeo");
+                sweetAlert({title : "Error", text: "Error al obtener el ubigeo", icon : "error"});            ;
             }
         }
     }
@@ -105,13 +106,10 @@ function FormCustomer({statusModal,contries,customerEdit,contactsEdit,pronvinces
         if(contact.type === 'old'){
             try {   
                 const resp = await apiAxios.delete('/customer-contact/' + id,{headers});
-                if(resp.data.error){
-                    return alert(resp.data.message);
-                }
-                alert(resp.data.message);
+                sweetAlert({title : "Mensaje", text: resp.data.message, icon : resp.data.error ? "error" : "success"});            ;
             } catch (error) {
                 console.error(error);
-                alert('Ocurrió un error al eliminar el contacto');
+                sweetAlert({title : "Error", text: "Ocurrió un error al eliminar el contacto", icon : "error"});            ;
             }
         }
         setContacts(contacts.filter(contact => contact.id != id));
@@ -126,7 +124,7 @@ function FormCustomer({statusModal,contries,customerEdit,contactsEdit,pronvinces
         contacts.forEach(contact => {
             if(!contact.contact_email && !contact.contact_number){
                 continueProcess = false;
-                alert('El contacto ' + contact.contact_name + ' debe de tener número o correo');
+                sweetAlert({title : "Alerta", text: 'El contacto ' + contact.contact_name + ' debe de tener número o correo', icon : "warning"});
             }
         });
         if(continueProcess){

@@ -8,6 +8,7 @@ import apiAxios from '@/axios';
 import Image from 'next/image';
 import { ButtonDangerSm, ButtonPrimary, ButtonPrimarySm } from '../Buttons';
 import { ArrowUpTrayIcon, TrashIcon } from '@heroicons/react/24/solid';
+import { sweetAlert } from '@/helpers/getAlert';
 const dataForm = {
     product_name:"",
     product_description:"",
@@ -67,7 +68,7 @@ function FormProduct({statusModal,closeModal,handleSave,productEdit,categories,s
                 setSubcategories(resp.data.data);
             } catch (error) {
                 console.error(error);
-                alert('Ocurrió un error al obtener las subcategorías');
+                sweetAlert({title : "Error", text: "Ocurrió un error al obtener las subcategorías", icon : "error"});
             }
         }
     }

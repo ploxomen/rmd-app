@@ -6,6 +6,7 @@ import { PlusCircleIcon, TrashIcon } from '@heroicons/react/24/solid'
 import { getCookie } from '@/helpers/getCookie'
 import Modal from '../Modal'
 import apiAxios from '@/axios'
+import { sweetAlert } from '@/helpers/getAlert'
 const dataForm = {
     id:null,
     categorie_name:""
@@ -44,27 +45,31 @@ function FormCategorie({statusModal,handleSave,closeModal,categorieEdit,subCateg
     }
     const handleDeleteSubCategorie = async (id) => {
         const subCategorie = subCategories.find(subCate => subCate.id == id);
-        if(!window.confirm("¿Deseas eliminar esta subcategoría?")){
+        const question = await sweetAlert({title : "Mensaje", text: "¿Deseas eliminar esta subcategoría?", icon : "question",showCancelButton:true});
+        if(!question.isConfirmed){
             return
         }
         if(subCategorie.type === 'old'){
             try {
                 const resp = await apiAxios.delete('/categorie-subcategorie/' + id,{headers});
                 if(resp.data.error){
-                    return alert(resp.data.message);
+                    return sweetAlert({title : "Alerta", text: resp.data.message, icon : "warning"});
                 }
-                alert(resp.data.message);
+                return sweetAlert({title : "Exitoso", text: resp.data.message, icon : "success"});
             } catch (error) {
                 console.error(error);
-                alert('Ocurrió un error al eliminar la subcategoría');
+                return sweetAlert({title : "Error", text: 'Ocurrió un error al eliminar la subcategoría', icon : "error"});
             }
         }
         setSubCategories(subCategories.filter(subCategorie => subCategorie.id != id));
     }
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        if(!subCategories.length && !window.confirm('¿Deseas agregar la categoría sin subcategorías?')){
-            return
+        if(!subCategories.length){
+            const question = await sweetAlert({title : "Mensaje", text: "¿Deseas agregar la categoría sin subcategorías?", icon : "question",showCancelButton:true});
+            if(!question.isConfirmed){
+                return
+            }
         }
         handleSave(form,subCategories);
     }

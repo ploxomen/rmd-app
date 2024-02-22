@@ -7,6 +7,7 @@ import LoyoutIntranet from '@/components/LoyoutIntranet';
 import PaginationTable from '@/components/PaginationTable';
 import FormProduct from '@/components/products/FormProduct';
 import TableProduct from '@/components/products/TableProduct';
+import { sweetAlert } from '@/helpers/getAlert';
 import { getCookie } from '@/helpers/getCookie';
 import { verifUser } from '@/helpers/verifUser';
 import { useModal } from '@/hooks/useModal';
@@ -36,7 +37,7 @@ function products({dataModules,dataUser,dataRoles}) {
             });
         } catch (error) {
           dispatch({type:TYPES_PRODUCTS.NO_PRODUCTS});
-          alert('Error al obtener las categorías');
+          sweetAlert({title : "Error", text: "Error al obtener las categorías", icon : "error"});
         }
     }
     getData();
@@ -86,7 +87,7 @@ function products({dataModules,dataUser,dataRoles}) {
         }
         if(resp.data.error){
             resp.data.data.forEach(error => {
-                alert(error);
+              sweetAlert({title : "Alerta", text: error, icon : "warning"});
             });
             return
         }
@@ -94,11 +95,11 @@ function products({dataModules,dataUser,dataRoles}) {
             ...dataChange,
             reload:!dataChange.reload
         })
-        alert(resp.data.message);
+        sweetAlert({title : "Exitoso", text: resp.data.message, icon : "success"});
         closeModal();
     } catch (error) {
         console.error(error);
-        alert("Ocurrió un error");
+        sweetAlert({title : "Error", text:'Error al guardar el producto', icon : "error"});
     }
   }
   const getProduct = async (idProduct) => {
@@ -108,7 +109,7 @@ function products({dataModules,dataUser,dataRoles}) {
             return route.replace(resp.data.redirect);
         }
         if(resp.data.error){
-            return alert(resp.data.message);
+          return sweetAlert({title : "Alerta", text: resp.data.message, icon : "warning"});
         }
         dispatch({
             type:TYPES_PRODUCTS.GET_PRODUCT,
@@ -139,8 +140,9 @@ function products({dataModules,dataUser,dataRoles}) {
     setDataChange({...dataChange,current:number});
   }
   const deleteProduct = async (idProduct) => {
-    if(!window.confirm("¿Deseas eliminar este producto?")){
-        return
+    const question = await sweetAlert({title : "Mensaje", text: "¿Deseas eliminar esta producto?", icon : "question",showCancelButton:true});
+    if(!question.isConfirmed){
+      return
     }
     try {
         const resp = await apiAxios.delete(`/product/${idProduct}`,{headers});
@@ -148,15 +150,15 @@ function products({dataModules,dataUser,dataRoles}) {
             return route.replace(resp.data.redirect);
         }
         if(resp.data.error){
-            return alert(resp.data.message);
+          return sweetAlert({title : "Alerta", text: resp.data.message, icon : "warning"});
         }
         setDataChange({
             ...dataChange,
             reload:!dataChange.reload
         })
-        alert(resp.data.message);
+        sweetAlert({title : "Exitoso", text: resp.data.message, icon : "success"});
     } catch (error) {
-        alert('Error al eliminar el producto');
+        sweetAlert({title : "Error", text:'Error al eliminar el producto', icon : "error"});
         dispatch({type:TYPES_PRODUCTS.NO_PRODUCTS});
     }
   }
@@ -180,7 +182,7 @@ function products({dataModules,dataUser,dataRoles}) {
       if(error.status !== 200){
         return route.replace('/intranet/home');
       }
-      alert('Error al exportar el excel');
+      sweetAlert({title : "Error", text:'Error al exportar producto', icon : "error"});
     }
   }
   return (

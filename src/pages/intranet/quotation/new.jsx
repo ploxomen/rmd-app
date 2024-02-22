@@ -8,6 +8,7 @@ import LoyoutIntranet from '@/components/LoyoutIntranet';
 import SeccionForm from '@/components/SeccionForm';
 import { SelectPrimary } from '@/components/Selects';
 import TableQuotation from '@/components/quotations/TableQuotation';
+import { sweetAlert } from '@/helpers/getAlert';
 import { getCookie } from '@/helpers/getCookie';
 import { verifUser } from '@/helpers/verifUser';
 import workSpace from '@/img/quotation.png';
@@ -72,7 +73,7 @@ function quotationNew({dataUser,dataModules,dataRoles}) {
                 setProductsList(all[1].data.data);
             } catch (error) {
                 console.error(error);
-                alert('Error al obtener los clientes y productos')
+                sweetAlert({title : "Error", text:'Error al obtener los clientes y productos', icon : "error"});
             }
         }
         getData();
@@ -115,7 +116,7 @@ function quotationNew({dataUser,dataModules,dataRoles}) {
                     quotation_include_igv:resq.data.data.disabledIgv
                 }))
             } catch (error) {
-                alert('Error al obtener los contactos');
+                sweetAlert({title : "Error", text:'Error al obtener los contactos', icon : "error"});
             }
         }else if(key == 'quotation_customer' && !value){
             setContacts([]);
@@ -151,9 +152,10 @@ function quotationNew({dataUser,dataModules,dataRoles}) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if(!products.length){
-            return alert('La cotización debe tener al menos un producto');
+            return await sweetAlert({title : "Alerta", text:'La cotización debe tener al menos un producto', icon : "warning"});
         }
-        if(!window.confirm('¿Deseas generar una nueva cotización?')){
+        const question = await sweetAlert({title : "Mensaje", text: "¿Deseas generar una nueva cotización?", icon : "question",showCancelButton:true});
+        if(!question.isConfirmed){
             return
         }
         const data = {
@@ -170,11 +172,11 @@ function quotationNew({dataUser,dataModules,dataRoles}) {
             }
             if(resp.data.error){
                 resp.data.data.forEach(error => {
-                    alert(error);
+                    sweetAlert({title : "Alerta", text: error, icon : "warning"});
                 });
                 return
             }
-            alert(resp.data.message);
+            sweetAlert({title : "Exitoso", text: resp.data.message, icon : "success"});
             setForm(initalForm);
             setContacts([]);
             setProducts([]);
@@ -183,7 +185,7 @@ function quotationNew({dataUser,dataModules,dataRoles}) {
             editorRefObservation.current.setContent("");
         } catch (error) {
             console.error(error);
-            alert('Error al generar una nueva cotización');
+            sweetAlert({title : "Error", text: "Error al generar una nueva cotización", icon : "error"});
         }
     }
   return (

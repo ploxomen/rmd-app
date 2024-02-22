@@ -7,6 +7,7 @@ import PaginationTable from '@/components/PaginationTable';
 import { SelectPrimary } from '@/components/Selects';
 import FormQuotation from '@/components/quotations/FormQuotation';
 import TableAllQuotation from '@/components/quotations/TableAllQuotation';
+import { sweetAlert } from '@/helpers/getAlert';
 import { getCookie } from '@/helpers/getCookie';
 import { statusQuotations } from '@/helpers/statusQuotations';
 import { verifUser } from '@/helpers/verifUser';
@@ -60,7 +61,8 @@ function All({dataUser,dataModules,dataRoles}) {
               users:all[2].data.data
             })
         } catch (error) {
-            alert('Error al obtener los filtros')
+          console.error(error);
+          sweetAlert({title : "Error", text: "Error al obtener los filtros", icon : "error"});
         }
     }
     getData();
@@ -93,7 +95,7 @@ function All({dataUser,dataModules,dataRoles}) {
           });
       } catch (error) {
           dispatch({type:TYPES_QUOTATIONS.NO_QUOTATION});
-          alert('Error al obtener las cotizaciones');
+          sweetAlert({title : "Error", text: "Error al obtener las cotizaciones", icon : "error"});
       }
     }
     getData();
@@ -105,7 +107,7 @@ function All({dataUser,dataModules,dataRoles}) {
           return route.replace(resp.data.redirect);
       }
       if(resp.data.error){
-          return alert(resp.data.message);
+        return sweetAlert({title : "Alerta", text: resp.data.message, icon : "warning"});
       }
       const data = resp.data.data;
       dispatch({
@@ -124,7 +126,8 @@ function All({dataUser,dataModules,dataRoles}) {
   }
 
   const deleteQuotation = async (idQuotation) => {
-    if(!window.confirm("¿Deseas anular esta cotización?")){
+    const question = await sweetAlert({title : "Mensaje", text: "¿Deseas anular esta cotización?", icon : "question",showCancelButton:true});
+    if(!question.isConfirmed){
       return
     }
     try {
@@ -133,15 +136,15 @@ function All({dataUser,dataModules,dataRoles}) {
             return route.replace(resp.data.redirect);
         }
         if(resp.data.error){
-            return alert(resp.data.message);
+          return sweetAlert({title : "Alerta", text: resp.data.message, icon : "warning"});
         }
         setDataChange({
           ...dataChange,
           reload:!dataChange.reload
         })
-        return alert(resp.data.message);
+        sweetAlert({title : "Exitoso", text: resp.data.message, icon : "success"});
     } catch (error) {
-        alert('Error al eliminar la cotización');
+        sweetAlert({title : "Error", text: 'Error al eliminar la cotización', icon : "error"});
         dispatch({type:TYPES_QUOTATIONS.NO_QUOTATION});
         console.error(error);
     }

@@ -8,6 +8,7 @@ import TableQuotation from './TableQuotation';
 import EditorText from '../EditorText';
 import apiAxios from '@/axios';
 import { getCookie } from '@/helpers/getCookie';
+import { sweetAlert } from '@/helpers/getAlert';
 const initalForm = {
     id:null,
     quotation_date_issue:"",
@@ -80,7 +81,7 @@ function FormQuotation({statusModal,customers,quotationEdit,contactsList,product
                 }))
             } catch (error) {
                 console.error(error)
-                alert('Error al obtener los contactos');
+                sweetAlert({title : "Error", text: "Error al obtener los contactos", icon : "error"});
             }
         }else if(key == 'quotation_customer' && !value){
             setContacts([]);
@@ -125,7 +126,7 @@ function FormQuotation({statusModal,customers,quotationEdit,contactsList,product
     const handleSubmit = async (e) => {
         e.preventDefault();
         if(!products.length){
-            return alert('La cotización debe tener al menos un producto');
+            return sweetAlert({title : "Alerta", text: "La cotización debe tener al menos un producto", icon : "warning"});
         }
         const data = {
             ...form,
@@ -141,14 +142,15 @@ function FormQuotation({statusModal,customers,quotationEdit,contactsList,product
             }
             if(resp.data.error){
                 resp.data.data.forEach(error => {
-                    alert(error);
+                    sweetAlert({title : "Alerta", text: error, icon : "warning"});
                 });
                 return
             }
-            alert(resp.data.message);
+            sweetAlert({title : "Mensaje", text: resp.data.message, icon : "success"});
             handleSaveModalForm();
         } catch (error) {
-            alert('Error al actualizar la cotización');
+            console.error(error);
+            sweetAlert({title : "Mensaje", text: 'Error al actualizar la cotización', icon : "success"});
         }
     }
   return (

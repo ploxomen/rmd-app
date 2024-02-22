@@ -10,6 +10,7 @@ import { ArrowUpTrayIcon, PaperAirplaneIcon, TrashIcon } from '@heroicons/react/
 import { getCookie } from '@/helpers/getCookie';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import { sweetAlert } from '@/helpers/getAlert';
 export async function getServerSideProps(context) {
     const userCookie = context.req.cookies;
     if(!userCookie.authenticate){
@@ -88,7 +89,8 @@ function MyAccount({dataUser,dataModules,dataRoles}) {
                 }
                 setTypeDocumentsData(resp.data.data)
             } catch (error) {
-                alert("Error al obtener los tipos de documentos")
+                console.error(error);
+                sweetAlert({title : "Error", text: 'Error al obtener los tipos de documentos', icon : "error"});            ;
             }
         }
         getRoles();
@@ -104,7 +106,7 @@ function MyAccount({dataUser,dataModules,dataRoles}) {
                 setForm({...resp.data.data,user_avatar:img})
             } catch (error) {
                 console.error(error);
-                alert("Error al obtener los tipos del usuario")
+                sweetAlert({title : "Error", text: 'Error al obtener los tipos del usuario', icon : "error"});            ;
             }
         }
         getRoles();
@@ -168,14 +170,14 @@ function MyAccount({dataUser,dataModules,dataRoles}) {
             });
             if(resp.data.error){
                 resp.data.data.forEach(error => {
-                    alert(error)
+                    sweetAlert({title : "Alerta", text: error, icon : "warning"});            ;
                 });
                 return
             }
-            alert(resp.data.message);
+            sweetAlert({title : "Exitoso", text: resp.data.message, icon : "success"});            ;
         } catch (error) {
-            console.error(error)
-            alert('Error al actualizar los datos de mi perfil')
+            console.error(error);
+            sweetAlert({title : "Error", text: 'Error al actualizar los datos de mi perfil', icon : "error"});            ;
         }
     }
     return(

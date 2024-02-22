@@ -15,6 +15,7 @@ import { useModal } from '@/hooks/useModal';
 import { InputSearch } from '@/components/Inputs';
 import PaginationTable from '@/components/PaginationTable';
 import { useRouter } from 'next/navigation';
+import { sweetAlert } from '@/helpers/getAlert';
 
 export async function getServerSideProps(context) {
   const userCookie = context.req.cookies;
@@ -49,7 +50,7 @@ function customers({dataModules,dataUser,dataRoles}) {
             });
         } catch (error) {
           dispatch({type:TYPES_CUSTOMERS.NO_CUSTOMERS});
-          alert('Error al obtener los tipos de documentos o departamentos');
+          sweetAlert({title : "Error", text: "Error al obtener los tipos de documentos o departamentos", icon : "error"});
         }
     }
     getData();
@@ -78,7 +79,7 @@ function customers({dataModules,dataUser,dataRoles}) {
           });
       } catch (error) {
           dispatch({type:TYPES_CUSTOMERS.NO_CUSTOMERS});
-          alert('Error al obtener los clientes');
+          sweetAlert({title : "Error", text: "Error al obtener los clientes", icon : "error"});
       }
     }
     getData();
@@ -90,17 +91,17 @@ function customers({dataModules,dataUser,dataRoles}) {
           return route.replace(resp.data.redirect);
         }
         if(resp.data.error){
-            return alert(resp.data.message);
+            return sweetAlert({title : "Error", text: resp.data.message, icon : "error"});            ;
         }
         setDataChange({
           ...dataChange,
             reload:!dataChange.reload
         })
-        alert(resp.data.message);
+        sweetAlert({title : "Exitoso", text: resp.data.message, icon : "success"});
         closeModal();
     } catch (error) {
         console.error(error)
-        alert("Error al guardar los datos del cliente");
+        sweetAlert({title : "Error", text: "Error alguardar los datos del cliente", icon : "error"});
     }
   }
   const getCustomer = async (idCustomer) => {
@@ -110,7 +111,7 @@ function customers({dataModules,dataUser,dataRoles}) {
             return route.replace(resp.data.redirect);
         }
         if(resp.data.error){
-            return alert(resp.data.message);
+          return sweetAlert({title : "Error", text: resp.data.message, icon : "error"});            ;
         }
         const customer = resp.data.data;
         dispatch({
@@ -121,6 +122,7 @@ function customers({dataModules,dataUser,dataRoles}) {
     } catch (error) {
         dispatch({type:TYPES_CUSTOMERS.NO_CUSTOMERS});
         console.error(error);
+        sweetAlert({title : "Error", text: "Error al obtener al cliente", icon : "error"});            ;
     }
   }
   const closeModal = async () => {
@@ -134,7 +136,8 @@ function customers({dataModules,dataUser,dataRoles}) {
     setDataChange({...dataChange,current:number});
   }
   const handleDeleteCustomer = async (idCustomer) => {
-    if(!window.confirm("¿Deseas eliminar este cliente?")){
+    const question = await sweetAlert({title : "Mensaje", text: "¿Deseas eliminar este cliente?", icon : "question",showCancelButton:true});
+    if(!question.isConfirmed){
       return
     }
     try {
@@ -143,13 +146,13 @@ function customers({dataModules,dataUser,dataRoles}) {
             return route.replace(resp.data.redirect);
         }
         if(resp.data.error){
-            return alert(resp.data.message);
+          return sweetAlert({title : "Alerta", text: resp.data.message, icon : "warning"});            ;
         }
         setDataChange({
           ...dataChange,
           reload:!dataChange.reload
         })
-        return alert(resp.data.message);
+        return sweetAlert({title : "Exitoso", text: resp.data.message, icon : "success"});            ;
     } catch (error) {
         dispatch({type:TYPES_CUSTOMERS.NO_CUSTOMERS});
         console.error(error);

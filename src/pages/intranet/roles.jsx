@@ -6,6 +6,7 @@ import LoyoutIntranet from "@/components/LoyoutIntranet";
 import Modal from '@/components/Modal';
 import FormRole from '@/components/roles/FormRole';
 import TableRole from '@/components/roles/TableRole';
+import { sweetAlert } from '@/helpers/getAlert';
 import { getCookie } from '@/helpers/getCookie';
 import { verifUser } from '@/helpers/verifUser';
 import { useModal } from '@/hooks/useModal';
@@ -76,7 +77,7 @@ export default function Roles({dataModules,dataRoles,dataUser}){
             if(resp.data.redirect !== null){
                 return route.replace(resp.data.redirect);
             }
-            alert(resp.data.message);
+            sweetAlert({title : "Exitoso", text: resp.data.message, icon : "success"});
             closeModal();
         } catch (error) {
             dispatch({type:TYPES.NO_ROLE});
@@ -84,7 +85,8 @@ export default function Roles({dataModules,dataRoles,dataUser}){
         }
     }
     const deleteRole = async (role) => {
-        if(!window.confirm("¿Deseas eliminar este rol?")){
+        const question = await sweetAlert({title : "Mensaje", text: "¿Deseas eliminar este rol?", icon : "question",showCancelButton:true});
+        if(!question.isConfirmed){
             return
         }
         try {
@@ -95,7 +97,7 @@ export default function Roles({dataModules,dataRoles,dataUser}){
             if(!resp.data.error){
                 dispatch({type:TYPES.DELETE_ROLE,payload:role});
             }
-            alert(resp.data.message);
+            sweetAlert({title : "Exitoso", text: resp.data.message, icon : "success"});
         } catch (error) {
             console.error(error);
             dispatch({type:TYPES.NO_ROLE});
