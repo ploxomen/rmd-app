@@ -183,6 +183,7 @@ function quotationNew({dataUser,dataModules,dataRoles}) {
             editorRefDescriptionProducts.current.setContent("");
             editorRefCondition.current.setContent("");
             editorRefObservation.current.setContent("");
+            window.open('/intranet/quotation/view/'+resp.data.id,'_blank');
         } catch (error) {
             console.error(error);
             sweetAlert({title : "Error", text: "Error al generar una nueva cotización", icon : "error"});
