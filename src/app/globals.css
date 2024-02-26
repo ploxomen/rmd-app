@@ -29,6 +29,9 @@ input,button,textarea,select{
   left: 0;
   background-color: rgba(0, 0, 0, 0.433);
 }
+.table-modal tbody tr:nth-child(odd){
+  background-color: #f0f0f0;
+}
 @media (min-width: 768px) {
   .menu-content{
     width: auto;

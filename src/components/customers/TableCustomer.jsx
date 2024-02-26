@@ -10,6 +10,7 @@ function TableCustomer({customers,getCustomer,deleteCustomer}) {
         'Tipo documento',
         'Número documento',
         'Razón social / Nombres',
+        'Usuario creador',
         'Acciones'
     ]
   return (
@@ -22,6 +23,7 @@ function TableCustomer({customers,getCustomer,deleteCustomer}) {
                         <td className="py-2 px-4">{customer.document_name}</td>
                         <td className="py-2 px-4">{customer.customer_number_document}</td>
                         <td className="py-2 px-4">{customer.customer_name}</td>
+                        <td className="py-2 px-4">{customer.user_creator}</td>
                         <td className="py-2 px-4">
                             <div className='flex gap-1 flex-wrap justify-center'>
                                 <ButtonPrimarySm text="Editar" onClick={e=> getCustomer(customer.id)} icon={<PencilIcon className='w-4 h-4'/>}/>

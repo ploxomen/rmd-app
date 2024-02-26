@@ -9,12 +9,12 @@ export const statusQuotations = [
     {
         value:"1",
         label:"Generado",
-        element:<Badge text="Generado" colors="text-green-500 bg-green-100" />
+        element:<Badge text="Generado" colors="text-green-500 bg-green-200" />
     },
     {
         value:"2",
         label:"En pedido",
-        element:<Badge text="En pedido" colors="text-blue-500 bg-blue-100" />
+        element:<Badge text="En pedido" colors="text-violet-500 bg-violet-200" />
     }
 ]
 export const statusOrders = [

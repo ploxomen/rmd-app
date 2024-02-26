@@ -5,13 +5,14 @@ import { ButtonPrimary } from '@/components/Buttons';
 import EditorText from '@/components/EditorText';
 import { InputPrimary } from '@/components/Inputs';
 import LoyoutIntranet from '@/components/LoyoutIntranet';
+import Modal from '@/components/Modal';
 import SeccionForm from '@/components/SeccionForm';
 import { SelectPrimary } from '@/components/Selects';
 import TableQuotation from '@/components/quotations/TableQuotation';
 import { sweetAlert } from '@/helpers/getAlert';
 import { getCookie } from '@/helpers/getCookie';
 import { verifUser } from '@/helpers/verifUser';
-import workSpace from '@/img/quotation.png';
+import { useModal } from '@/hooks/useModal';
 import { PaperAirplaneIcon } from '@heroicons/react/24/solid';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
@@ -27,6 +28,7 @@ const initalForm = {
     quotation_type_change:"",
     quotation_include_igv:true,
     quotation_customer:"",
+    quotation_actuality:null,
     quotation_contact:"",
     quotation_address:"",
     quotation_discount:"0.00",
@@ -54,13 +56,15 @@ function quotationNew({dataUser,dataModules,dataRoles}) {
     const [form,setForm] = useState(initalForm);
     const [products,setProducts] = useState([]);
     const [productsList,setProductsList] = useState([]);
+    const [idDetails,setIdDetails] = useState(null);
     const [amountDetails,setAmountDetails] = useState(initialAmountDetails);
     const [contacts,setContacts] = useState([]);
     const [customers,setCustomers] = useState([]);
     const editorRefObservation = useRef(null);
     const editorRefCondition = useRef(null);
+    const {modal,handleOpenModal,handleCloseModal} = useModal("hidden");
+    const editorDetails = useRef(null);
     const route = useRouter();
-    const editorRefDescriptionProducts = useRef(null);
     const headers = getCookie();
     useEffect(()=>{
         const getData = async () => {
@@ -145,6 +149,7 @@ function quotationNew({dataUser,dataModules,dataRoles}) {
                     quantity:1,
                     price_unit: e.product_sale,
                     price_aditional: 0,
+                    details:null
                 }
             ])
         }
@@ -160,7 +165,6 @@ function quotationNew({dataUser,dataModules,dataRoles}) {
         }
         const data = {
             ...form,
-            quotation_description_products:editorRefDescriptionProducts.current.getContent(),
             quotation_conditions:editorRefCondition.current.getContent(),
             quotation_observations:editorRefObservation.current.getContent(),
             products
@@ -180,7 +184,6 @@ function quotationNew({dataUser,dataModules,dataRoles}) {
             setForm(initalForm);
             setContacts([]);
             setProducts([]);
-            editorRefDescriptionProducts.current.setContent("");
             editorRefCondition.current.setContent("");
             editorRefObservation.current.setContent("");
             window.open('/intranet/quotation/view/'+resp.data.id,'_blank');
@@ -189,87 +192,118 @@ function quotationNew({dataUser,dataModules,dataRoles}) {
             sweetAlert({title : "Error", text: "Error al generar una nueva cotización", icon : "error"});
         }
     }
+    const handleAddDescription = async (id) => {
+        const existProduct = products.find(product => product.id == id);
+        if(existProduct && existProduct.details === null){
+            try {
+                const resp = await apiAxios.get('quotation-extra/products-details/'+id,{headers})
+                if(resp.data.redirect !== null){
+                    return route.replace(resp.data.redirect);
+                }
+                editorDetails.current.setContent(resp.data.data||"");
+                setIdDetails(id);
+                handleOpenModal();
+            } catch (error) {
+                console.error(error);
+                sweetAlert({title : "Error", text: "Error al obtener la descripción del producto", icon : "error"});
+            }
+        }else{
+            setIdDetails(existProduct.id);
+            editorDetails.current.setContent(existProduct.details||"");
+            handleOpenModal();
+        }
+    }
+    const handleSaveDescription = () => {
+        setProducts(products.map(product => product.id == idDetails ? {...product,details:editorDetails.current.getContent()}:product));
+        handleCloseDescription();
+    }
+    const handleCloseDescription = () => {
+        setIdDetails(null);
+        editorDetails.current.setContent("");
+        handleCloseModal();
+    }
   return (
-    <LoyoutIntranet title="Nueva cotización" description="Creación de nuevas cotizaciones" user={dataUser} modules={dataModules} roles={dataRoles}>
-        <BanerModule imageBanner='/baners/Group 18.jpg' title="Nueva cotización"/>
-        <form id='form-quotation' onSubmit={handleSubmit}>
-            <div className='w-full p-6 mb-4 bg-white rounded-md shadow grid grid-cols-12 gap-x-3 gap-y-0'>
-                <div className="col-span-full">
-                    <SeccionForm title="Datos de la cotización"/>
+    <>
+        <LoyoutIntranet title="Nueva cotización" description="Creación de nuevas cotizaciones" user={dataUser} modules={dataModules} roles={dataRoles}>
+            <BanerModule imageBanner='/baners/Group 18.jpg' title="Nueva cotización"/>
+            <form id='form-quotation' onSubmit={handleSubmit}>
+                <div className='w-full p-6 mb-4 bg-white rounded-md shadow grid grid-cols-12 gap-x-3 gap-y-0'>
+                    <div className="col-span-full">
+                        <SeccionForm title="Datos de la cotización"/>
+                    </div>
+                    <div className="col-span-full md:col-span-4">
+                        <InputPrimary label="Fecha de emisión" type='date' inputRequired='required' disabled="disabled" value={form.quotation_date_issue||''}/>
+                    </div>
+                    <div className="col-span-full md:col-span-4">
+                        <SelectPrimary label="Tipo moneda" inputRequired='required' name="quotation_type_money" value={form.quotation_type_money||''} onChange={handleChangeForm}>
+                            <option value="PEN">Soles (S/)</option>
+                            <option value="USD">Dolares ($)</option>
+                        </SelectPrimary>
+                    </div>
+                    <div className="col-span-full md:col-span-4">
+                        <InputPrimary label="Tipo cambio" type='number' inputRequired={form.quotation_type_money == 'USD' ? 'required' : ''} step="0.01" min="0" name="quotation_type_change" value={form.quotation_type_change||''} onChange={handleChangeForm}/>
+                    </div>
                 </div>
-                <div className="col-span-full md:col-span-4">
-                    <InputPrimary label="Fecha de emisión" type='date' inputRequired='required' disabled="disabled" value={form.quotation_date_issue||''}/>
-                </div>
-                <div className="col-span-full md:col-span-4">
-                    <SelectPrimary label="Tipo moneda" inputRequired='required' name="quotation_type_money" value={form.quotation_type_money||''} onChange={handleChangeForm}>
-                        <option value="PEN">Soles (S/)</option>
-                        <option value="USD">Dolares ($)</option>
-                    </SelectPrimary>
-                </div>
-                <div className="col-span-full md:col-span-4">
-                    <InputPrimary label="Tipo cambio" type='number' inputRequired={form.quotation_type_money == 'USD' ? 'required' : ''} step="0.01" min="0" name="quotation_type_change" value={form.quotation_type_change||''} onChange={handleChangeForm}/>
-                </div>
-            </div>
-            <div className='w-full p-6 mb-4 bg-white rounded-md shadow grid grid-cols-12 gap-x-3 gap-y-0'>
-                <div className="col-span-full">
-                    <SeccionForm title="Datos del cliente"/>
-                </div>
-                <div className="col-span-full md:col-span-6">
-                    <SelectPrimary label="Cliente" inputRequired='required' name="quotation_customer" value={form.quotation_customer||''} onChange={handleChangeForm}>
-                        <option value="">Seleccione un cliente</option>
+                <div className='w-full p-6 mb-4 bg-white rounded-md shadow grid grid-cols-12 gap-x-3 gap-y-0'>
+                    <div className="col-span-full">
+                        <SeccionForm title="Datos del cliente"/>
+                    </div>
+                    <div className="col-span-full md:col-span-6">
+                        <SelectPrimary label="Cliente" inputRequired='required' name="quotation_customer" value={form.quotation_customer||''} onChange={handleChangeForm}>
+                            <option value="">Seleccione un cliente</option>
 
-                        {
-                            customers.map(customer => <option key={customer.value} value={customer.value}>{customer.label}</option>)
-                        }
-                    </SelectPrimary>
+                            {
+                                customers.map(customer => <option key={customer.value} value={customer.value}>{customer.label}</option>)
+                            }
+                        </SelectPrimary>
+                    </div>
+                    <div className="col-span-full md:col-span-6">
+                        <SelectPrimary label="Contacto" name="quotation_contact" inputRequired="required" value={form.quotation_contact||''} onChange={handleChangeForm}>
+                            <option value="">Seleccione un contacto</option>
+                            {
+                                contacts.map(contact => <option key={contact.id} value={contact.id}>{contact.contact_name}</option>)
+                            }
+                        </SelectPrimary>
+                    </div>
+                    <div className="col-span-full">
+                        <InputPrimary label="Dirección" type='text' name="quotation_address" value={form.quotation_address||''} onChange={handleChangeForm}/>
+                    </div>
                 </div>
-                <div className="col-span-full md:col-span-6">
-                    <SelectPrimary label="Contacto" name="quotation_contact" inputRequired="required" value={form.quotation_contact||''} onChange={handleChangeForm}>
-                        <option value="">Seleccione un contacto</option>
-                        {
-                            contacts.map(contact => <option key={contact.id} value={contact.id}>{contact.contact_name}</option>)
-                        }
-                    </SelectPrimary>
+                <div className='w-full p-6 mb-4 bg-white rounded-md shadow grid grid-cols-12 gap-x-3 gap-y-0'>
+                    <div className="col-span-full">
+                        <SeccionForm title="Detalle de los productos"/>
+                    </div>
+                    <div className="col-span-full mb-2">
+                        <span className='text-sm mb-1 block dark:text-white text-placeholder'>{
+                            !form.quotation_include_igv && <p className='text-sm text-red-600 my-2'>Esta cotización no incluye I.G.V debido a que el cliente <strong className='font-bold'>NO ES DE PERÚ</strong></p>
+                        }Lista de productos</span>
+                        <Select instanceId='quotation_products_list' name='quotation_products_list' options={productsList} onChange={handleProductSelect} placeholder="Buscar" menuPosition='fixed'/>
+                        
+                    </div>
+                    <div className="col-span-full overflow-x-auto">
+                        <TableQuotation products={products} formatMoney={form.quotation_type_money} handleDetailChange={handleDetailChange} handleDeleteDetail={handleDeleteDetail} includeIgv={form.quotation_include_igv} dataTotal={{discount:form.quotation_discount,igv:amountDetails.quotation_igv,amount:amountDetails.quotation_amount,total:amountDetails.quotation_total}} handleChangeDiscount={handleChangeForm} handleDetails={handleAddDescription}/>
+                    </div>
                 </div>
-                <div className="col-span-full">
-                    <InputPrimary label="Dirección" type='text' name="quotation_address" value={form.quotation_address||''} onChange={handleChangeForm}/>
+                <div className='w-full p-6 mb-4 bg-white rounded-md shadow grid grid-cols-12 gap-x-3 gap-y-0'>
+                    <div className="col-span-full">
+                        <SeccionForm title="Datos adicionales"/>
+                    </div>
+                    <div className="col-span-full mb-2">
+                        <EditorText label="Observaciones" initialValue={form.quotation_observations} id="quotation_observations" editorRef={editorRefObservation}/>
+                    </div>
+                    <div className="col-span-full mb-2">
+                        <EditorText label="Condiciones" initialValue={form.quotation_conditions} id="quotation_conditions" editorRef={editorRefCondition}/>
+                    </div>
+                    <div className="col-span-full text-center">
+                        <ButtonPrimary text="Generar" type='submit' icon={<PaperAirplaneIcon className='w-5 h-5'/>}/>
+                    </div>
                 </div>
-            </div>
-            <div className='w-full p-6 mb-4 bg-white rounded-md shadow grid grid-cols-12 gap-x-3 gap-y-0'>
-                <div className="col-span-full">
-                    <SeccionForm title="Detalle de los productos"/>
-                </div>
-                <div className="col-span-full mb-2">
-                    <span className='text-sm mb-1 block dark:text-white text-placeholder'>{
-                        !form.quotation_include_igv && <p className='text-sm text-red-600 my-2'>Esta cotización no incluye I.G.V debido a que el cliente <strong className='font-bold'>NO ES DE PERÚ</strong></p>
-                    }Lista de productos</span>
-                    <Select instanceId='quotation_products_list' name='quotation_products_list' options={productsList} onChange={handleProductSelect} placeholder="Buscar" menuPosition='fixed'/>
-                    
-                </div>
-                <div className="col-span-full overflow-x-auto">
-                    <TableQuotation products={products} formatMoney={form.quotation_type_money} handleDetailChange={handleDetailChange} handleDeleteDetail={handleDeleteDetail} includeIgv={form.quotation_include_igv} dataTotal={{discount:form.quotation_discount,igv:amountDetails.quotation_igv,amount:amountDetails.quotation_amount,total:amountDetails.quotation_total}} handleChangeDiscount={handleChangeForm}/>
-                </div>
-            </div>
-            <div className='w-full p-6 mb-4 bg-white rounded-md shadow grid grid-cols-12 gap-x-3 gap-y-0'>
-                <div className="col-span-full">
-                    <SeccionForm title="Datos adicionales"/>
-                </div>
-                <div className="col-span-full mb-2">
-                    <EditorText label="Descripción de productos" id="quotation_details_products" editorRef={editorRefDescriptionProducts}/>
-                </div>
-                <div className="col-span-full mb-2">
-                    <EditorText label="Observaciones" initialValue={form.quotation_observations} id="quotation_observations" editorRef={editorRefObservation}/>
-                </div>
-                <div className="col-span-full mb-2">
-                    <EditorText label="Condiciones" initialValue={form.quotation_conditions} id="quotation_conditions" editorRef={editorRefCondition}/>
-                </div>
-                <div className="col-span-full text-center">
-                    <ButtonPrimary text="Generar" type='submit' icon={<PaperAirplaneIcon className='w-5 h-5'/>}/>
-                </div>
-            </div>
-        </form>
-        
-    </LoyoutIntranet>
+            </form>
+        </LoyoutIntranet>
+        <Modal status={modal} title="Agregar descripcion" maxWidth='w-[700px]' onSave={handleSaveDescription} handleCloseModal={handleCloseDescription}>
+            <EditorText label="Descripción" id='details-producto-description' initialValue={form.quotation_actuality} editorRef={editorDetails}/>
+        </Modal>
+    </>
   )
 }
 

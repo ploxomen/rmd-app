@@ -163,7 +163,7 @@ function FormCustomer({statusModal,contries,customerEdit,contactsEdit,pronvinces
                 form.customer_contrie == dataForm.customer_contrie &&
                 <>
                 <div className="col-span-6 md:col-span-4">
-                    <SelectPrimary label="Departamento" name="customer_departament" value={form.customer_departament} inputRequired={!form.customer_departament ? '' : 'required'} onChange={handleChangeForm}>
+                    <SelectPrimary label="Departamento" name="customer_departament" value={form.customer_departament} inputRequired={'required'} onChange={handleChangeForm}>
                         <option value="">Ninguno</option>
                         {
                             departamentsData.map(departament => <option value={departament.id} key={departament.id}>{departament.departament_name}</option>)
@@ -171,7 +171,7 @@ function FormCustomer({statusModal,contries,customerEdit,contactsEdit,pronvinces
                     </SelectPrimary>
                 </div>
                 <div className="col-span-6 md:col-span-4">
-                    <SelectPrimary label="Provincia" name="customer_province" inputRequired={!form.customer_departament ? '' : 'required'} value={form.customer_province||''} onChange={handleChangeForm}>
+                    <SelectPrimary label="Provincia" name="customer_province" inputRequired={'required'} value={form.customer_province||''} onChange={handleChangeForm}>
                         <option value="">Ninguno</option>
                         {
                             provinces.map(province => <option value={province.id} key={province.id}>{province.province_name||''}</option>)
@@ -179,7 +179,7 @@ function FormCustomer({statusModal,contries,customerEdit,contactsEdit,pronvinces
                     </SelectPrimary>
                 </div>
                 <div className="col-span-6 md:col-span-4">
-                    <SelectPrimary label="Distrito" inputRequired={!form.customer_departament ? '' : 'required'} name="customer_district" value={form.customer_district||''} onChange={handleChangeForm}>
+                    <SelectPrimary label="Distrito" inputRequired={'required'} name="customer_district" value={form.customer_district||''} onChange={handleChangeForm}>
                         <option value="">Ninguno</option>
                         {
                             districts.map(district => <option value={district.id} key={district.id}>{district.district_name}</option>)

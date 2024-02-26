@@ -192,13 +192,13 @@ function MyAccount({dataUser,dataModules,dataRoles}) {
                     <ButtonPrimarySm text="Subir" icon={<ArrowUpTrayIcon className='w-4 h-6'/>} onClick={handleClickUpload}/>
                     {form.user_avatar && <ButtonDangerSm text="Borrar" icon={<TrashIcon className='w-4 h-6'/>} onClick={handleDeleteImg}/>}
                 </div>
-                <div className="col-span-6">
+                <div className="col-span-full md:col-span-6">
                     <InputPrimary label="Nombres" name="user_name" inputRequired='required' value={form.user_name} onChange={handleChangeForm}/>
                 </div>
-                <div className="col-span-6">
+                <div className="col-span-full md:col-span-6">
                     <InputPrimary label="Apellidos" name="user_last_name" inputRequired='required' value={form.user_last_name} onChange={handleChangeForm}/>
                 </div>
-                <div className="col-span-3">
+                <div className="col-span-full md:col-span-6 lg:col-span-3">
                     <SelectPrimary label="Tipo documento" name="user_type_document" value={form.user_type_document||''} onChange={handleChangeForm}>
                         <option value="">Ninguno</option>
                         {
@@ -206,19 +206,19 @@ function MyAccount({dataUser,dataModules,dataRoles}) {
                         }
                     </SelectPrimary>
                 </div>
-                <div className="col-span-3">
+                <div className="col-span-full md:col-span-6 lg:col-span-3">
                     <InputPrimary label="N° Documento" name="user_number_document" minLength={digitDocuments.min} maxLength={digitDocuments.max} disabled={digitDocuments.min && digitDocuments.max ? '' : 'disabled'} inputRequired={digitDocuments.min && 'required'} value={form.user_number_document||''} onChange={handleChangeForm}/>
                 </div>
-                <div className="col-span-6">
+                <div className="col-span-full md:col-span-6">
                     <InputPrimary label="Correo" disabled="disabled" type='email' inputRequired='required' name="user_email" value={form.user_email||''} onChange={handleChangeForm}/>
                 </div>
-                <div className="col-span-4">
+                <div className="col-span-full md:col-span-6 lg:col-span-4">
                     <InputPrimary label="Celular" type='tel' inputRequired='required' name="user_cell_phone" value={form.user_cell_phone||''} onChange={handleChangeForm}/>
                 </div>
-                <div className="col-span-4">
+                <div className="col-span-full md:col-span-6 lg:col-span-4">
                     <InputPrimary label="Fecha nacimiento" name="user_birthdate" type='date' value={form.user_birthdate||''} onChange={handleChangeForm}/>
                 </div>
-                <div className="col-span-4">
+                <div className="col-span-full md:col-span-6 lg:col-span-4">
                     <SelectPrimary label="Género" name="user_gender" value={!form.user_gender ? 'N' : form.user_gender} onChange={handleChangeForm}>
                         <option value="N">No establecer</option>
                         <option value="M">Masculino</option>

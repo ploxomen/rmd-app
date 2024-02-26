@@ -18,6 +18,7 @@ const initalForm = {
     quotation_customer:"",
     quotation_contact:"",
     quotation_address:"",
+    quotation_actuality:null,
     quotation_discount:"0.00",
     quotation_description_products:"",
     quotation_conditions:"",
@@ -28,15 +29,46 @@ const initialAmountDetails = {
     quotation_igv:"0.00",
     quotation_total:"0.00"
 }
-function FormQuotation({statusModal,customers,quotationEdit,contactsList,productsList,productDetails,handleCloseModal,handleSaveModalForm}) {
+function FormQuotation({statusModal,customers,quotationEdit,contactsList,productsList,productDetails,handleCloseModal,handleSaveModalForm,closeModalDesc,modalDesc,openModalDesc}) {
     const [form,setForm] = useState(initalForm);
     const [contacts,setContacts] = useState([]);
+    const [idDetails,setIdDetails] = useState(null);
     const [products,setProducts] = useState([]);
+    const editorDetails = useRef(null);
     const editorRefObservation = useRef(null);
     const editorRefCondition = useRef(null);
-    const editorRefDescriptionProducts = useRef(null);
     const [amountDetails,setAmountDetails] = useState(initialAmountDetails);
     const headers = getCookie();
+    const handleAddDescription = async (id) => {
+        const existProduct = products.find(product => product.id == id);
+        if(existProduct && existProduct.details === null){
+            try {
+                const resp = await apiAxios.get('quotation-extra/products-details/'+id,{headers})
+                if(resp.data.redirect !== null){
+                    return route.replace(resp.data.redirect);
+                }
+                editorDetails.current.setContent(resp.data.data||"");
+                setIdDetails(id);
+                openModalDesc();
+            } catch (error) {
+                console.error(error);
+                sweetAlert({title : "Error", text: "Error al obtener la descripción del producto", icon : "error"});
+            }
+        }else{
+            setIdDetails(existProduct.id);
+            editorDetails.current.setContent(existProduct.details||"");
+            openModalDesc();
+        }
+    }
+    const handleSaveDescription = () => {
+        setProducts(products.map(product => product.id == idDetails ? {...product,details:editorDetails.current.getContent()}:product));
+        handleCloseDescription();
+    }
+    const handleCloseDescription = () => {
+        setIdDetails(null);
+        editorDetails.current.setContent("");
+        closeModalDesc();
+    }
     useEffect(()=>{
         let amount = 0;
         products.forEach(product => {
@@ -107,6 +139,7 @@ function FormQuotation({statusModal,customers,quotationEdit,contactsList,product
                     quantity:1,
                     price_unit: e.product_sale,
                     price_aditional: 0,
+                    details:null
                 }
             ])
         }
@@ -130,7 +163,6 @@ function FormQuotation({statusModal,customers,quotationEdit,contactsList,product
         }
         const data = {
             ...form,
-            quotation_description_products:editorRefDescriptionProducts.current.getContent(),
             quotation_conditions:editorRefCondition.current.getContent(),
             quotation_observations:editorRefObservation.current.getContent(),
             products
@@ -154,6 +186,7 @@ function FormQuotation({statusModal,customers,quotationEdit,contactsList,product
         }
     }
   return (
+    <>
     <Modal status={statusModal} title="Editar cotización" onSave={handleSaveModal} handleCloseModal={handleCloseModal} maxWidth='max-w-3xl'>
         <form  className='grid grid-cols-12 gap-x-2 gap-y-0' onSubmit={handleSubmit}>
             <div className="col-span-full">
@@ -204,13 +237,10 @@ function FormQuotation({statusModal,customers,quotationEdit,contactsList,product
                 }
             </div>
             <div className="col-span-full overflow-x-auto">
-                <TableQuotation products={products} formatMoney={form.quotation_type_money} handleDetailChange={handleDetailChange} handleDeleteDetail={handleDeleteDetail} includeIgv={form.quotation_include_igv} dataTotal={{discount:form.quotation_discount,igv:amountDetails.quotation_igv,amount:amountDetails.quotation_amount,total:amountDetails.quotation_total}} handleChangeDiscount={handleChangeForm}/>
+                <TableQuotation products={products} formatMoney={form.quotation_type_money} handleDetailChange={handleDetailChange} handleDeleteDetail={handleDeleteDetail} includeIgv={form.quotation_include_igv} dataTotal={{discount:form.quotation_discount,igv:amountDetails.quotation_igv,amount:amountDetails.quotation_amount,total:amountDetails.quotation_total}} handleChangeDiscount={handleChangeForm} handleDetails={handleAddDescription}/>
             </div>
             <div className="col-span-full">
                 <SeccionForm title="Datos adicionales"/>
-            </div>
-            <div className="col-span-full mb-2">
-                <EditorText label="Descripción de productos" initialValue={form.quotation_description_products} id="quotation_details_products" editorRef={editorRefDescriptionProducts}/>
             </div>
             <div className="col-span-full mb-2">
                 <EditorText label="Observaciones" initialValue={form.quotation_observations} id="quotation_observations" editorRef={editorRefObservation}/>
@@ -221,6 +251,10 @@ function FormQuotation({statusModal,customers,quotationEdit,contactsList,product
             <SubmitForm id="form-cotizacion-submit"/>
         </form>
     </Modal>
+    <Modal status={modalDesc} title="Agregar descripcion" maxWidth='w-[700px]' onSave={handleSaveDescription} handleCloseModal={handleCloseDescription}>
+        <EditorText label="Descripción" id='details-producto-description' initialValue={form.quotation_actuality} editorRef={editorDetails}/>
+      </Modal>
+    </>
   )
 }
 

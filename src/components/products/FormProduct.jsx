@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Modal from '../Modal'
 import { InputPrimary, SubmitForm, TextareaPrimary } from '../Inputs';
 import SeccionForm from '../SeccionForm';
@@ -9,6 +9,7 @@ import Image from 'next/image';
 import { ButtonDangerSm, ButtonPrimary, ButtonPrimarySm } from '../Buttons';
 import { ArrowUpTrayIcon, TrashIcon } from '@heroicons/react/24/solid';
 import { sweetAlert } from '@/helpers/getAlert';
+import EditorText from '../EditorText';
 const dataForm = {
     product_name:"",
     product_description:"",
@@ -22,6 +23,7 @@ function FormProduct({statusModal,closeModal,handleSave,productEdit,categories,s
     const [form,setForm] = useState(dataForm);
     const [subcategories,setSubcategories] = useState([]);
     const [deleteImg,setDeleteImg] = useState(false);
+    const editorDescription = useRef(null);
     const headers = getCookie();
     const edit = Object.keys(productEdit).length;
     useEffect(()=>{
@@ -49,6 +51,7 @@ function FormProduct({statusModal,closeModal,handleSave,productEdit,categories,s
                 data.append('delete_img','true');
             }
         }
+        data.append('product_description',editorDescription.current.getContent());
         const inputImage = document.querySelector("#upload-file");
         if(inputImage.value){
             data.append('product_img',inputImage.files[0]);
@@ -103,7 +106,7 @@ function FormProduct({statusModal,closeModal,handleSave,productEdit,categories,s
         document.querySelector("#upload-file").click();
     }
   return (
-    <Modal status={statusModal} title={edit ? 'Editar producto' : 'Nuevo producto'} onSave={hanbleSendModal} handleCloseModal={closeModal}>
+    <Modal status={statusModal} maxWidth='w-[750px]' title={edit ? 'Editar producto' : 'Nuevo producto'} onSave={hanbleSendModal} handleCloseModal={closeModal}>
         <form  className='grid grid-cols-6 gap-x-3 gap-y-0' onSubmit={handleSubmit}>
             <div className="col-span-full">
                 <SeccionForm title="Datos del producto"/>
@@ -111,8 +114,8 @@ function FormProduct({statusModal,closeModal,handleSave,productEdit,categories,s
             <div className="col-span-full">
                 <InputPrimary label="Producto" inputRequired='required' name="product_name" value={form.product_name||''} onChange={handleChangeForm}/>
             </div>
-            <div className="col-span-full">
-                <TextareaPrimary label="Descripción" name="product_description" value={form.product_description||''} onChange={handleChangeForm} rows={4}/>
+            <div className="col-span-full mb-4">
+                <EditorText label="Descripción" initialValue={form.product_description} id="quotation_observations" editorRef={editorDescription}/>
             </div>
             <div className="col-span-3">
                 <InputPrimary label="P. Producción" step="0.01" min="0" type='number' name="product_buy" value={form.product_buy||''} onChange={handleChangeForm}/>

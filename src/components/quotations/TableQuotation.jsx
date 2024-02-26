@@ -1,11 +1,11 @@
 import React from 'react'
 import TableIntranet from '../TableIntranet'
 import { ButtonDangerSm } from '../Buttons'
-import { TrashIcon } from '@heroicons/react/24/solid'
+import { PencilIcon, PlusCircleIcon, TrashIcon } from '@heroicons/react/24/solid'
 import { parseMoney } from '@/helpers/utilities'
 import { InputDetailsSm } from '../Inputs'
 
-function TableQuotation({products,formatMoney,handleDetailChange,handleDeleteDetail,dataTotal,includeIgv,handleChangeDiscount}) {
+function TableQuotation({products,formatMoney,handleDetailChange,handleDeleteDetail,dataTotal,includeIgv,handleChangeDiscount,handleDetails}) {
     const columns = [
         'Item',
         'Descripción',
@@ -21,7 +21,17 @@ function TableQuotation({products,formatMoney,handleDetailChange,handleDeleteDet
             !products.length ? <tr className="bg-white dark:bg-gray-800"><td colSpan="100%" className='text-center font-bold'>No se agregaron productos</td></tr> : products.map((product,key) => (
                 <tr className="bg-white dark:bg-gray-800" key={product.id}>
                     <td className="py-2 px-2 max-w-3 w-3 text-center">{key + 1}</td>
-                    <td className="py-2 px-2">{product.description}</td>
+                    <td className="py-2 px-2">
+                        <div className="flex items-center gap-1">
+                            <button type='button' className={!product.details ? 'text-green-500': 'text-blue-500'} title={!product.details ? 'Agregar descripción': 'Editar descripción'} onClick={e => handleDetails(product.id)}>
+                            {
+                                !product.details ? <PlusCircleIcon className='w-5 h-5'/> : <PencilIcon className='w-5 h-5'/>
+                            }
+                            </button>
+                            {product.description}
+                        </div>
+                        
+                    </td>
                     <td className="py-2 px-2 w-12">{<InputDetailsSm value={product.quantity} name="quantity" type="number" min="0" onChange={ e => handleDetailChange(e.target.value,product.id,'quantity')}/>}</td>
                     <td className="py-2 px-2 max-w-8 w-14">{parseMoney(product.price_unit,formatMoney)}</td>
                     <td className="py-2 px-2 w-12">{<InputDetailsSm value={product.price_aditional} name="price_aditional" step="0.01" type="number" min="0" onChange={ e => handleDetailChange(e.target.value,product.id,'price_aditional')}/>}</td>

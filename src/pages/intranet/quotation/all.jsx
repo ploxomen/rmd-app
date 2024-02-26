@@ -16,7 +16,7 @@ import { TYPES_QUOTATIONS, quotationInitialState, reducerQuotations } from '@/re
 import axios from 'axios';
 
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useReducer, useState } from 'react'
+import React, { useEffect, useReducer, useRef, useState } from 'react'
 export async function getServerSideProps(context){
   const userCookie = context.req.cookies;
   return await verifUser(userCookie,'/quotation/all');
@@ -45,6 +45,8 @@ function All({dataUser,dataModules,dataRoles}) {
   const [pagination,setPagination] = useState({quantityRowData,totalPages:0});
   const [state,dispatch] = useReducer(reducerQuotations,quotationInitialState);
   const {modal,handleOpenModal,handleCloseModal} = useModal("hidden");
+  const {modal:modalDesc,handleOpenModal:openModalDesc,handleCloseModal:closeModalDesc} = useModal("hidden");
+
 
   useEffect(()=>{
     const getData = async () => {
@@ -181,6 +183,24 @@ function All({dataUser,dataModules,dataRoles}) {
     dispatch({type:TYPES_QUOTATIONS.CLOSE_QUOTATION});
     handleCloseModal();
   }
+  const downloadPdf = async (id) => {
+    try {
+      const resp = await apiAxios.get('quotation-extra/download/' + id,{
+        responseType:'blob',
+        headers
+      })
+      const url = window.URL.createObjectURL(new Blob([resp.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'cotizacion_'+ id.toString().padStart(5,'0') +'.pdf');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      return
+    } catch (error) {
+      sweetAlert({title : "Error", text: 'Error al eliminar la cotización', icon : "error"});
+    }
+  }
     return (
       <>
       <LoyoutIntranet title="Mis cotizaciones" description="Administración de cotizaciones" user={dataUser} modules={dataModules} roles={dataRoles}>
@@ -215,11 +235,11 @@ function All({dataUser,dataModules,dataRoles}) {
               <div style={{width:"300px"}} className='ml-auto mb-4'>
                 <InputSearch placeholder='¿Que estas buscando?' onInput={e => handleChangeFilter('search',e.target.value)}/>
               </div>
-              <TableAllQuotation quotations={state.quotations} deleteQuotation={deleteQuotation} getQuotation={getQuotation} status={filters.status}/>
+              <TableAllQuotation quotations={state.quotations} deleteQuotation={deleteQuotation} getQuotation={getQuotation} status={filters.status} downloadPdf={downloadPdf}/>
               <PaginationTable currentPage={dataChange.current} quantityRow={pagination.quantityRowData} totalData={pagination.totalPages} handleChangePage={handleChangePage}/>
           </div>
       </LoyoutIntranet>
-      <FormQuotation statusModal={modal} handleCloseModal={handleCloseModalForm} handleSaveModalForm={handleSaveModalForm} customers={filters.customers} contactsList={state.contactsEdit} productsList={filters.products} productDetails={state.productsDetails} quotationEdit={state.quotationEdit}/>
+      <FormQuotation statusModal={modal} handleCloseModal={handleCloseModalForm} handleSaveModalForm={handleSaveModalForm} customers={filters.customers} contactsList={state.contactsEdit} productsList={filters.products} productDetails={state.productsDetails} quotationEdit={state.quotationEdit} closeModalDesc={closeModalDesc} modalDesc={modalDesc} openModalDesc={openModalDesc}/>
       </>
     )
 }
