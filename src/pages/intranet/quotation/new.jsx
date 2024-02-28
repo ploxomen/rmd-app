@@ -189,7 +189,7 @@ function quotationNew({dataUser,dataModules,dataRoles}) {
             window.open(`/intranet/quotation/view/${resp.data.id}?fileName=${resp.data.fileName}` ,'_blank');
         } catch (error) {
             console.error(error);
-            sweetAlert({title : "Error", text: "Error al generar una nueva cotización", icon : "error"});
+            sweetAlert({title : "Error", text: "Error al generar una nueva cotización, intentelo más tarde", icon : "error"});
         }
     }
     const handleAddDescription = async (id) => {
