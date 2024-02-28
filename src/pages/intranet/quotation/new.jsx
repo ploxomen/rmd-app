@@ -184,9 +184,9 @@ function quotationNew({dataUser,dataModules,dataRoles}) {
             setForm(initalForm);
             setContacts([]);
             setProducts([]);
-            editorRefCondition.current.setContent("");
-            editorRefObservation.current.setContent("");
-            window.open('/intranet/quotation/view/'+resp.data.id,'_blank');
+            editorRefCondition.current.setContent(initalForm.quotation_conditions);
+            editorRefObservation.current.setContent(initalForm.quotation_observations);
+            window.open(`/intranet/quotation/view/${resp.data.id}?fileName=${resp.data.fileName}` ,'_blank');
         } catch (error) {
             console.error(error);
             sweetAlert({title : "Error", text: "Error al generar una nueva cotización", icon : "error"});
