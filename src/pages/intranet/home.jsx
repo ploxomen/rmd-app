@@ -95,7 +95,7 @@ export default function Home({dataModules,dataRoles,dataUser}){
                 <CartHome title="Usuarios" quantity={limit.usersCount} backgroundIcon="bg-orange-200" Icon={UserIcon} colorIcon="text-orange-500"/>
             </div>
             <div className='p-6 bg-white rounded-md shadow'>
-                <div className='grid grid-cols-12 gap-10 mb-6'>
+                <div className='grid grid-cols-12 gap-10 mb-6 overflow-x-auto'>
                     <div className='col-span-full lg:col-span-6'>
                     <BarLine data={charts.customersBar} titleLabel="Clientes"/>
                     </div>

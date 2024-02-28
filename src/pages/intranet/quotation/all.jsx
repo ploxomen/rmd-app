@@ -183,7 +183,7 @@ function All({dataUser,dataModules,dataRoles}) {
     dispatch({type:TYPES_QUOTATIONS.CLOSE_QUOTATION});
     handleCloseModal();
   }
-  const downloadPdf = async (id) => {
+  const downloadPdf = async (id,fileName) => {
     try {
       const resp = await apiAxios.get('quotation-extra/download/' + id,{
         responseType:'blob',
@@ -192,7 +192,7 @@ function All({dataUser,dataModules,dataRoles}) {
       const url = window.URL.createObjectURL(new Blob([resp.data]));
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', 'cotizacion_'+ id.toString().padStart(5,'0') +'.pdf');
+      link.setAttribute('download', fileName);
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);

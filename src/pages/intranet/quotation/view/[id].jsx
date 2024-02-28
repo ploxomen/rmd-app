@@ -7,13 +7,13 @@ import React, { useEffect, useState } from 'react'
 export async function getServerSideProps(context){
   return {
     props : {
-      id:context.query.id
+      id:context.query.id,
+      title:context.query.fileName
     }
   }
 }
-function ReportQuotation({id}) {
+function ReportQuotation({id,title}) {
   const [pdfSrc, setPdfSrc] = useState(null);
-  const title = 'cotizacion_' + id.toString().padStart(5,'0') + '.pdf';
   const headers = getCookie();
   const route = useRouter();
   useEffect(() => {
@@ -33,7 +33,7 @@ function ReportQuotation({id}) {
   return (
     <>
     {pdfSrc ? (
-      <ViewPdf src={pdfSrc} title={title}/>
+      <ViewPdf src={pdfSrc} title={title||"documento.pdf"}/>
     ) : <span>Cargando la cotización, por favor espere unos segundos...</span>}
     </>
   );
