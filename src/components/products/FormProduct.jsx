@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Modal from '../Modal'
-import { InputPrimary, SubmitForm, TextareaPrimary } from '../Inputs';
+import { InputPrimary, SubmitForm, TextareaPrimary, Toogle } from '../Inputs';
 import SeccionForm from '../SeccionForm';
 import { getCookie } from '@/helpers/getCookie';
 import { SelectPrimary } from '../Selects';
@@ -16,6 +16,7 @@ const dataForm = {
     product_buy:"",
     product_sale:"",
     product_categorie:"",
+    product_service:false,
     sub_categorie:"",
     product_img:null
 }
@@ -61,6 +62,14 @@ function FormProduct({statusModal,closeModal,handleSave,productEdit,categories,s
     const handleChangeForm = async (e) => {
         const key = e.target.name;
         const value = e.target.value;
+        console.log(key);
+        if(key == "product_service"){
+            setForm({
+                ...form,
+                product_service : !form.product_service
+            })
+            return
+        }
         setForm({
             ...form,
             [key] : value
@@ -114,15 +123,25 @@ function FormProduct({statusModal,closeModal,handleSave,productEdit,categories,s
             <div className="col-span-full">
                 <InputPrimary label="Producto" inputRequired='required' name="product_name" value={form.product_name||''} onChange={handleChangeForm}/>
             </div>
+            <div className="col-span-full">
+                <Toogle text="Establecer como servicio" onChange={handleChangeForm} checked={form.product_service} name="product_service"/>
+            </div>
             <div className="col-span-full mb-4">
                 <EditorText label="Descripción" initialValue={form.product_description} id="quotation_observations" editorRef={editorDescription}/>
             </div>
-            <div className="col-span-3">
-                <InputPrimary label="P. Producción" step="0.01" min="0" type='number' name="product_buy" value={form.product_buy||''} onChange={handleChangeForm}/>
-            </div>
-            <div className="col-span-3">
-                <InputPrimary label="P. Venta" step="0.01" min="0" type='number' inputRequired='required' name="product_sale" value={form.product_sale||''} onChange={handleChangeForm}/>
-            </div>
+            {
+                !form.product_service
+                &&
+                <>
+                    <div className="col-span-3">
+                        <InputPrimary label="P. Producción" step="0.01" min="0" type='number' name="product_buy" value={form.product_buy||''} onChange={handleChangeForm}/>
+                    </div>
+                    <div className="col-span-3">
+                        <InputPrimary label="P. Venta" step="0.01" min="0" type='number' inputRequired='required' name="product_sale" value={form.product_sale||''} onChange={handleChangeForm}/>
+                    </div>
+                </>
+            }
+            
             <div className="col-span-3">
                 <SelectPrimary label="Categorías" inputRequired='required' name="product_categorie" value={form.product_categorie||''} onChange={handleChangeForm}>
                     <option value="">Seleccione una opción</option>

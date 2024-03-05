@@ -29,6 +29,8 @@ const initialForm = {
 function Configurations({dataRoles,dataUser,dataModules}) {
     const [form,setForm] = useState(initialForm);
     const eidtorRefBanks = useRef();
+    const editorConditions = useRef();
+    const editorObservations = useRef();
     const route = useRouter();
     const headers = getCookie();
     useEffect(() => {
@@ -44,7 +46,6 @@ function Configurations({dataRoles,dataUser,dataModules}) {
                     dataReplace[config.description] = config.value;
                 });
                 setForm({
-                    ...form,
                     ...dataReplace
                 })
             } catch (error) {
@@ -57,7 +58,11 @@ function Configurations({dataRoles,dataUser,dataModules}) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const resp = await apiAxios.put('/my-business',{...form,business_bank:eidtorRefBanks.current.getContent()},{headers});
+            const resp = await apiAxios.put('/my-business',{...form,
+                business_bank:eidtorRefBanks.current.getContent(),
+                quotation_conditions:editorConditions.current.getContent(),
+                quotation_observations:editorObservations.current.getContent()
+            },{headers});
             if(resp.data.redirect !== null){
                 return route.replace(resp.data.redirect);
             }
@@ -108,10 +113,16 @@ function Configurations({dataRoles,dataUser,dataModules}) {
             </div>
             <div className='w-full p-6 mb-4 bg-white rounded-md shadow grid grid-cols-12 gap-x-3 gap-y-0'>
                 <div className="col-span-full">
-                    <SeccionForm title="Datos adicioanales"/>
+                    <SeccionForm title="Datos adicionales"/>
                 </div>
                 <div className="col-span-full mb-2">
                     <EditorText label="Datos bancarios" initialValue={form.business_bank} id="configuration_bank" editorRef={eidtorRefBanks}/>
+                </div>
+                <div className="col-span-full mb-2">
+                    <EditorText label="Cotización observaciones" initialValue={form.quotation_observations} id="configuration_observations" editorRef={editorObservations}/>
+                </div>
+                <div className="col-span-full mb-2">
+                    <EditorText label="Cotización condiciones" initialValue={form.quotation_conditions} id="configurations_conditions" editorRef={editorConditions}/>
                 </div>
                 <div className="col-span-full text-center">
                     <ButtonPrimary text="Guardar" type='submit' icon={<PaperAirplaneIcon className='w-5 h-5'/>}/>

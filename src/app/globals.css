@@ -4,10 +4,10 @@
 html{
   font-family: "Poppins", sans-serif;
 }
-input,button,textarea,select{
+/* input,button,textarea,select{
   outline: none;
-}
-[type="checkbox"]{
+} */
+/* [type="checkbox"]{
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -17,7 +17,7 @@ input,button,textarea,select{
 }
 [type="checkbox"]:checked{
   background-image: url(/icons/checked.svg);
-}
+} */
 .menu-content-windows{
   left: -260px !important;
 }

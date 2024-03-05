@@ -1,7 +1,7 @@
 import '@/app/globals.css';
 import apiAxios from '@/axios';
 import BanerModule from '@/components/BanerModule';
-import { ButtonPrimary } from '@/components/Buttons';
+import { ButtonDanger, ButtonPrimary } from '@/components/Buttons';
 import EditorText from '@/components/EditorText';
 import { InputPrimary } from '@/components/Inputs';
 import LoyoutIntranet from '@/components/LoyoutIntranet';
@@ -13,7 +13,7 @@ import { sweetAlert } from '@/helpers/getAlert';
 import { getCookie } from '@/helpers/getCookie';
 import { verifUser } from '@/helpers/verifUser';
 import { useModal } from '@/hooks/useModal';
-import { PaperAirplaneIcon } from '@heroicons/react/24/solid';
+import { EyeIcon, PaperAirplaneIcon } from '@heroicons/react/24/solid';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useRef, useState } from 'react'
@@ -32,20 +32,8 @@ const initalForm = {
     quotation_contact:"",
     quotation_address:"",
     quotation_discount:"0.00",
-    quotation_observations:`<p><span style="font-size: 10pt;"><strong>OBSERVACIONES:</strong> NO INCLUYE INSTALACI&Oacute;N Y TRANSPORTE</span></p>
-    <p><strong><span style="font-size: 10pt;">Plazo de Fabricaci&oacute;n:</span></strong></p>
-    <p><strong><span style="font-size: 10pt;">Plazo de Entrega:&nbsp;</span></strong></p>`,
-    quotation_conditions:`<ul>
-    <li style="font-size: 10pt;"><span style="font-size: 10pt;"><strong>Superficies para la instalaci&oacute;n:</strong> La superficie destinada a la instalaci&oacute;n deber&aacute; presentar una base de CONCRETO s&oacute;lida, nivelada, limpia, seca y libre de obstrucciones.</span></li>
-    <li style="font-size: 10pt;"><span style="font-size: 10pt;"><strong>Seguro del personal de obra:</strong> El servicio de instalaci&oacute;n incluye seguro del personal de RMD (SCTR Y EPIS), proporcionado por la empresa durante la ejecuci&oacute;n de los trabajos contratados.</span></li>
-    <li style="font-size: 10pt;"><span style="font-size: 10pt;"><strong>Suministro de fluido el&eacute;ctrico y almacenamiento:</strong> El cliente deber&aacute; suministrar el fluido el&eacute;ctrico requerido, as&iacute; como almac&eacute;n seguro para guardar materiales y maquinas, permisos municipales o cuota sindical.</span></li>
-    <li style="font-size: 10pt;"><span style="font-size: 10pt;"><strong>Entrega de productos o insumos: </strong>A menos que se acuerde lo contrario, los productos y/o insumos ser&aacute;n entregados una vez que se haya reflejado la cancelaci&oacute;n correspondiente en la cuenta bancaria. El cliente deber&aacute; efectuar el pago seg&uacute;n los t&eacute;rminos acordados para garantizar la entrega oportuna de los productos y/o insumos. El horario establecido para la recogida de los productos ser&aacute; de lunes a viernes de 9:00 h a 17:00 h.</span></li>
-    </ul>
-    <p><span style="font-size: 10pt;"><strong><span style="line-height: 107%; font-family: Calibri, sans-serif;">GARANTIA:</span></strong><span style="line-height: 107%; font-family: Calibri, sans-serif;"> Defecto de f&aacute;brica, reemplazo inmediato.</span></span></p>
-    <p><span style="font-size: 10pt;"><span style="line-height: 107%; font-family: Calibri, sans-serif;"><strong>NO INCLUYE:</strong> Otro tipo de documentaci&oacute;n (pdr, examenes m&eacute;dicos y/o requisitos adicionales, ni costes para charlas de inducci&oacute;n, etc)</span></span></p>
-    <p><span style="font-size: 10pt;"><span style="line-height: 107%; font-family: Calibri, sans-serif;"><strong>LUGAR DE ENTREGA:</strong> ALMACEN RMD / No incluye prueba covid</span></span></p>
-    <p><span style="font-size: 10pt;"><span style="line-height: 107%; font-family: Calibri, sans-serif;"><strong>FORMA DE PAGO:</strong> </span></span></p>
-    <p><span style="font-size: 10pt;"><span style="line-height: 107%; font-family: Calibri, sans-serif;"><strong>TIEMPO DE VALIDEZ DE COTIZACI&Oacute;N:</strong> 15 D&Iacute;AS HABILES</span></span></p>`
+    quotation_observations:"",
+    quotation_conditions:""
 }
 const initialAmountDetails = {
     quotation_amount:"0.00",
@@ -71,13 +59,22 @@ function quotationNew({dataUser,dataModules,dataRoles}) {
             try {
                 const all = await axios.all([
                     apiAxios.get('/quotation-extra/customers',{headers}),
-                    apiAxios.get('/quotation-extra/products',{headers})
+                    apiAxios.get('/quotation-extra/products',{headers}),
+                    apiAxios.get('/quotation-extra/config',{headers})
                 ]);
                 setCustomers(all[0].data.data);
                 setProductsList(all[1].data.data);
+                const dataReplace = {};
+                all[2].data.data.forEach(config => {
+                    dataReplace[config.description] = config.value;
+                });
+                setForm({
+                    ...form,
+                    ...dataReplace
+                })
             } catch (error) {
                 console.error(error);
-                sweetAlert({title : "Error", text:'Error al obtener los clientes y productos', icon : "error"});
+                sweetAlert({title : "Error", text:'Error al obtener los datos', icon : "error"});
             }
         }
         getData();
@@ -222,6 +219,25 @@ function quotationNew({dataUser,dataModules,dataRoles}) {
         editorDetails.current.setContent("");
         handleCloseModal();
     }
+    const handlePreview = async () => {
+        const resp = await apiAxios.post('quotation-extra/preview',{...form,
+            products},{
+            responseType:'blob',
+            headers
+        })
+        var blobURL = URL.createObjectURL(resp.data);
+        let iframe = document.querySelector("#preview") || document.createElement('iframe');
+        document.body.appendChild(iframe);
+        iframe.id = "preview";
+        iframe.style.display = 'none';
+        iframe.src = blobURL;
+        iframe.onload = function() {
+            setTimeout(function() {
+                iframe.focus();
+                iframe.contentWindow.print();
+            }, 1);
+        };
+    }
   return (
     <>
         <LoyoutIntranet title="Nueva cotización" description="Creación de nuevas cotizaciones" user={dataUser} modules={dataModules} roles={dataRoles}>
@@ -266,7 +282,7 @@ function quotationNew({dataUser,dataModules,dataRoles}) {
                         </SelectPrimary>
                     </div>
                     <div className="col-span-full">
-                        <InputPrimary label="Dirección" type='text' name="quotation_address" value={form.quotation_address||''} onChange={handleChangeForm}/>
+                        <InputPrimary label="Dirección" type='text' inputRequired='required' name="quotation_address" value={form.quotation_address||''} onChange={handleChangeForm}/>
                     </div>
                 </div>
                 <div className='w-full p-6 mb-4 bg-white rounded-md shadow grid grid-cols-12 gap-x-3 gap-y-0'>
@@ -296,6 +312,7 @@ function quotationNew({dataUser,dataModules,dataRoles}) {
                     </div>
                     <div className="col-span-full text-center">
                         <ButtonPrimary text="Generar" type='submit' icon={<PaperAirplaneIcon className='w-5 h-5'/>}/>
+                        <ButtonDanger text="Vista previa" icon={<EyeIcon className='w-5 h-5'/>} onClick={handlePreview}/>
                     </div>
                 </div>
             </form>
