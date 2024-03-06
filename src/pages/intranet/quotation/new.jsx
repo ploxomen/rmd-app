@@ -143,6 +143,7 @@ function quotationNew({dataUser,dataModules,dataRoles}) {
                 {
                     id: e.value,
                     description:e.label,
+                    is_service:e.product_service,
                     quantity:1,
                     price_unit: e.product_sale,
                     price_aditional: 0,
@@ -155,6 +156,16 @@ function quotationNew({dataUser,dataModules,dataRoles}) {
         e.preventDefault();
         if(!products.length){
             return await sweetAlert({title : "Alerta", text:'La cotización debe tener al menos un producto', icon : "warning"});
+        }
+        let existServiceEmpty = false;
+        products.forEach(product => {
+            if(!product.price_aditional || (product.is_service === 1 && product.price_aditional < 0)){
+                existServiceEmpty = true;
+                return sweetAlert({title : "Alerta", text:`El valor del precio adicional del servicio ${product.description} debe ser mayor a cero`, icon : "warning"}); 
+            }
+        })
+        if(existServiceEmpty){
+            return
         }
         const question = await sweetAlert({title : "Mensaje", text: "¿Deseas generar una nueva cotización?", icon : "question",showCancelButton:true});
         if(!question.isConfirmed){

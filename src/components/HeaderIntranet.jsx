@@ -58,7 +58,7 @@ function HeaderIntranet({dataRoles,user,handleMenu}) {
             <ChevronDownIcon className='w-4 h-4'/>
           </div>
         </button>
-        <div className='w-40 bg-white border pt-3 rounded-md absolute right-10 top-14' id='box-menu' hidden>
+        <div className='w-40 bg-white border pt-3 rounded-md absolute z-50 right-10 top-14' id='box-menu' hidden>
               <ul className='flex flex-col gap-0'>
                 <li className='text-left px-3'>
                   <span className='font-semibold text-sm'>Roles</span>

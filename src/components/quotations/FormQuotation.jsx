@@ -137,6 +137,7 @@ function FormQuotation({statusModal,customers,quotationEdit,contactsList,product
                     id: e.value,
                     description:e.label,
                     quantity:1,
+                    is_service:e.product_service,
                     price_unit: e.product_sale,
                     price_aditional: 0,
                     details:null
@@ -160,6 +161,16 @@ function FormQuotation({statusModal,customers,quotationEdit,contactsList,product
         e.preventDefault();
         if(!products.length){
             return sweetAlert({title : "Alerta", text: "La cotización debe tener al menos un producto", icon : "warning"});
+        }
+        let existServiceEmpty = false;
+        products.forEach(product => {
+            if(!product.price_aditional || (product.is_service === 1 && product.price_aditional < 0)){
+                existServiceEmpty = true;
+                return sweetAlert({title : "Alerta", text:`El valor del precio adicional del servicio ${product.description} debe ser mayor a cero`, icon : "warning"}); 
+            }
+        })
+        if(existServiceEmpty){
+            return
         }
         const data = {
             ...form,
