@@ -137,7 +137,7 @@ function FormQuotation({statusModal,customers,quotationEdit,contactsList,product
                     id: e.value,
                     description:e.label,
                     quantity:1,
-                    is_service:e.product_service,
+                    is_service:!e.product_service ? 0 : e.product_service,
                     price_unit: e.product_sale,
                     price_aditional: 0,
                     details:null
@@ -164,7 +164,7 @@ function FormQuotation({statusModal,customers,quotationEdit,contactsList,product
         }
         let existServiceEmpty = false;
         products.forEach(product => {
-            if(!product.price_aditional || (product.is_service === 1 && product.price_aditional < 0)){
+            if((product.is_service === 1 && !product.price_aditional) || (product.is_service === 1 && product.price_aditional < 0)){
                 existServiceEmpty = true;
                 return sweetAlert({title : "Alerta", text:`El valor del precio adicional del servicio ${product.description} debe ser mayor a cero`, icon : "warning"}); 
             }

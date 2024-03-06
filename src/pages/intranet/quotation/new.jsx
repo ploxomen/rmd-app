@@ -52,6 +52,10 @@ function quotationNew({dataUser,dataModules,dataRoles}) {
     const editorRefCondition = useRef(null);
     const {modal,handleOpenModal,handleCloseModal} = useModal("hidden");
     const editorDetails = useRef(null);
+    const [editorDetail,setEditorDetail] = useState({
+        quotation_observations:"",
+        quotation_conditions:""
+    });
     const route = useRouter();
     const headers = getCookie();
     useEffect(()=>{
@@ -68,6 +72,7 @@ function quotationNew({dataUser,dataModules,dataRoles}) {
                 all[2].data.data.forEach(config => {
                     dataReplace[config.description] = config.value;
                 });
+                setEditorDetail(dataReplace);
                 setForm({
                     ...form,
                     ...dataReplace
@@ -143,7 +148,7 @@ function quotationNew({dataUser,dataModules,dataRoles}) {
                 {
                     id: e.value,
                     description:e.label,
-                    is_service:e.product_service,
+                    is_service:!e.product_service ? 0 : e.product_service,
                     quantity:1,
                     price_unit: e.product_sale,
                     price_aditional: 0,
@@ -159,7 +164,7 @@ function quotationNew({dataUser,dataModules,dataRoles}) {
         }
         let existServiceEmpty = false;
         products.forEach(product => {
-            if(!product.price_aditional || (product.is_service === 1 && product.price_aditional < 0)){
+            if((product.is_service === 1 && !product.price_aditional) || (product.is_service === 1 && product.price_aditional < 0)){
                 existServiceEmpty = true;
                 return sweetAlert({title : "Alerta", text:`El valor del precio adicional del servicio ${product.description} debe ser mayor a cero`, icon : "warning"}); 
             }
@@ -189,11 +194,11 @@ function quotationNew({dataUser,dataModules,dataRoles}) {
                 return
             }
             sweetAlert({title : "Exitoso", text: resp.data.message, icon : "success"});
-            setForm(initalForm);
+            setForm({...initalForm,...editorDetail});
             setContacts([]);
             setProducts([]);
-            editorRefCondition.current.setContent(initalForm.quotation_conditions);
-            editorRefObservation.current.setContent(initalForm.quotation_observations);
+            editorRefCondition.current.setContent(editorDetail.quotation_conditions);
+            editorRefObservation.current.setContent(editorDetail.quotation_observations);
             window.open(`/intranet/quotation/view/${resp.data.id}?fileName=${resp.data.fileName}` ,'_blank');
         } catch (error) {
             console.error(error);
@@ -231,8 +236,12 @@ function quotationNew({dataUser,dataModules,dataRoles}) {
         handleCloseModal();
     }
     const handlePreview = async () => {
-        const resp = await apiAxios.post('quotation-extra/preview',{...form,
-            products},{
+        const resp = await apiAxios.post('quotation-extra/preview',{
+            ...form,
+            quotation_conditions:editorRefCondition.current.getContent(),
+            quotation_observations:editorRefObservation.current.getContent(),
+            products
+        },{
             responseType:'blob',
             headers
         })
