@@ -9,6 +9,7 @@ import { getCookie } from '@/helpers/getCookie';
 import apiAxios from '@/axios';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
+import workSpace from '@/img/logo.jpg';
 import { sweetAlert } from '@/helpers/getAlert';
 export async function getServerSideProps(context) {
     const userCookie = context.req.cookies;
@@ -102,7 +103,7 @@ function UserReset() {
         <div className='bg-white px-4 py-7 max-w-md rounded-lg shadow-md'>
             <form onSubmit={handleSubmit}>
                 <div className="mb-1">
-                    <Image src='/baners/Group 16.jpg' className='m-auto' width={150} quality={100} alt='Candado abierto'/>
+                    <Image src={workSpace} width={120} height={120} className='m-auto'/>
                 </div>
                 <div className="mb-5">
                     <small className="text-sm text-paragraph">Su cuenta a sido restaurada por un administrador o es la primera vez que ingresa al sistema, por favor establesca una contraseña para acceder al sistema</small>

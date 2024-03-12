@@ -33,6 +33,7 @@ const initalForm = {
     quotation_address:"",
     quotation_discount:"0.00",
     quotation_observations:"",
+    quotation_project:"",
     quotation_conditions:""
 }
 const initialAmountDetails = {
@@ -159,6 +160,9 @@ function quotationNew({dataUser,dataModules,dataRoles}) {
     }
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if(!form.quotation_address){
+            return await sweetAlert({title : "Alerta", text:'Se debe establecer una dirección', icon : "warning"});
+        }
         if(!products.length){
             return await sweetAlert({title : "Alerta", text:'La cotización debe tener al menos un producto', icon : "warning"});
         }
@@ -301,8 +305,11 @@ function quotationNew({dataUser,dataModules,dataRoles}) {
                             }
                         </SelectPrimary>
                     </div>
-                    <div className="col-span-full">
-                        <InputPrimary label="Dirección" type='text' inputRequired='required' name="quotation_address" value={form.quotation_address||''} onChange={handleChangeForm}/>
+                    <div className="col-span-full md:col-span-6 lg:col-span-8">
+                        <InputPrimary label="Dirección" type='text' inputRequired='required' name="quotation_address" value={form.quotation_address||''} disabled/>
+                    </div>
+                    <div className="col-span-full md:col-span-6 lg:col-span-4">
+                        <InputPrimary label="Proyecto" type='text' inputRequired='required' name="quotation_project" value={form.quotation_project||''} onChange={handleChangeForm}/>
                     </div>
                 </div>
                 <div className='w-full p-6 mb-4 bg-white rounded-md shadow grid grid-cols-12 gap-x-3 gap-y-0'>

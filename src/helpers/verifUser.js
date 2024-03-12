@@ -1,4 +1,5 @@
 import apiAxios from "@/axios";
+import Cookies from "js-cookie";
 
 export const verifUser = async (userCookie,currentRoute) => {
     if(!userCookie.authenticate){

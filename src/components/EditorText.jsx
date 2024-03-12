@@ -12,6 +12,7 @@ function EditorText({label,editorRef,id,initialValue = ""}) {
             init={{
               language:'es',
               branding:false,
+              toolbar_mode:'sliding',
               height: 300,
               menubar: false,
               font_size_formats: '5pt 6pt 7pt 8pt 10pt 12pt 14pt 16pt 18pt 24pt 36pt 48pt',

@@ -17,7 +17,7 @@ function TableCategorie({categories,getCategorie,deleteCategorie}) {
                     <tr className="bg-white dark:bg-gray-800" key={categorie.id}>
                         <td  className="py-2 px-4 text-center">{categorie.id.toString().padStart(3,'0')}</td>
                         <td className="py-2 px-4">{categorie.categorie_name}</td>
-                        <td className="py-2 px-4">{categorie.subcategorie_quantity}</td>
+                        <td className="py-2 px-4 text-center">{categorie.subcategorie_quantity}</td>
                         <td className="py-2 px-4">
                             <div className='flex gap-1 flex-wrap justify-center'>
                                 <ButtonPrimarySm text="Editar" onClick={e=> getCategorie(categorie.id)} icon={<PencilIcon className='w-4 h-4'/>}/>

@@ -72,11 +72,6 @@ export default function Login(){
                     <form className="px-6" onSubmit={handleSubmit}>
                         <InputLogin name="username" label="Usuario" type="text" value={formUser.username} onChange={handleFormChange}/>
                         <InputLogin name="password" label="Contraseña" type="password" value={formUser.password} onChange={handleFormChange}/>
-                        {/* <div className="flex justify-between flex-wrap mb-2">
-                            <div className="flex items-center mb-4">
-                                <Checkbox name="remember" label="Recordarme" checked={formUser.remember} onChange={handleFormChange}/>
-                            </div>
-                        </div> */}
                         <div>
                             <ButtonLogin text="Iniciar sesión" type="submit"/>
                         </div>

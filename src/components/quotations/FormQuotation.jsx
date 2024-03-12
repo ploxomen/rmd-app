@@ -17,6 +17,7 @@ const initalForm = {
     quotation_include_igv:true,
     quotation_customer:"",
     quotation_contact:"",
+    quotation_project:"",
     quotation_address:"",
     quotation_actuality:null,
     quotation_discount:"0.00",
@@ -159,6 +160,9 @@ function FormQuotation({statusModal,customers,quotationEdit,contactsList,product
     }
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if(!form.quotation_address){
+            return await sweetAlert({title : "Alerta", text:'Se debe establecer una dirección', icon : "warning"});
+        }
         if(!products.length){
             return sweetAlert({title : "Alerta", text: "La cotización debe tener al menos un producto", icon : "warning"});
         }
@@ -236,6 +240,9 @@ function FormQuotation({statusModal,customers,quotationEdit,contactsList,product
             </div>
             <div className="col-span-full">
                 <InputPrimary label="Dirección" type='text' name="quotation_address" value={form.quotation_address||''} onChange={handleChangeForm}/>
+            </div>
+            <div className="col-span-full">
+                <InputPrimary label="Proyecto" type='text' inputRequired='required' name="quotation_project" value={form.quotation_project||''} onChange={handleChangeForm}/>
             </div>
             <div className="col-span-full">
                 <SeccionForm title="Detalle de los productos"/>
