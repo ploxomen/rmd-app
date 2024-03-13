@@ -149,7 +149,7 @@ function FormCustomer({statusModal,contries,customerEdit,contactsEdit,pronvinces
                 <SelectPrimary label="Tipo documento" inputRequired='required' name="customer_type_document" value={form.customer_type_document||''} onChange={handleChangeForm} disabled={form.customer_contrie != dataForm.customer_contrie}>
                     <option value="">Seleccione una opción</option>
                     {
-                        typeDocumentsData.map(document => <option value={document.id} key={document.id}>{document.document_name}</option>)
+                        typeDocumentsData.map(document => form.customer_contrie == dataForm.customer_contrie && document.id == 5 ? null : <option value={document.id} key={document.id}>{document.document_name}</option>)
                     }
                 </SelectPrimary>
             </div>
