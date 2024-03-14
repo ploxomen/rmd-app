@@ -152,9 +152,6 @@ function FormQuotation({statusModal,customers,quotationEdit,contactsList,product
     }
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if(!form.quotation_address){
-            return await sweetAlert({title : "Alerta", text:'Se debe establecer una dirección', icon : "warning"});
-        }
         if(!products.length){
             return sweetAlert({title : "Alerta", text: "La cotización debe tener al menos un producto", icon : "warning"});
         }
