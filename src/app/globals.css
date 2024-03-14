@@ -1,6 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+.css-t3ipsp-control input:focus,
+.css-13cymwt-control input:focus{
+  outline: none !important;
+  outline-offset:0 !important;
+  box-shadow: none !important;
+}
+.css-1dimb5e-singleValue{
+  color: #84919D !important;
+}
 html{
   font-family: "Poppins", sans-serif;
 }

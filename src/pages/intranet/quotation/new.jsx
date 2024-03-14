@@ -105,33 +105,26 @@ function quotationNew({dataUser,dataModules,dataRoles}) {
             products.filter(product => product.id != id)
         )
     }
+    const handleContact = async (e) => {
+        try {
+            const resq = await apiAxios.get('quotation/contacts/' + e.value,{headers});
+            setContacts(resq.data.data.contacts);
+            setForm(form => ({
+                ...form,
+                quotation_customer:e.value,
+                quotation_address:resq.data.data.address,
+                quotation_contact:resq.data.data.contacts.length === 1 ? resq.data.data.contacts[0].id : "",
+                quotation_include_igv:resq.data.data.disabledIgv
+            }))
+        } catch (error) {
+            sweetAlert({title : "Error", text:'Error al obtener los contactos', icon : "error"});
+        }
+    }
     const handleChangeForm = async (e) => {
-        const key = e.target.name;
-        const value = e.target.value; 
         setForm({
             ...form,
             [e.target.name] : e.target.value
         })
-        if(key == 'quotation_customer' && value){
-            try {
-                const resq = await apiAxios.get('quotation/contacts/' + value,{headers});
-                setContacts(resq.data.data.contacts);
-                setForm(form => ({
-                    ...form,
-                    quotation_address:resq.data.data.address,
-                    quotation_contact:resq.data.data.contacts.length === 1 ? resq.data.data.contacts[0].id : "",
-                    quotation_include_igv:resq.data.data.disabledIgv
-                }))
-            } catch (error) {
-                sweetAlert({title : "Error", text:'Error al obtener los contactos', icon : "error"});
-            }
-        }else if(key == 'quotation_customer' && !value){
-            setContacts([]);
-            setForm(form => ({
-                ...form,
-                quotation_address:""
-            }))
-        }
     }
     const handleDetailChange = (value,id,column) => {
         setProducts(products.map(product => product.id == id ? {...product,[column] : value} : product))
@@ -288,14 +281,9 @@ function quotationNew({dataUser,dataModules,dataRoles}) {
                     <div className="col-span-full">
                         <SeccionForm title="Datos del cliente"/>
                     </div>
-                    <div className="col-span-full md:col-span-6">
-                        <SelectPrimary label="Cliente" inputRequired='required' name="quotation_customer" value={form.quotation_customer||''} onChange={handleChangeForm}>
-                            <option value="">Seleccione un cliente</option>
-
-                            {
-                                customers.map(customer => <option key={customer.value} value={customer.value}>{customer.label}</option>)
-                            }
-                        </SelectPrimary>
+                    <div className="col-span-full md:col-span-6 text-placeholder">
+                        <label htmlFor="quotation_customer" className="text-sm mb-1 block dark:text-white">Cliente <span className="text-red-500 font-bold pl-1">*</span> </label>
+                        <Select instanceId='quotation_customer' placeholder="Seleccione un cliente" name='quotation_customer' options={customers} onChange={handleContact} menuPosition='fixed'/>
                     </div>
                     <div className="col-span-full md:col-span-6">
                         <SelectPrimary label="Contacto" name="quotation_contact" inputRequired="required" value={form.quotation_contact||''} onChange={handleChangeForm}>
@@ -305,10 +293,7 @@ function quotationNew({dataUser,dataModules,dataRoles}) {
                             }
                         </SelectPrimary>
                     </div>
-                    <div className="col-span-full md:col-span-6 lg:col-span-8">
-                        <InputPrimary label="Dirección" type='text' inputRequired='required' name="quotation_address" value={form.quotation_address||''} disabled/>
-                    </div>
-                    <div className="col-span-full md:col-span-6 lg:col-span-4">
+                    <div className="col-span-full">
                         <InputPrimary label="Proyecto" type='text' inputRequired='required' name="quotation_project" value={form.quotation_project||''} onChange={handleChangeForm}/>
                     </div>
                 </div>
@@ -320,7 +305,7 @@ function quotationNew({dataUser,dataModules,dataRoles}) {
                         <span className='text-sm mb-1 block dark:text-white text-placeholder'>{
                             !form.quotation_include_igv && <p className='text-sm text-red-600 my-2'>Esta cotización no incluye I.G.V debido a que el cliente <strong className='font-bold'>NO ES DE PERÚ</strong></p>
                         }Lista de productos</span>
-                        <Select instanceId='quotation_products_list' name='quotation_products_list' options={productsList} onChange={handleProductSelect} placeholder="Buscar" menuPosition='fixed'/>
+                        <Select instanceId='quotation_products_list' className='text-placeholder' name='quotation_products_list' options={productsList} onChange={handleProductSelect} placeholder="Buscar" menuPosition='fixed'/>
                         
                     </div>
                     <div className="col-span-full overflow-x-auto">
