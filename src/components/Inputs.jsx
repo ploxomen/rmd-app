@@ -43,12 +43,12 @@ export function Checkbox({label = "",name,checked,onChange}) {
         {
             label
             ?
-            <div class="flex items-center">
-                <input checked={checked||false} id={`id-${name}`} type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" onChange={onChange}/>
-                <label for={`id-${name}`} class="ms-2 text-sm font-medium text-placeholder dark:text-gray-300">{label}</label>
+            <div className="flex items-center">
+                <input checked={checked||false} id={`id-${name}`} type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" onChange={onChange}/>
+                <label for={`id-${name}`} className="ms-2 text-sm font-medium text-placeholder dark:text-gray-300">{label}</label>
             </div>
             :
-            <input checked={checked||false} id={`id-${name}`} type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" onChange={onChange}/>
+            <input checked={checked||false} id={`id-${name}`} type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" onChange={onChange}/>
         }
         </>
     )

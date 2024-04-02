@@ -88,7 +88,8 @@ function quotationNew({dataUser,dataModules,dataRoles}) {
     useEffect(()=>{
         let amount = 0;
         products.forEach(product => {
-            amount += (parseFloat(product.price_aditional) + parseFloat(product.price_unit)) * product.quantity;
+            const priceAditionalValid = isNaN(parseFloat(product.price_aditional)) ? 0 : parseFloat(product.price_aditional);
+            amount += (priceAditionalValid + parseFloat(product.price_unit)) * product.quantity;
         });
         let subtotal = amount - form.quotation_discount;
         let igv = form.quotation_include_igv ? subtotal * 0.18 : 0;
@@ -118,6 +119,11 @@ function quotationNew({dataUser,dataModules,dataRoles}) {
             }))
         } catch (error) {
             sweetAlert({title : "Error", text:'Error al obtener los contactos', icon : "error"});
+        }
+    }
+    const handleVerifNull= (value,id,column) => {
+        if(value === ""){
+            setProducts(products.map(product => product.id == id ? {...product,[column] : 0} : product))
         }
     }
     const handleChangeForm = async (e) => {
@@ -279,7 +285,7 @@ function quotationNew({dataUser,dataModules,dataRoles}) {
                         <SeccionForm title="Datos del cliente"/>
                     </div>
                     <div className="col-span-full md:col-span-6 text-placeholder">
-                        <label htmlFor="quotation_customer" className="text-sm mb-1 block dark:text-white">Cliente <span className="text-red-500 font-bold pl-1">*</span> </label>
+                        <label htmlFor="quotation_customer" className="text-sm mb-1 block dark:text-white">Cliente <span className="text-red-500 font-bold pl-1">*</span></label>
                         <Select instanceId='quotation_customer' placeholder="Seleccione un cliente" name='quotation_customer' options={customers} onChange={handleContact} menuPosition='fixed'/>
                     </div>
                     <div className="col-span-full md:col-span-6">
@@ -306,7 +312,7 @@ function quotationNew({dataUser,dataModules,dataRoles}) {
                         
                     </div>
                     <div className="col-span-full overflow-x-auto">
-                        <TableQuotation products={products} formatMoney={form.quotation_type_money} handleDetailChange={handleDetailChange} handleDeleteDetail={handleDeleteDetail} includeIgv={form.quotation_include_igv} dataTotal={{discount:form.quotation_discount,igv:amountDetails.quotation_igv,amount:amountDetails.quotation_amount,total:amountDetails.quotation_total}} handleChangeDiscount={handleChangeForm} handleDetails={handleAddDescription}/>
+                        <TableQuotation products={products} formatMoney={form.quotation_type_money} handleDetailChange={handleDetailChange} handleDeleteDetail={handleDeleteDetail} includeIgv={form.quotation_include_igv} dataTotal={{discount:form.quotation_discount,igv:amountDetails.quotation_igv,amount:amountDetails.quotation_amount,total:amountDetails.quotation_total}} handleChangeDiscount={handleChangeForm} handleDetails={handleAddDescription} handleVerifNull={handleVerifNull}/>
                     </div>
                 </div>
                 <div className='w-full p-6 mb-4 bg-white rounded-md shadow grid grid-cols-12 gap-x-3 gap-y-0'>
@@ -326,7 +332,7 @@ function quotationNew({dataUser,dataModules,dataRoles}) {
                 </div>
             </form>
         </LoyoutIntranet>
-        <Modal status={modal} title="Agregar descripcion" maxWidth='w-[700px]' onSave={handleSaveDescription} handleCloseModal={handleCloseDescription}>
+        <Modal status={modal} title="Agregar descripcion" maxWidth='max-w-[700px]' onSave={handleSaveDescription} handleCloseModal={handleCloseDescription}>
             <EditorText label="Descripción" id='details-producto-description' initialValue={form.quotation_actuality} editorRef={editorDetails}/>
         </Modal>
     </>

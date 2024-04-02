@@ -115,7 +115,7 @@ function FormProduct({statusModal,closeModal,handleSave,productEdit,categories,s
         document.querySelector("#upload-file").click();
     }
   return (
-    <Modal status={statusModal} maxWidth='w-[750px]' title={edit ? 'Editar producto' : 'Nuevo producto'} onSave={hanbleSendModal} handleCloseModal={closeModal}>
+    <Modal status={statusModal} maxWidth='max-w-[750px]' title={edit ? 'Editar producto' : 'Nuevo producto'} onSave={hanbleSendModal} handleCloseModal={closeModal}>
         <form  className='grid grid-cols-6 gap-x-3 gap-y-0' onSubmit={handleSubmit}>
             <div className="col-span-full">
                 <SeccionForm title="Datos del producto"/>

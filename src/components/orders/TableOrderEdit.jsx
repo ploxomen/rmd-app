@@ -20,7 +20,7 @@ function TableOrderEdit({quotations,typeMoney,handleDelete}) {
                     return quotation.close === 0 && 
                     <tr className="bg-white dark:bg-gray-800" key={quotation.id}>
                         <td className="py-2 px-2 max-w-3 w-3 text-center">{key + 1}</td>
-                        <td className="py-2 px-4">{quotation.id.toString().padStart(5,'0')}</td>
+                        <td className="py-2 px-4">{quotation.quotation_code}</td>
                         <td className="py-2 px-4">{quotation.date_issue}</td>
                         <td className="py-2 px-4">{parseMoney(quotation.quotation_total,typeMoney)}</td>
                         <td className="py-2 px-2 max-w-8 w-6">

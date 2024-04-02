@@ -5,7 +5,7 @@ export const verifUser = async (userCookie,currentRoute) => {
     if(!userCookie.authenticate){
         return {
             redirect : {
-                destination: '/account/login',
+                destination: '/login',
                 permanent:false
             }
         }

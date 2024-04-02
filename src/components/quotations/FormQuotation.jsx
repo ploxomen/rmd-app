@@ -73,7 +73,8 @@ function FormQuotation({statusModal,customers,quotationEdit,contactsList,product
     useEffect(()=>{
         let amount = 0;
         products.forEach(product => {
-            amount += (parseFloat(product.price_aditional) + parseFloat(product.price_unit)) * product.quantity;
+            const priceAditionalValid = isNaN(parseFloat(product.price_aditional)) ? 0 : parseFloat(product.price_aditional);
+            amount += (priceAditionalValid + parseFloat(product.price_unit)) * product.quantity;
         });
         const discount = isNaN(form.quotation_discount) || !form.quotation_discount  ? 0 : parseFloat(form.quotation_discount)
         let subtotal = amount - discount;
@@ -108,6 +109,11 @@ function FormQuotation({statusModal,customers,quotationEdit,contactsList,product
             }))
         } catch (error) {
             sweetAlert({title : "Error", text:'Error al obtener los contactos', icon : "error"});
+        }
+    }
+    const handleVerifNull= (value,id,column) => {
+        if(value === ""){
+            setProducts(products.map(product => product.id == id ? {...product,[column] : 0} : product))
         }
     }
     const handleChangeForm = async (e) => {
@@ -239,7 +245,7 @@ function FormQuotation({statusModal,customers,quotationEdit,contactsList,product
                 }
             </div>
             <div className="col-span-full overflow-x-auto">
-                <TableQuotation products={products} formatMoney={form.quotation_type_money} handleDetailChange={handleDetailChange} handleDeleteDetail={handleDeleteDetail} includeIgv={form.quotation_include_igv} dataTotal={{discount:form.quotation_discount,igv:amountDetails.quotation_igv,amount:amountDetails.quotation_amount,total:amountDetails.quotation_total}} handleChangeDiscount={handleChangeForm} handleDetails={handleAddDescription}/>
+                <TableQuotation products={products} formatMoney={form.quotation_type_money} handleDetailChange={handleDetailChange} handleDeleteDetail={handleDeleteDetail} includeIgv={form.quotation_include_igv} dataTotal={{discount:form.quotation_discount,igv:amountDetails.quotation_igv,amount:amountDetails.quotation_amount,total:amountDetails.quotation_total}} handleChangeDiscount={handleChangeForm} handleDetails={handleAddDescription} handleVerifNull={handleVerifNull}/>
             </div>
             <div className="col-span-full">
                 <SeccionForm title="Datos adicionales"/>
@@ -253,7 +259,7 @@ function FormQuotation({statusModal,customers,quotationEdit,contactsList,product
             <SubmitForm id="form-cotizacion-submit"/>
         </form>
     </Modal>
-    <Modal status={modalDesc} title="Agregar descripcion" maxWidth='w-[700px]' onSave={handleSaveDescription} handleCloseModal={handleCloseDescription}>
+    <Modal status={modalDesc} title="Agregar descripcion" maxWidth='max-w-[700px]' onSave={handleSaveDescription} handleCloseModal={handleCloseDescription}>
         <EditorText label="Descripción" id='details-producto-description' initialValue={form.quotation_actuality} editorRef={editorDetails}/>
       </Modal>
     </>

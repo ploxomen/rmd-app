@@ -40,7 +40,7 @@ function HeaderIntranet({dataRoles,user,handleMenu}) {
         if(!resp.error){
           document.cookie = 'authenticate=;Max-Age=0;path=/';  
         }
-        return route.replace('/account/login');
+        return route.replace('/login');
       } catch (error) {
         console.error(error);
       }

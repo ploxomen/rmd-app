@@ -22,7 +22,7 @@ function TableOrder({quotations,typeMoney,selectQuotation,changeChecked,changeAl
                         <td className="py-2 px-4 text-center">
                             <Checkbox name={"quotation_check_" + quotation.id} checked={quotation.checked === 1 ? true : false} onChange={e => changeChecked(quotation.id)}/>
                         </td>
-                        <td className="py-2 px-4 text-center">{quotation.id.toString().padStart(5,'0')}</td>
+                        <td className="py-2 px-4 text-center">{quotation.quotation_code}</td>
                         <td className="py-2 px-4">{quotation.date_issue}</td>
                         <td className="py-2 px-4">{parseMoney(quotation.quotation_total,typeMoney)}</td>
                     </tr>

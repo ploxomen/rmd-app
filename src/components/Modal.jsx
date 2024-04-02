@@ -5,7 +5,7 @@ function Modal({title,children,status,handleCloseModal,onSave,textSuccess = "Gua
   return (
     <div className='fixed z-20 top-0 left-0 w-full h-dvh bg-modal' hidden={status}>
         <div className='px-4 py-6 w-full h-full flex justify-center items-start overflow-y-auto'>
-            <div className={`py-4 px-6 border border-gray-300 bg-white ${maxWidth} rounded-lg`}>
+            <div className={`py-4 px-6 border border-gray-300 w-full bg-white ${maxWidth} rounded-lg`}>
                 <div className='flex justify-between items-center mb-4'>
                     <h2 className='text-xl font-medium'>{title}</h2>
                 </div>

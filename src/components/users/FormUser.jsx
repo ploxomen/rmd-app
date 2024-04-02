@@ -25,7 +25,10 @@ function FormUser({rolesData,typeDocumentsData,saveUser,dataUser,dataUserRol,sta
     const [form,setForm] = useState(dataForm);
     const [roles,setRoles] = useState([]);
     const filterLengthDocuments = typeDocumentsData.find(typeDocument => typeDocument.id == form.user_type_document)
-    const digitDocuments = {min:filterLengthDocuments && filterLengthDocuments.id == 5 ? 1 : (filterLengthDocuments && filterLengthDocuments.document_length),max: filterLengthDocuments && filterLengthDocuments.document_length};
+    const digitDocuments = {
+        min: filterLengthDocuments && filterLengthDocuments.document_minimun,
+        max: filterLengthDocuments && filterLengthDocuments.document_length
+    };
     const edit = Object.keys(dataUser).length;
     useEffect(()=>{
         setRoles(dataUserRol ? dataUserRol : [])

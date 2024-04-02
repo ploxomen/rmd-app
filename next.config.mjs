@@ -13,6 +13,11 @@ const nextConfig = {
                 protocol:'https',
                 hostname:'apirmd.herramientaswp.com',
                 pathname:'/storage/**'
+            },
+            {
+                protocol:'https',
+                hostname:'api.erprmdperu.com',
+                pathname:'/storage/**'
             }
         ]
     }

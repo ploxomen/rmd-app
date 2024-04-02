@@ -13,7 +13,7 @@ export async function getServerSideProps(context) {
     if(!userCookie.authenticate){
         return {
             redirect : {
-                destination: '/account/login',
+                destination: '/login',
                 permanent:false
             }
         }

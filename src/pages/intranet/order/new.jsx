@@ -4,8 +4,6 @@ import BanerModule from '@/components/BanerModule';
 import LoyoutIntranet from '@/components/LoyoutIntranet'
 import { SelectPrimary } from '@/components/Selects';
 import { verifUser } from '@/helpers/verifUser';
-import Swal from 'sweetalert2'
-// import 'sweetalert2/src/scss/'
 import React, { useEffect, useRef, useState } from 'react'
 import { getCookie } from '@/helpers/getCookie';
 import TableOrder from '@/components/orders/TableOrder';
@@ -14,6 +12,7 @@ import SeccionForm from '@/components/SeccionForm';
 import { ButtonPrimary } from '@/components/Buttons';
 import { PaperAirplaneIcon } from '@heroicons/react/24/solid';
 import EditorText from '@/components/EditorText';
+import Select from 'react-select';
 import { useRouter } from 'next/navigation';
 export async function getServerSideProps(context) {
     const userCookie = context.req.cookies;
@@ -64,7 +63,7 @@ function OrderNew({dataUser,dataModules,dataRoles}) {
   const handleChangeFilter = async (e) => {
     setFilter({
       ...filter,
-      [e.target.name] : e.target.value
+      [e.label ? 'customer' : e.target.name] : e.label ? e.value : e.target.value
     })
   }
   const handleSelectAll = () => {
@@ -92,6 +91,7 @@ function OrderNew({dataUser,dataModules,dataRoles}) {
         ...filter,
         reload:!filter.reload
       })
+      refDetailsAditional.current.setContent("");
     } catch (error) {
       console.error(error);
       sweetAlert({title : "Error", text: "Error al generar un nuevo pedido", icon : "error"});
@@ -102,13 +102,8 @@ function OrderNew({dataUser,dataModules,dataRoles}) {
       <BanerModule imageBanner='/baners/Group 15.jpg' title="Nuevo pedido"/>
       <div className='w-full p-6 mb-4 bg-white rounded-md shadow grid grid-cols-12 gap-x-3 gap-y-0'>
         <div className="col-span-full md:col-span-6">
-          <SelectPrimary label="Cliente" inputRequired='required' name="customer" value={filter.customer||''} onChange={handleChangeFilter}>
-              <option value="">Seleccione un cliente</option>
-
-              {
-                  customers.map(customer => <option key={customer.value} value={customer.value}>{customer.label}</option>)
-              }
-          </SelectPrimary>
+          <label htmlFor="customer" className="text-placeholder text-sm mb-1 block dark:text-white">Cliente<span className="text-red-500 font-bold pl-1">*</span></label>
+        <Select instanceId='customer' placeholder="Seleccione un cliente" name='customer' options={customers} onChange={handleChangeFilter} menuPosition='fixed'/>
         </div>
         <div className="col-span-full md:col-span-4 lg:col-span-3">
           <SelectPrimary label="Tipo moneda" inputRequired='required' name="money" value={filter.money||''} onChange={handleChangeFilter}>

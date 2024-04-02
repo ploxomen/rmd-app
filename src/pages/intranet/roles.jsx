@@ -97,7 +97,7 @@ export default function Roles({dataModules,dataRoles,dataUser}){
             if(!resp.data.error){
                 dispatch({type:TYPES.DELETE_ROLE,payload:role});
             }
-            sweetAlert({title : "Exitoso", text: resp.data.message, icon : "success"});
+            sweetAlert({title : !resp.data.error ? "Exitoso" : "Alerta", text: resp.data.message, icon : !resp.data.error ? "success" : "info"});
         } catch (error) {
             console.error(error);
             dispatch({type:TYPES.NO_ROLE});

@@ -5,7 +5,7 @@ import { PencilIcon, PlusCircleIcon, TrashIcon } from '@heroicons/react/24/solid
 import { parseMoney } from '@/helpers/utilities'
 import { InputDetailsSm } from '../Inputs'
 
-function TableQuotation({products,formatMoney,handleDetailChange,handleDeleteDetail,dataTotal,includeIgv,handleChangeDiscount,handleDetails}) {
+function TableQuotation({products,formatMoney,handleDetailChange,handleDeleteDetail,dataTotal,handleVerifNull,includeIgv,handleChangeDiscount,handleDetails}) {
     const columns = [
         'Item',
         'Descripción',
@@ -32,10 +32,10 @@ function TableQuotation({products,formatMoney,handleDetailChange,handleDeleteDet
                         </div>
                         
                     </td>
-                    <td className="py-2 px-2 w-12">{<InputDetailsSm value={product.quantity} name="quantity" type="number" min="0" onChange={ e => handleDetailChange(e.target.value,product.id,'quantity')}/>}</td>
+                    <td className="py-2 px-2 w-12">{<InputDetailsSm value={product.quantity} name="quantity" type="number" min="0" onChange={ e => handleDetailChange(e.target.value,product.id,'quantity')} onBlur={e => handleVerifNull(e.target.value,product.id,'quantity')}/>}</td>
                     <td className="py-2 px-2 max-w-8 w-14">{parseMoney(product.price_unit,formatMoney)}</td>
-                    <td className="py-2 px-2 w-12">{<InputDetailsSm value={product.price_aditional} name="price_aditional" step="0.01" type="number" min="0" onChange={ e => handleDetailChange(e.target.value,product.id,'price_aditional')}/>}</td>
-                    <td className="py-2 px-2 max-w-8 w-6">{parseMoney((parseFloat(product.price_aditional) + parseFloat(product.price_unit)) * product.quantity,formatMoney)}</td>
+                    <td className="py-2 px-2 w-12">{<InputDetailsSm value={product.price_aditional} name="price_aditional" step="0.01" type="number" min="0" onChange={ e => handleDetailChange(e.target.value,product.id,'price_aditional')} onBlur={e => handleVerifNull(e.target.value,product.id,'price_aditional')}/>}</td>
+                    <td className="py-2 px-2 max-w-8 w-6">{parseMoney(((parseFloat(product.price_aditional)||0) + parseFloat(product.price_unit)) * product.quantity,formatMoney)}</td>
                     <td className="py-2 px-2 max-w-8 w-6">
                         <div className='flex gap-1 flex-wrap justify-center'>
                             <ButtonDangerSm text="Eliminar" onClick={e => handleDeleteDetail(product.id)} icon={<TrashIcon className='w-4 h-4'/>}/>

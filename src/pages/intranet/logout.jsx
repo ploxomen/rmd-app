@@ -5,7 +5,7 @@ function Logout() {
     const router = useRouter();
     useEffect(()=>{
         document.cookie = 'authenticate=;Max-Age=0;path=/';
-        router.replace('/account/login');
+        router.replace('/login');
     },[])
   return (
     <div>Cerrando sesión</div>

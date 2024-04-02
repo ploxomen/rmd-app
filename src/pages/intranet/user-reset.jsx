@@ -16,7 +16,7 @@ export async function getServerSideProps(context) {
     if(!userCookie.authenticate){
         return {
             redirect : {
-                destination: '/account/login',
+                destination: '/login',
                 permanent:false
             }
         }
@@ -61,7 +61,7 @@ function UserReset() {
         if(!resp.error){
             document.cookie = 'authenticate=;Max-Age=0;path=/';  
         }
-        return route.replace('/account/login');
+        return route.replace('/login');
         } catch (error) {
             console.error(error);
             sweetAlert({title : "Error", text: "Error al cerrar sesión", icon : "error"});            ;

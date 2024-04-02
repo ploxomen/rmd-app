@@ -9,6 +9,7 @@ import { ExclamationTriangleIcon } from '@heroicons/react/24/solid';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation'
 import Image from 'next/image';
+import React from 'react';
 export async function getServerSideProps(context) {
     const userCookie = context.req.cookies;
     if(userCookie.authenticate){
