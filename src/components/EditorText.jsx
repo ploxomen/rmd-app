@@ -25,7 +25,7 @@ function EditorText({label,editorRef,id,initialValue = ""}) {
                   'bold italic forecolor | alignleft aligncenter ' +
                   'alignright alignjustify | bullist numlist outdent indent | ' +
                   'removeformat | help',
-              content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:10px; font-style:italic;}'
+              content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:8pt;}'
             }}
         />
     </>
