@@ -5,7 +5,7 @@ function EditorText({label,editorRef,id,initialValue = ""}) {
     <>
         <span className='text-sm mb-1 block dark:text-white text-placeholder'>{label}</span>
         <Editor
-            apiKey='6fbtqt9m6xugsl9q2dfx6oyrvdubr7oxo4d2gbzy3dkomci9'
+            apiKey='8t4qx4b9gcwo6s7dzp7nsa21iratzhav27cguj5jjkstyi8a'
             onInit={(evt, editor) => editorRef.current = editor}
             initialValue={!initialValue ? "" : initialValue}
             id={id}
