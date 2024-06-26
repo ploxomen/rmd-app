@@ -30,6 +30,7 @@ function Configurations({dataRoles,dataUser,dataModules}) {
     const [form,setForm] = useState(initialForm);
     const eidtorRefBanks = useRef();
     const editorConditions = useRef();
+    const attentionHours = useRef();
     const editorObservations = useRef();
     const route = useRouter();
     const headers = getCookie();
@@ -61,7 +62,8 @@ function Configurations({dataRoles,dataUser,dataModules}) {
             const resp = await apiAxios.put('/my-business',{...form,
                 business_bank:eidtorRefBanks.current.getContent(),
                 quotation_conditions:editorConditions.current.getContent(),
-                quotation_observations:editorObservations.current.getContent()
+                quotation_observations:editorObservations.current.getContent(),
+                attention_hours: attentionHours.current.getContent()
             },{headers});
             if(resp.data.redirect !== null){
                 return route.replace(resp.data.redirect);
@@ -123,6 +125,9 @@ function Configurations({dataRoles,dataUser,dataModules}) {
                 </div>
                 <div className="col-span-full mb-2">
                     <EditorText label="Cotización condiciones" initialValue={form.quotation_conditions} id="configurations_conditions" editorRef={editorConditions}/>
+                </div>
+                <div className="col-span-full mb-2">
+                    <EditorText label="Horarios de atención" initialValue={form.attention_hours} id="attention_hours" editorRef={attentionHours}/>
                 </div>
                 <div className="col-span-full text-center">
                     <ButtonPrimary text="Guardar" type='submit' icon={<PaperAirplaneIcon className='w-5 h-5'/>}/>

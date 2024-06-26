@@ -14,8 +14,9 @@ const dataForm = {
     product_name:"",
     product_description:"",
     product_buy:"",
-    product_sale:"",
+    product_public_customer:"",
     product_categorie:"",
+    product_distributor:"",
     product_service:false,
     sub_categorie:"",
     product_img:null
@@ -62,7 +63,6 @@ function FormProduct({statusModal,closeModal,handleSave,productEdit,categories,s
     const handleChangeForm = async (e) => {
         const key = e.target.name;
         const value = e.target.value;
-        console.log(key);
         if(key == "product_service"){
             setForm({
                 ...form,
@@ -137,7 +137,10 @@ function FormProduct({statusModal,closeModal,handleSave,productEdit,categories,s
                         <InputPrimary label="P. Producción" step="0.01" min="0" type='number' name="product_buy" value={form.product_buy||''} onChange={handleChangeForm}/>
                     </div>
                     <div className="col-span-3">
-                        <InputPrimary label="P. Venta" step="0.01" min="0" type='number' inputRequired='required' name="product_sale" value={form.product_sale||''} onChange={handleChangeForm}/>
+                        <InputPrimary label="P. Público Cliente" step="0.01" min="0" type='number' inputRequired='required' name="product_public_customer" value={form.product_public_customer||''} onChange={handleChangeForm}/>
+                    </div>
+                    <div className="col-span-3">
+                        <InputPrimary label="P. Distribuidor" step="0.01" min="0" type='number' name="product_distributor" value={form.product_distributor||''} onChange={handleChangeForm}/>
                     </div>
                 </>
             }
