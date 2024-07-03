@@ -5,10 +5,13 @@ function EditorText({label,editorRef,id,initialValue = ""}) {
     <>
         <span className='text-sm mb-1 block dark:text-white text-placeholder'>{label}</span>
         <Editor
-            apiKey='8t4qx4b9gcwo6s7dzp7nsa21iratzhav27cguj5jjkstyi8a'
+            tinymceScriptSrc='/tinymce/tinymce.min.js'
+            licenseKey='gpl'
             onInit={(evt, editor) => editorRef.current = editor}
             initialValue={!initialValue ? "" : initialValue}
             id={id}
+            visual={false}
+            highlightOnFocus={false}
             init={{
               language:'es',
               branding:false,
@@ -22,7 +25,7 @@ function EditorText({label,editorRef,id,initialValue = ""}) {
                 'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount'
               ],
               toolbar: 'undo redo | blocks fontfamily fontsize | ' +
-                  'bold italic forecolor | alignleft aligncenter ' +
+                  'bold italic underline forecolor | alignleft aligncenter ' +
                   'alignright alignjustify | bullist numlist outdent indent | ' +
                   'removeformat | help',
               content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:8pt;}'

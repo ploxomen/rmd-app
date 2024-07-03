@@ -16,7 +16,9 @@ html{
 .navigation-scroll::-webkit-scrollbar {
   width: 8px;               /* width of the entire scrollbar */
 }
-
+.tox .tox-edit-area::before {
+  border: 0 !important;
+}
 .navigation-scroll::-webkit-scrollbar-track {
   background: rgb(237, 237, 237);        /* color of the tracking area */
 }
