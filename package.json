@@ -1,14 +1,12 @@
 {
   "name": "integrated-system",
   "version": "0.1.0",
-  "type": "module",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "NODE_ENV=production node server.js",
-    "lint": "next lint",
-    "postinstall": "node ./postinstall.js"
+    "lint": "next lint"
   },
   "dependencies": {
     "@heroicons/react": "^2.1.1",
