@@ -11,7 +11,8 @@ function TableProduct({products,getProduct,deleteProduct}) {
         'Categoría',
         'Subcategoría',
         'P. Producción',
-        'P. Venta',
+        'P. P. Cliente',
+        'P. Distribuidor',
         'Acciones'
     ]
   return (
@@ -24,7 +25,8 @@ function TableProduct({products,getProduct,deleteProduct}) {
                         <td className="py-2 px-4">{product.categorie_name}</td>
                         <td className="py-2 px-4">{product.sub_categorie_name}</td>
                         <td className="py-2 px-4">{parseMoney(product.product_buy,'PEN')}</td>
-                        <td className="py-2 px-4">{parseMoney(product.product_sale,'PEN')}</td>
+                        <td className="py-2 px-4">{parseMoney(product.product_public_customer,'PEN')}</td>
+                        <td className="py-2 px-4">{parseMoney(product.product_distributor,'PEN')}</td>
                         <td className="py-2 px-4">
                             <div className='flex gap-1 flex-wrap justify-center'>
                                 <ButtonPrimarySm text="Editar" onClick={e=> getProduct(product.id)} icon={<PencilIcon className='w-4 h-4'/>}/>
