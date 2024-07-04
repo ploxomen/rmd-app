@@ -138,9 +138,9 @@ function FormQuotation({ statusModal, customers, quotationEdit, contactsList, pr
                 {
                     id: e.value,
                     description: e.label,
-                    quantity: 1,
                     is_service: !e.product_service ? 0 : e.product_service,
-                    price_unit: e.product_sale,
+                    quantity: 1,
+                    price_unit: e.product_public_customer || 0,
                     type_ammount: "P. P. Cliente",
                     price_public_customer: e.product_public_customer,
                     price_distributor: e.product_distributor || 0,

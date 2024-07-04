@@ -13,7 +13,6 @@ function EditorText({label,editorRef,id,initialValue = ""}) {
             visual={false}
             highlightOnFocus={false}
             init={{
-              language:'es',
               branding:false,
               toolbar_mode:'sliding',
               height: 300,
