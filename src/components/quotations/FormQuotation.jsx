@@ -264,7 +264,7 @@ function FormQuotation({ statusModal, customers, quotationEdit, contactsList, pr
                         <SeccionForm title="Datos adicionales" />
                     </div>
                     <div className="col-span-full mb-2">
-                        <TextareaPrimary label="Garantias" name="quotation_warranty" value={form.quotation_warranty || ''} onChange={handleChangeForm}/>
+                        <TextareaPrimary label="Garantías" name="quotation_warranty" value={form.quotation_warranty || ''} onChange={handleChangeForm}/>
                     </div>
                     <div className="col-span-full mb-2">
                         <EditorText label="Observaciones" initialValue={form.quotation_observations} id="quotation_observations" editorRef={editorRefObservation} />

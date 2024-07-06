@@ -34,7 +34,7 @@ const initalForm = {
     quotation_discount: "0.00",
     quotation_observations: "",
     quotation_project: "",
-    quotation_warranty:"Defecto de fábrica, reemplazo inmediato.\nSegún Carta de Garantia.",
+    quotation_warranty:"Defecto de fábrica, reemplazo inmediato.\nSegún Carta de Garantía.",
     quotation_conditions: "",
     quotation_way_to_pay:"CRÉDITO 15 DÍAS"
 }
@@ -331,7 +331,7 @@ function quotationNew({ dataUser, dataModules, dataRoles }) {
                             <SeccionForm title="Datos adicionales" />
                         </div>
                         <div className="col-span-full mb-2">
-                            <TextareaPrimary label="Garantias" name="quotation_warranty" value={form.quotation_warranty || ''} onChange={handleChangeForm}/>
+                            <TextareaPrimary label="Garantías" name="quotation_warranty" value={form.quotation_warranty || ''} onChange={handleChangeForm}/>
                         </div>
                         <div className="col-span-full mb-2">
                             <EditorText label="Observaciones" initialValue={form.quotation_observations} id="quotation_observations" editorRef={editorRefObservation} />
