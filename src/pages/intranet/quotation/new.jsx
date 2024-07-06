@@ -34,7 +34,7 @@ const initalForm = {
     quotation_discount: "0.00",
     quotation_observations: "",
     quotation_project: "",
-    quotation_warranty:"Defecto de fábrica, reemplazo inmediato.\nLUGAR DE ENTREGA: JR. MIGUEL ORTIZ (ANTES CALLE 42) / No incluye prueba covid",
+    quotation_warranty:"Defecto de fábrica, reemplazo inmediato.\nSegún Carta de Garantia.",
     quotation_conditions: "",
     quotation_way_to_pay:"CRÉDITO 15 DÍAS"
 }
