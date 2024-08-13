@@ -11,6 +11,7 @@ function TableAllQuotation({quotations,status,getQuotation,deleteQuotation,downl
         'Fecha',
         'Cliente',
         'Cotizador',
+        'Subcategoria',
         'Total',
         'Estado',
         'Acciones'
@@ -24,6 +25,7 @@ function TableAllQuotation({quotations,status,getQuotation,deleteQuotation,downl
                         <td className="py-2 px-4">{quotation.date_issue}</td>
                         <td className="py-2 px-4">{quotation.customer_name}</td>
                         <td className="py-2 px-4">{quotation.name_quoter}</td>
+                        <td className="py-2 px-4">{quotation.sub_categorie_name}</td>
                         <td className="py-2 px-4">{parseMoney(quotation.quotation_total,quotation.quotation_type_money)}</td>
                         <td className="py-2 px-4">{status[quotation.quotation_status].element}</td>
                         <td className="py-2 px-4">

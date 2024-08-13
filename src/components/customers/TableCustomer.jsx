@@ -6,7 +6,7 @@ import { HomeModernIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/solid
 function TableCustomer({customers,getCustomer,deleteCustomer}) {
     const columns = [
         'Código',
-        'País',
+        'Departamento',
         'Tipo documento',
         'Número documento',
         'Razón social / Nombres',
@@ -19,7 +19,7 @@ function TableCustomer({customers,getCustomer,deleteCustomer}) {
                 !customers.length ? <tr className="bg-white dark:bg-gray-800"><td colSpan="100%" className='text-center font-bold'>No se registraron clientes</td></tr> : customers.map(customer => (
                     <tr className="bg-white dark:bg-gray-800" key={customer.id}>
                         <td  className="py-2 px-4 text-center">{customer.id.toString().padStart(3,'0')}</td>
-                        <td className="py-2 px-4">{customer.contrie}</td>
+                        <td className="py-2 px-4">{customer.departament_name}</td>
                         <td className="py-2 px-4">{customer.document_name}</td>
                         <td className="py-2 px-4">{customer.customer_number_document}</td>
                         <td className="py-2 px-4">{customer.customer_name}</td>

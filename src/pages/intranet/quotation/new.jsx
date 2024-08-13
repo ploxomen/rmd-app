@@ -1,4 +1,3 @@
-import '@/app/globals.css';
 import apiAxios from '@/axios';
 import BanerModule from '@/components/BanerModule';
 import { ButtonDanger, ButtonPrimary } from '@/components/Buttons';
