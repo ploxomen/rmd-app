@@ -6,8 +6,30 @@ export function InputPrimary({label,type="text",name,value,onChange,inputRequire
                 {label}
                 {inputRequired && <span className="text-red-500 font-bold pl-1">*</span>}
             </label>
-            <input required={inputRequired} className="border border-gray-300 text-placeholder text-sm rounded-lg block w-full p-2.5 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-500" {...restProps} id={`id${name}`} type={type} value={value} name={name} onChange={onChange}/>
+            <input required={inputRequired} className="disabled:cursor-not-allowed disabled:bg-[#F2F2F2] border border-gray-300 text-placeholder text-sm rounded-lg block w-full p-2.5 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-500" {...restProps} id={`id${name}`} type={type} value={value} name={name} onChange={onChange}/>
         </div>
+    )
+}
+export function InputFile({label,name,value,onChange,multiple = false,inputRequired = true,...restProps}){
+    return (
+        <label className="block">
+          <span className="text-sm mb-1 block dark:text-white text-placeholder">
+            {label}
+            {inputRequired && <span className="text-red-500 font-bold pl-1">*</span>}
+          </span>
+          <input type="file" {...restProps} id={`id${name}`} name={name} onChange={onChange} multiple={multiple} required={inputRequired} className="block w-full text-sm text-gray-500
+            file:me-4 file:py-2 file:px-4
+            file:rounded-lg file:border-0
+            file:text-sm file:font-semibold
+            file:bg-blue-600 file:text-white
+            hover:file:bg-blue-700
+            file:disabled:opacity-50 file:disabled:pointer-events-none
+            dark:text-neutral-500
+            dark:file:bg-blue-500
+            dark:hover:file:bg-blue-400
+            focus:outline-none
+          "/>
+        </label>
     )
 }
 export function InputDetailsSm({type,value,name,...restProps}) {

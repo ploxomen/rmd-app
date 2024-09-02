@@ -24,7 +24,8 @@ const initalForm = {
     quotation_description_products: "",
     quotation_conditions: "",
     quotation_observations: "",
-    quotation_way_to_pay: ""
+    quotation_way_to_pay: "",
+    order_id: null
 }
 const initialAmountDetails = {
     quotation_amount: "0.00",
@@ -41,6 +42,7 @@ function FormQuotation({ statusModal, customers, quotationEdit, contactsList, pr
     const editorRefCondition = useRef(null);
     const [amountDetails, setAmountDetails] = useState(initialAmountDetails);
     const headers = getCookie();
+    const isDisabled = form.order_id
     const handleAddDescription = async (id) => {
         const existProduct = products.find(product => product.id == id);
         if (existProduct && existProduct.details === null) {
@@ -202,7 +204,6 @@ function FormQuotation({ statusModal, customers, quotationEdit, contactsList, pr
         }
     }
     const handleTypeAmmountChange = (value, productId) => {
-        console.log(value, productId)
         setProducts(products.map(product => product.id == productId ? { ...product, type_ammount: value, price_unit: (value == "P. P. Cliente" ? product.price_public_customer : product.price_distributor||0) } : product))
     }
     return (
@@ -213,16 +214,16 @@ function FormQuotation({ statusModal, customers, quotationEdit, contactsList, pr
                         <SeccionForm title="Datos de la cotización" />
                     </div>
                     <div className="col-span-full md:col-span-4">
-                        <InputPrimary label="Fecha de emisión" type='date' inputRequired='required' disabled="disabled" value={form.quotation_date_issue || ''} />
+                        <InputPrimary label="Fecha de emisión" type='date' inputRequired='required' disabled={true} value={form.quotation_date_issue || ''} />
                     </div>
                     <div className="col-span-full md:col-span-4">
-                        <SelectPrimary label="Tipo moneda" inputRequired='required' name="quotation_type_money" value={form.quotation_type_money || ''} onChange={handleChangeForm}>
+                        <SelectPrimary label="Tipo moneda" inputRequired='required' disabled={isDisabled} name="quotation_type_money" value={form.quotation_type_money || ''} onChange={e => !isDisabled && handleChangeForm(e)}>
                             <option value="PEN">Soles (S/)</option>
                             <option value="USD">Dolares ($)</option>
                         </SelectPrimary>
                     </div>
                     <div className="col-span-full md:col-span-4">
-                        <InputPrimary label="Tipo cambio" inputRequired={form.quotation_type_money == 'USD' ? 'required' : ''} step="0.01" type='number' min="0" name="quotation_type_change" value={form.quotation_type_change || ''} onChange={handleChangeForm} />
+                        <InputPrimary label="Tipo cambio" disabled={isDisabled} inputRequired={form.quotation_type_money == 'USD' ? 'required' : ''} step="0.01" type='number' min="0" name="quotation_type_change" value={form.quotation_type_change || ''} onChange={e => !isDisabled && handleChangeForm(e)} />
                     </div>
                     <div className="col-span-full md:col-span-4">
                         <InputPrimary label="Forma de pago" type='text' inputRequired='required' name="quotation_way_to_pay" value={form.quotation_way_to_pay || ''} onChange={handleChangeForm} />
@@ -233,11 +234,11 @@ function FormQuotation({ statusModal, customers, quotationEdit, contactsList, pr
                     <div className="col-span-full md:col-span-6">
                         <div className="col-span-full md:col-span-6 text-placeholder">
                             <label htmlFor="quotation_customer" className="text-sm mb-1 block dark:text-white">Cliente <span className="text-red-500 font-bold pl-1">*</span> </label>
-                            <Select instanceId='quotation_customer' placeholder="Seleccione un cliente" name='quotation_customer' options={customers} onChange={handleContact} menuPosition='fixed' value={customers.filter(customer => customer.value === form.quotation_customer)} />
+                            <Select instanceId='quotation_customer' isDisabled={isDisabled} placeholder="Seleccione un cliente" name='quotation_customer' options={customers} onChange={e => !isDisabled && handleContact(e)} menuPosition='fixed' value={customers.filter(customer => customer.value === form.quotation_customer)} />
                         </div>
                     </div>
                     <div className="col-span-full md:col-span-6">
-                        <SelectPrimary label="Contacto" name="quotation_contact" inputRequired="required" value={form.quotation_contact || ''} onChange={handleChangeForm}>
+                        <SelectPrimary label="Contacto" disabled={isDisabled} name="quotation_contact" inputRequired="required" value={form.quotation_contact || ''} onChange={e => !isDisabled && handleChangeForm(e)}>
                             <option value="">Seleccione un contacto</option>
                             {
                                 contacts.map(contact => <option key={contact.id} value={contact.id}>{contact.contact_name}</option>)
@@ -245,7 +246,7 @@ function FormQuotation({ statusModal, customers, quotationEdit, contactsList, pr
                         </SelectPrimary>
                     </div>
                     <div className="col-span-full">
-                        <InputPrimary label="Proyecto" type='text' inputRequired='required' name="quotation_project" value={form.quotation_project || ''} onChange={handleChangeForm} />
+                        <InputPrimary label="Proyecto" disabled={isDisabled} type='text' inputRequired='required' name="quotation_project" value={form.quotation_project || ''} onChange={e => !isDisabled && handleChangeForm(e)} />
                     </div>
                     <div className="col-span-full">
                         <SeccionForm title="Detalle de los productos" />

@@ -14,6 +14,7 @@ import { statusOrders } from '@/helpers/statusQuotations';
 import { verifUser } from '@/helpers/verifUser';
 import { useModal } from '@/hooks/useModal';
 import { TYPES_ORDERS, ordersInitialReducer, reducerOrders } from '@/reducers/crudOrders';
+import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useReducer, useState } from 'react'
 const initialStateFilters = {
@@ -38,18 +39,24 @@ function OrderAll({dataUser,dataModules,dataRoles}) {
     const [dataChange,setDataChange] = useState(initialStateValueFilters);
     const [pagination,setPagination] = useState({quantityRowData,totalPages:0});
     const {modal,handleOpenModal,handleCloseModal} = useModal("hidden");
+    const [departaments, setDepartaments] = useState([]);
     const route = useRouter();
     const headers = getCookie();
     useEffect(() => {
         const getData = async () => {
           try {
-            const response = await apiAxios.get('/quotation-extra/customers',{headers});
+            const all = await axios.all([
+                apiAxios.get('/departaments', { headers }),
+                apiAxios.get('/quotation-extra/customers', { headers }),
+            ]);
+            setDepartaments(all[0].data.data);
             setFilters({
                 ...filters,
-                customers:response.data.data
-            }); 
+                customers: all[1].data.data
+            });
           } catch (error) {
-            sweetAlert({title : "Error", text: "Error al obtener los clientes", icon : "error"});
+            console.log(error);
+            sweetAlert({title : "Error", text: "Error al obtener de clientes y departamentos", icon : "error"});
           }
         }
         getData();
@@ -140,14 +147,17 @@ function OrderAll({dataUser,dataModules,dataRoles}) {
                 type:TYPES_ORDERS.GET_ORDER,
                 payload:{
                     order:resp.data.data.order,
-                    quotations:resp.data.data.quotations
+                    quotations:resp.data.data.quotations,
+                    provinces:resp.data.data.provinces,
+                    districs:resp.data.data.districs,
+                    quotationsNew: resp.data.data.quotationsNew
                 }
             });
             handleOpenModal();
         } catch (error) {
             dispatch({type:TYPES_ORDERS.NO_ORDERS});
             console.error(error);
-            sweetAlert({title : "Error", text: "Error al obtener el pedido", icon : "error"});            ;
+            sweetAlert({title : "Error", text: "Error al obtener el pedido", icon : "error"});
         }
     }
     const closeModal = async () => {
@@ -184,7 +194,7 @@ function OrderAll({dataUser,dataModules,dataRoles}) {
                     </SelectPrimary>
                 </div>
             </div>
-            <div className='w-full p-6 bg-white rounded-md shadow overflow-x-auto'>
+            <div className='w-full p-6 bg-white rounded-md shadow overflow-x-auto overflow-y-hidden'>
                 <div style={{width:"300px"}} className='mb-4 ml-auto'>
                     <InputSearch placeholder='¿Que estas buscando?' onInput={searchCustomer}/>
                 </div>
@@ -192,7 +202,7 @@ function OrderAll({dataUser,dataModules,dataRoles}) {
                 <PaginationTable currentPage={dataChange.current} quantityRow={pagination.quantityRowData} totalData={pagination.totalPages} handleChangePage={handleChangePage}/>
             </div>
         </LoyoutIntranet>
-        <FormOrder statusModal={modal} orderEdit={state.orderEdit} quotationsEdit={state.quotationsEdit} handleCloseModal={closeModal} handleSaveModalClose={handleSaveModalClose}/>
+        <FormOrder statusModal={modal} quotationsNew={state.quotationsNew} departaments={departaments} districsAll={state.districs} provincesAll={state.provinces} customers={filters.customers} orderEdit={state.orderEdit} quotationsEdit={state.quotationsEdit} handleCloseModal={closeModal} handleSaveModalClose={handleSaveModalClose}/>
     </>
   )
 }

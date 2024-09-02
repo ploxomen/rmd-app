@@ -7,7 +7,10 @@ export const TYPES_ORDERS = {
 export const ordersInitialReducer = {
     orders:[],
     orderEdit:{},
-    quotationsEdit:[]
+    quotationsEdit:[],
+    provinces: [],
+    districs: [],
+    quotationsNew: []
 }
 export const reducerOrders = (state,action) =>{
     switch (action.type) {
@@ -21,7 +24,10 @@ export const reducerOrders = (state,action) =>{
             return {
                 ...state,
                 orderEdit:action.payload.order,
-                quotationsEdit:action.payload.quotations
+                quotationsEdit:action.payload.quotations,
+                provinces: action.payload.provinces,
+                districs: action.payload.districs,
+                quotationsNew: action.payload.quotationsNew
             }
         }
         case TYPES_ORDERS.CLOSE_EDIT:{

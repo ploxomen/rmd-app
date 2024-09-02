@@ -198,7 +198,7 @@ function All({dataUser,dataModules,dataRoles}) {
       document.body.removeChild(link);
       return
     } catch (error) {
-      sweetAlert({title : "Error", text: 'Error al eliminar la cotización', icon : "error"});
+      sweetAlert({title : "Error", text: 'Error al descargar la cotización', icon : "error"});
     }
   }
     return (

@@ -39,9 +39,17 @@ export function ButtonPrimarySm({type="button",text,onClick,icon}) {
         </button>
     )
 }
-export function ButtonSecondarySm({type="button",text,onClick,icon}) {
+export function ButtonLight({type="button",text,icon,onClick,props}){
     return (
-        <button className="rounded-md relative overflow-hidden inline-flex group items-center justify-center px-2 py-1.5 cursor-pointer border-b-4 border-l-2 hover:bg-blue-600 font-semibold transition-all ease-in-out text-xs shadow-lg bg-gradient-to-tr bg-blue-500 text-white" type={type} onClick={onClick}>
+        <button type={type} className="inline-flex items-center p-2 text-sm font-medium text-center text-gray-900 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600" onClick={onClick} {...props}>
+            {icon}
+            {text}
+        </button>
+    )
+}
+export function ButtonSecondarySm({type="button",text,onClick,icon,props}) {
+    return (
+        <button className="rounded-md relative overflow-hidden inline-flex group items-center justify-center px-2 py-1.5 cursor-pointer border-b-4 border-l-2 hover:bg-blue-600 font-semibold transition-all ease-in-out text-xs shadow-lg bg-gradient-to-tr bg-blue-500 text-white" type={type} onClick={onClick} {...props}>
             <div className="flex justify-center items-center gap-0.5">
                 {icon}
                 {text && <span className="relative">{text}</span>}

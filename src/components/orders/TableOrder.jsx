@@ -12,6 +12,10 @@ function TableOrder({quotations,typeMoney,selectQuotation,changeChecked,changeAl
                 </th>
                 <th scope="col" className="py-3 px-6 text-center">Código</th>
                 <th scope="col" className="py-3 px-6 text-center">Fecha Emisión</th>
+                <th scope="col" className="py-3 px-6 text-center">Proyecto</th>
+                <th scope="col" className="py-3 px-6 text-center">Contacto</th>
+                <th scope="col" className="py-3 px-6 text-center">Email</th>
+                <th scope="col" className="py-3 px-6 text-center">Tel.</th>
                 <th scope="col" className="py-3 px-6 text-center">Total</th>
             </tr>
         </thead>
@@ -24,6 +28,10 @@ function TableOrder({quotations,typeMoney,selectQuotation,changeChecked,changeAl
                         </td>
                         <td className="py-2 px-4 text-center">{quotation.quotation_code}</td>
                         <td className="py-2 px-4">{quotation.date_issue}</td>
+                        <td className="py-2 px-4">{quotation.quotation_project}</td>
+                        <td className="py-2 px-4">{quotation.contact_name}</td>
+                        <td className="py-2 px-4">{quotation.contact_email}</td>
+                        <td className="py-2 px-4">{quotation.contact_number}</td>
                         <td className="py-2 px-4">{parseMoney(quotation.quotation_total,typeMoney)}</td>
                     </tr>
                 ))
