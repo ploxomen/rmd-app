@@ -34,7 +34,7 @@ const initialForm = {
   order_conditions_pay: "",
   order_conditions_delivery: "DAP",
   order_address: "",
-  order_os: null,
+  order_os: "",
   order_date_issue: new Date().toISOString().split('T')[0]
 }
 function OrderNew({ dataUser, dataModules, dataRoles }) {
@@ -115,29 +115,28 @@ function OrderNew({ dataUser, dataModules, dataRoles }) {
   }
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const quotationsNew = quotations.filter(quotation => quotation.checked == 1);
+    const quotationsNew = quotations.filter(quotation => quotation.checked === 1);
     if (!quotationsNew.length) {
       return sweetAlert({ title: "Alerta", text: "Debe elegir al menos una cotización", icon: "warning" });
     }
-    for (let i = 0; i < quotations.length; i++) {
+    for (let i = 0; i < quotationsNew.length; i++) {
       if (i === 0) {
         continue;
       }
-      if (quotations[i - 1].quotation_project !== quotations[i - 1].quotation_project) {
-        sweetAlert({ title: "Alerta", text: "Las cotizaciones deben tener el mismo proyecto", icon: "warning" });
+      if (quotationsNew[i - 1].quotation_project !== quotationsNew[i].quotation_project) {
+        return sweetAlert({ title: "Alerta", text: "Las cotizaciones deben tener el mismo proyecto", icon: "warning" });
         break;
       }
-      if (quotations[i - 1].contact_name !== quotations[i - 1].contact_name) {
-        sweetAlert({ title: "Alerta", text: "Las cotizaciones deben tener el mismo contacto", icon: "warning" });
+      if (quotationsNew[i - 1].contact_name !== quotationsNew[i].contact_name) {
+        return sweetAlert({ title: "Alerta", text: "Las cotizaciones deben tener el mismo contacto", icon: "warning" });
         break;
       }
-      if (quotations[i - 1].contact_email !== quotations[i - 1].contact_email) {
-        sweetAlert({ title: "Alerta", text: "Las cotizaciones deben tener el mismo email", icon: "warning" });
+      if (quotationsNew[i - 1].contact_email !== quotationsNew[i].contact_email) {
+        return sweetAlert({ title: "Alerta", text: "Las cotizaciones deben tener el mismo email", icon: "warning" });
         break;
       }
-      if (quotations[i - 1].contact_number !== quotations[i - 1].contact_number) {
-        sweetAlert({ title: "Alerta", text: "Las cotizaciones deben tener el mismo teléfono", icon: "warning" });
-        break;
+      if (quotationsNew[i - 1].contact_number !== quotationsNew[i].contact_number) {
+        return sweetAlert({ title: "Alerta", text: "Las cotizaciones deben tener el mismo teléfono", icon: "warning" });
       }
     }
     const question = await sweetAlert({ title: "Mensaje", text: "¿Deseas generar un nuevo pedido?", icon: "question", showCancelButton: true });
@@ -145,7 +144,6 @@ function OrderNew({ dataUser, dataModules, dataRoles }) {
       return
     }
     const formData = new FormData();
-
     // Recorrer el objeto form y añadir dinámicamente los campos de texto
     Object.keys(form).forEach((key) => {
       if (key !== 'order_os') {
@@ -163,7 +161,7 @@ function OrderNew({ dataUser, dataModules, dataRoles }) {
     formData.append('order_money', filter.money);
     formData.append('order_igv', filter.includeIgv);
     formData.append('customer_id', filter.customer);
-    formData.append('quotations', JSON.stringify(quotations));
+    formData.append('quotations', JSON.stringify(quotationsNew));
     try {
       const resp = await apiAxios.post('order', formData , {
         headers: {
@@ -223,7 +221,7 @@ function OrderNew({ dataUser, dataModules, dataRoles }) {
           <InputPrimary label='Condiciones de pago' inputRequired='required' name='order_conditions_pay' value={form.order_conditions_pay} onChange={handleChangeForm} />
         </div>
         <div className='col-span-full md:col-span-6 lg:col-span-3'>
-          <InputPrimary label='Fecha entrega' type='date' inputRequired='required' value={form.order_date_issue}/>
+          <InputPrimary label='Fecha entrega' type='date' disabled={true} inputRequired='required' value={form.order_date_issue}/>
         </div>
         <div className="col-span-full md:col-span-6 lg:col-span-5">
           <SelectPrimary label="Condiciones de entrega" inputRequired='required' name="order_conditions_delivery" value={form.order_conditions_delivery} onChange={handleChangeForm}>

@@ -17,7 +17,7 @@ export function InputFile({label,name,value,onChange,multiple = false,inputRequi
             {label}
             {inputRequired && <span className="text-red-500 font-bold pl-1">*</span>}
           </span>
-          <input type="file" {...restProps} id={`id${name}`} name={name} onChange={onChange} multiple={multiple} required={inputRequired} className="block w-full text-sm text-gray-500
+          <input type="file" {...restProps} value={value} id={`id${name}`} name={name} onChange={onChange} multiple={multiple} required={inputRequired} className="block w-full text-sm text-gray-500
             file:me-4 file:py-2 file:px-4
             file:rounded-lg file:border-0
             file:text-sm file:font-semibold
