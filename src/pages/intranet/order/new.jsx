@@ -17,6 +17,7 @@ import { InputFile, InputPrimary } from '@/components/Inputs';
 import axios from 'axios';
 import { getProvinces } from '@/helpers/getProvinces';
 import { getDistrics } from '@/helpers/getDistrics';
+import { optionsConditionsPayOrder } from '@/helpers/optionsConditionsPayOrder';
 export async function getServerSideProps(context) {
   const userCookie = context.req.cookies;
   return await verifUser(userCookie, '/order/new');
@@ -32,7 +33,7 @@ const initialForm = {
   order_district: "",
   order_province: "",
   order_conditions_pay: "",
-  order_conditions_delivery: "DAP",
+  order_conditions_delivery: "",
   order_address: "",
   order_os: "",
   order_date_issue: new Date().toISOString().split('T')[0]
@@ -125,15 +126,12 @@ function OrderNew({ dataUser, dataModules, dataRoles }) {
       }
       if (quotationsNew[i - 1].quotation_project !== quotationsNew[i].quotation_project) {
         return sweetAlert({ title: "Alerta", text: "Las cotizaciones deben tener el mismo proyecto", icon: "warning" });
-        break;
       }
       if (quotationsNew[i - 1].contact_name !== quotationsNew[i].contact_name) {
         return sweetAlert({ title: "Alerta", text: "Las cotizaciones deben tener el mismo contacto", icon: "warning" });
-        break;
       }
       if (quotationsNew[i - 1].contact_email !== quotationsNew[i].contact_email) {
         return sweetAlert({ title: "Alerta", text: "Las cotizaciones deben tener el mismo email", icon: "warning" });
-        break;
       }
       if (quotationsNew[i - 1].contact_number !== quotationsNew[i].contact_number) {
         return sweetAlert({ title: "Alerta", text: "Las cotizaciones deben tener el mismo teléfono", icon: "warning" });
@@ -172,12 +170,22 @@ function OrderNew({ dataUser, dataModules, dataRoles }) {
       if (resp.data.redirect !== null) {
         return route.replace(resp.data.redirect);
       }
-      sweetAlert({ title: "Exitoso", text: "Peidido generado correctamente", icon: "success" });
-      setFilter({
-        ...filter,
-        reload: !filter.reload
-      })
+      sweetAlert({ 
+        title: "Exitoso", text: "Pedido generado correctamente", icon: "success" 
+      }).then(result => {
+        setTimeout(() => {
+          document.getElementById('content-page').scrollTo({
+            top: 0,
+            left: 0,
+            behavior: 'smooth'
+          });
+        }, 500);
+      });
+      setFilter(initialFilter)
       setForm(initialForm);
+      if (form.order_os) {
+        document.getElementById("idorder_os").value = '';
+      }
     } catch (error) {
       console.error(error);
       sweetAlert({ title: "Error", text: "Error al generar un nuevo pedido", icon: "error" });
@@ -189,7 +197,7 @@ function OrderNew({ dataUser, dataModules, dataRoles }) {
       <div className='w-full p-6 mb-4 bg-white rounded-md shadow grid grid-cols-12 gap-x-3 gap-y-0'>
         <div className="col-span-full md:col-span-6 lg:col-span-8 mb-3">
           <label htmlFor="customer" className="text-placeholder text-sm mb-1 block dark:text-white">Cliente<span className="text-red-500 font-bold pl-1">*</span></label>
-          <Select instanceId='customer' placeholder="Seleccione un cliente" name='customer' options={customers} onChange={handleChangeFilter} menuPosition='fixed' />
+          <Select instanceId='customer' placeholder="Seleccione un cliente" name='customer' options={customers} onChange={handleChangeFilter} menuPosition='fixed' value={filter.customer == '' ? [] : customers.find(customer => customer.value == filter.customer)}/>
         </div>
         <div className="col-span-full md:col-span-3 lg:col-span-2">
           <SelectPrimary label="Tipo moneda" inputRequired='required' name="money" value={filter.money || ''} onChange={handleChangeFilter}>
@@ -225,9 +233,10 @@ function OrderNew({ dataUser, dataModules, dataRoles }) {
         </div>
         <div className="col-span-full md:col-span-6 lg:col-span-5">
           <SelectPrimary label="Condiciones de entrega" inputRequired='required' name="order_conditions_delivery" value={form.order_conditions_delivery} onChange={handleChangeForm}>
-            <option value="DAP">ENTREGA EN LUGAR SIN COSTO (DAP)</option>
-            <option value="DAP(PC)">ENTREGA EN LUGAR ACORDADO CON COSTO (DAP(PC))</option>
-            <option value="FOB CALLAO">FOB CALLAO</option>
+            <option value="" hidden>Seleccione una condición de entrega</option>
+            {
+              optionsConditionsPayOrder.map((option,keyOption) => <option key={keyOption} value={option.value}>{option.label}</option>)
+            }
           </SelectPrimary>
         </div>
         <div className='col-span-full'>
@@ -258,7 +267,7 @@ function OrderNew({ dataUser, dataModules, dataRoles }) {
           </SelectPrimary>
         </div>
         <div className='col-span-full mb-3x'>
-          <InputFile label='Cargar OS' name='order_os' inputRequired={true} onChange={handleChangeDocument} />
+          <InputFile label='Cargar OC' name='order_os' inputRequired={true} onChange={handleChangeDocument} />
         </div>
         <div className="col-span-full text-center">
           <ButtonPrimary text="Generar" type='submit' icon={<PaperAirplaneIcon className='w-5 h-5' />} />

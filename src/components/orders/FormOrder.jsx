@@ -13,6 +13,7 @@ import { getProvinces } from '@/helpers/getProvinces';
 import { getDistrics } from '@/helpers/getDistrics';
 import { ButtonPrimary, ButtonSecondarySm } from '../Buttons';
 import { ArrowPathIcon } from '@heroicons/react/24/solid';
+import { optionsConditionsPayOrder } from '@/helpers/optionsConditionsPayOrder';
 
 const initalForm = {
     id: null,
@@ -247,9 +248,9 @@ function FormOrder({ statusModal, orderEdit, quotationsNew, departaments, distri
                 </div>
                 <div className="col-span-full md:col-span-6 lg:col-span-5">
                     <SelectPrimary label="Condiciones de entrega" inputRequired='required' name="order_conditions_delivery" value={form.order_conditions_delivery} onChange={handleForm}>
-                        <option value="DAP">ENTREGA EN LUGAR SIN COSTO (DAP)</option>
-                        <option value="DAP(PC)">ENTREGA EN LUGAR ACORDADO CON COSTO (DAP(PC))</option>
-                        <option value="FOB CALLAO">FOB CALLAO</option>
+                        {
+                            optionsConditionsPayOrder.map((option,keyOption) => <option key={keyOption} value={option.value}>{option.label}</option>)
+                        }
                     </SelectPrimary>
                 </div>
                 <div className='col-span-full'>
@@ -281,7 +282,7 @@ function FormOrder({ statusModal, orderEdit, quotationsNew, departaments, distri
                 </div>
                 <div className='col-span-full'>
                     <input ref={refUploadFile} type="file" hidden onChange={handleUploadFile} />
-                    <ButtonPrimary text="Actualizar OS" onClick={handleClickUpload} icon={<ArrowPathIcon className='text-white size-4 font-bold' />} />
+                    <ButtonPrimary text="Actualizar OC" onClick={handleClickUpload} icon={<ArrowPathIcon className='text-white size-4 font-bold' />} />
                     <span className='text-slate-400'>{form.order_file_update ? form.order_file_update.name : form.order_file_name}</span>
                 </div>
                 <SubmitForm id="form-order-submit" />
