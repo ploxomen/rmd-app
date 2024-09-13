@@ -86,6 +86,7 @@ function FormOrder({ statusModal, orderEdit, quotationsNew, departaments, distri
             formData.append('order_file_update', form.order_file_update);
         }
         formData.append('_method', 'put');
+        formData.append('quotations', JSON.stringify(quotations));
         try {
             const resp = await apiAxios.post('order/' + form.id, formData, {
                 headers: {

@@ -229,7 +229,7 @@ function OrderNew({ dataUser, dataModules, dataRoles }) {
           <InputPrimary label='Condiciones de pago' inputRequired='required' name='order_conditions_pay' value={form.order_conditions_pay} onChange={handleChangeForm} />
         </div>
         <div className='col-span-full md:col-span-6 lg:col-span-3'>
-          <InputPrimary label='Fecha entrega' type='date' disabled={true} inputRequired='required' value={form.order_date_issue}/>
+          <InputPrimary label='Fecha entrega' type='date' inputRequired='required' name="order_date_issue" value={form.order_date_issue} onChange={handleChangeForm}/>
         </div>
         <div className="col-span-full md:col-span-6 lg:col-span-5">
           <SelectPrimary label="Condiciones de entrega" inputRequired='required' name="order_conditions_delivery" value={form.order_conditions_delivery} onChange={handleChangeForm}>

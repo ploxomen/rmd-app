@@ -12,6 +12,7 @@ import { getCookie } from '@/helpers/getCookie'
 function TableOrderAll({ orders, deleteOrder, getOrder, status }) {
     const columns = [
         'Código',
+        'Fecha pedido',
         'Fecha entrega',
         'Cliente',
         'Subcategoría',
@@ -68,10 +69,11 @@ function TableOrderAll({ orders, deleteOrder, getOrder, status }) {
             {
                 !orders.length ? <tr className="bg-white dark:bg-gray-800"><td colSpan="100%" className='text-center font-bold'>No se encontraron pedidos</td></tr> : orders.map(order => (
                     <tr className="bg-white dark:bg-gray-800" key={order.id}>
-                        <td className="py-2 px-4">{order.order_code}</td>
-                        <td className="py-2 px-4">{order.date_issue}</td>
+                        <td className="py-2 px-4 text-center">{order.order_code}</td>
+                        <td className="py-2 px-4 text-center">{order.date_created}</td>
+                        <td className="py-2 px-4 text-center">{order.date_issue}</td>
                         <td className="py-2 px-4">{order.customer_name}</td>
-                        <td className="py-2 px-4">{order.sub_categorie_name}</td>
+                        <td className="py-2 px-4 text-center">{order.sub_categorie_name}</td>
                         <td className="py-2 px-4">{parseMoney(order.order_mount, order.order_money)}</td>
                         <td className="py-2 px-4">{parseMoney(order.order_mount_igv, order.order_money)}</td>
                         <td className="py-2 px-4">{parseMoney(order.order_total, order.order_money)}</td>
