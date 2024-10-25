@@ -9,8 +9,8 @@ import { getCookie } from '@/helpers/getCookie';
 import TableOrder from '@/components/orders/TableOrder';
 import { sweetAlert } from '@/helpers/getAlert';
 import SeccionForm from '@/components/SeccionForm';
-import { ButtonPrimary } from '@/components/Buttons';
-import { PaperAirplaneIcon } from '@heroicons/react/24/solid';
+import { ButtonPrimary, ButtonSecondarySm } from '@/components/Buttons';
+import { ArrowPathIcon, PaperAirplaneIcon } from '@heroicons/react/24/solid';
 import Select from 'react-select';
 import { useRouter } from 'next/navigation';
 import { InputFile, InputPrimary } from '@/components/Inputs';
@@ -36,6 +36,7 @@ const initialForm = {
   order_conditions_delivery: "",
   order_address: "",
   order_os: "",
+  order_retaining_customer: "",
   order_date_issue: new Date().toISOString().split('T')[0]
 }
 function OrderNew({ dataUser, dataModules, dataRoles }) {
@@ -114,6 +115,12 @@ function OrderNew({ dataUser, dataModules, dataRoles }) {
       order_os: e.target.files[0]
     })
   }
+  const handleUpdateQuotations = (e) => {
+    setFilter({
+      ...filter,
+      reload: !filter.reload
+    })
+  }
   const handleSubmit = async (e) => {
     e.preventDefault();
     const quotationsNew = quotations.filter(quotation => quotation.checked === 1);
@@ -161,7 +168,7 @@ function OrderNew({ dataUser, dataModules, dataRoles }) {
     formData.append('customer_id', filter.customer);
     formData.append('quotations', JSON.stringify(quotationsNew));
     try {
-      const resp = await apiAxios.post('order', formData , {
+      const resp = await apiAxios.post('order', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           ...headers
@@ -170,8 +177,8 @@ function OrderNew({ dataUser, dataModules, dataRoles }) {
       if (resp.data.redirect !== null) {
         return route.replace(resp.data.redirect);
       }
-      sweetAlert({ 
-        title: "Exitoso", text: "Pedido generado correctamente", icon: "success" 
+      sweetAlert({
+        title: "Exitoso", text: "Pedido generado correctamente", icon: "success"
       }).then(result => {
         setTimeout(() => {
           document.getElementById('content-page').scrollTo({
@@ -197,7 +204,7 @@ function OrderNew({ dataUser, dataModules, dataRoles }) {
       <div className='w-full p-6 mb-4 bg-white rounded-md shadow grid grid-cols-12 gap-x-3 gap-y-0'>
         <div className="col-span-full md:col-span-6 lg:col-span-8 mb-3">
           <label htmlFor="customer" className="text-placeholder text-sm mb-1 block dark:text-white">Cliente<span className="text-red-500 font-bold pl-1">*</span></label>
-          <Select instanceId='customer' placeholder="Seleccione un cliente" name='customer' options={customers} onChange={handleChangeFilter} menuPosition='fixed' value={filter.customer == '' ? [] : customers.find(customer => customer.value == filter.customer)}/>
+          <Select instanceId='customer' placeholder="Seleccione un cliente" name='customer' options={customers} onChange={handleChangeFilter} menuPosition='fixed' value={filter.customer == '' ? [] : customers.find(customer => customer.value == filter.customer)} />
         </div>
         <div className="col-span-full md:col-span-3 lg:col-span-2">
           <SelectPrimary label="Tipo moneda" inputRequired='required' name="money" value={filter.money || ''} onChange={handleChangeFilter}>
@@ -218,7 +225,10 @@ function OrderNew({ dataUser, dataModules, dataRoles }) {
         </div>
       </div>
       <div className='w-full p-6 bg-white rounded-md shadow overflow-x-auto mb-4'>
-        <SeccionForm title="Lista de cotizaciones" />
+        <div className='flex gap-2'>
+          <SeccionForm title="Lista de cotizaciones" />
+          <ButtonSecondarySm title="Actualizar cotizaciones" onClick={handleUpdateQuotations} icon={<ArrowPathIcon className='text-white size-4 font-bold' />} />
+        </div>
         <TableOrder quotations={quotations} typeMoney={filter.money} selectQuotation={selectAllQuotations} changeChecked={handleCheck} changeAll={handleSelectAll} />
       </div>
       <form onSubmit={handleSubmit} className='w-full p-6 mb-4 bg-white rounded-md shadow grid grid-cols-12 gap-x-3 gap-y-0'>
@@ -229,13 +239,13 @@ function OrderNew({ dataUser, dataModules, dataRoles }) {
           <InputPrimary label='Condiciones de pago' inputRequired='required' name='order_conditions_pay' value={form.order_conditions_pay} onChange={handleChangeForm} />
         </div>
         <div className='col-span-full md:col-span-6 lg:col-span-3'>
-          <InputPrimary label='Fecha entrega' type='date' inputRequired='required' name="order_date_issue" value={form.order_date_issue} onChange={handleChangeForm}/>
+          <InputPrimary label='Fecha entrega' type='date' inputRequired='required' name="order_date_issue" value={form.order_date_issue} onChange={handleChangeForm} />
         </div>
         <div className="col-span-full md:col-span-6 lg:col-span-5">
           <SelectPrimary label="Condiciones de entrega" inputRequired='required' name="order_conditions_delivery" value={form.order_conditions_delivery} onChange={handleChangeForm}>
             <option value="" hidden>Seleccione una condición de entrega</option>
             {
-              optionsConditionsPayOrder.map((option,keyOption) => <option key={keyOption} value={option.value}>{option.label}</option>)
+              optionsConditionsPayOrder.map((option, keyOption) => <option key={keyOption} value={option.value}>{option.label}</option>)
             }
           </SelectPrimary>
         </div>
@@ -264,6 +274,13 @@ function OrderNew({ dataUser, dataModules, dataRoles }) {
             {
               districts.map(district => <option value={district.id} key={district.id}>{district.district_name}</option>)
             }
+          </SelectPrimary>
+        </div>
+        <div className='col-span-full md:col-span-6 lg:col-span-4'>
+          <SelectPrimary label="Empresa retenedora" inputRequired={'required'} name="order_retaining_customer" value={form.order_retaining_customer || ''} onChange={handleChangeForm}>
+            <option value="">Ninguno</option>
+            <option value="SI">SI</option>
+            <option value="NO">NO</option>
           </SelectPrimary>
         </div>
         <div className='col-span-full mb-3x'>

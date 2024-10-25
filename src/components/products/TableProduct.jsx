@@ -20,7 +20,7 @@ function TableProduct({products,getProduct,deleteProduct}) {
             {
                 !products.length ? <tr className="bg-white dark:bg-gray-800"><td colSpan="100%" className='text-center font-bold'>No se registraron productos</td></tr> : products.map(product => (
                     <tr className="bg-white dark:bg-gray-800" key={product.id}>
-                        <td  className="py-2 px-4 text-center">{product.id.toString().padStart(3,'0')}</td>
+                        <td  className="py-2 px-4 text-center">{product.product_code.toString().padStart(3,'0')}</td>
                         <td className="py-2 px-4">{product.product_name}</td>
                         <td className="py-2 px-4">{product.categorie_name}</td>
                         <td className="py-2 px-4">{product.sub_categorie_name}</td>

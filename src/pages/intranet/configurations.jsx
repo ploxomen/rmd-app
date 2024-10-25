@@ -32,6 +32,8 @@ function Configurations({dataRoles,dataUser,dataModules}) {
     const editorConditions = useRef();
     const attentionHours = useRef();
     const editorObservations = useRef();
+    const editorRefWarrantyColumn1 = useRef(null);
+    const editorRefWarrantyColumn2 = useRef(null);
     const route = useRouter();
     const headers = getCookie();
     useEffect(() => {
@@ -63,7 +65,9 @@ function Configurations({dataRoles,dataUser,dataModules}) {
                 business_bank:eidtorRefBanks.current.getContent(),
                 quotation_conditions:editorConditions.current.getContent(),
                 quotation_observations:editorObservations.current.getContent(),
-                attention_hours: attentionHours.current.getContent()
+                attention_hours: attentionHours.current.getContent(),
+                quotation_warranty_1: editorRefWarrantyColumn1.current.getContent(),
+                quotation_warranty_2: editorRefWarrantyColumn2.current.getContent(),
             },{headers});
             if(resp.data.redirect !== null){
                 return route.replace(resp.data.redirect);
@@ -119,6 +123,12 @@ function Configurations({dataRoles,dataUser,dataModules}) {
                 </div>
                 <div className="col-span-full mb-2">
                     <EditorText label="Datos bancarios" initialValue={form.business_bank} id="configuration_bank" editorRef={eidtorRefBanks}/>
+                </div>
+                <div className="col-span-full mb-2">
+                    <EditorText label="Garantía - Primera columna" initialValue={form.quotation_warranty_1} id="quotation_warranty_1" editorRef={editorRefWarrantyColumn1}/>
+                </div>
+                <div className="col-span-full mb-2">
+                    <EditorText label="Garantía - Segunda columna" initialValue={form.quotation_warranty_2} id="quotation_warranty_2" editorRef={editorRefWarrantyColumn2}/>
                 </div>
                 <div className="col-span-full mb-2">
                     <EditorText label="Cotización observaciones" initialValue={form.quotation_observations} id="configuration_observations" editorRef={editorObservations}/>

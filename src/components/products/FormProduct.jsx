@@ -19,7 +19,8 @@ const dataForm = {
     product_distributor:"",
     product_service:false,
     sub_categorie:"",
-    product_img:null
+    product_img: null,
+    product_code: null
 }
 function FormProduct({statusModal,closeModal,handleSave,productEdit,categories,subcategoriesData}) {
     const [form,setForm] = useState(dataForm);
@@ -120,7 +121,10 @@ function FormProduct({statusModal,closeModal,handleSave,productEdit,categories,s
             <div className="col-span-full">
                 <SeccionForm title="Datos del producto"/>
             </div>
-            <div className="col-span-full">
+            {form.product_code !== null && <div className='col-span-full md:col-span-1'>
+                <InputPrimary label="Código" inputRequired='required' name="product_code" value={form.product_code||''} onChange={handleChangeForm}/>
+            </div>}
+            <div className={`${form.product_code !== null ? 'col-span-full md:col-span-5' : 'col-span-full'}`}>
                 <InputPrimary label="Producto" inputRequired='required' name="product_name" value={form.product_name||''} onChange={handleChangeForm}/>
             </div>
             <div className="col-span-full">

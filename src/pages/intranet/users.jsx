@@ -6,6 +6,7 @@ import { InputSearch } from '@/components/Inputs';
 import LoyoutIntranet from '@/components/LoyoutIntranet'
 import PaginationTable from '@/components/PaginationTable';
 import { SelectPrimary } from '@/components/Selects';
+import FormResetPasswordAdmin from '@/components/users/FormResetPasswordAdmin';
 import FormResetPasswordUser from '@/components/users/FormResetPasswordUser';
 import FormUser from '@/components/users/FormUser';
 import TableUser from '@/components/users/TableUser';
@@ -13,9 +14,8 @@ import { sweetAlert } from '@/helpers/getAlert';
 import { getCookie } from '@/helpers/getCookie';
 import { verifUser } from '@/helpers/verifUser';
 import { useModal } from '@/hooks/useModal';
-import workSpace from '@/img/man.png';
 import { TYPES_USER, crudUserInitialState, reducerUsers } from '@/reducers/crudUser';
-import { PlusCircleIcon } from '@heroicons/react/24/solid';
+import { PlusCircleIcon, ShieldCheckIcon } from '@heroicons/react/24/solid';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useReducer, useState } from 'react'
@@ -31,11 +31,14 @@ function Users({dataModules,dataUser,dataRoles}) {
     const headers = getCookie();
     const route = useRouter();
     const [filter,setFilter] = useState(initialFilter);
+    const [password, setPassword] = useState('');
     const [state,dispatch] = useReducer(reducerUsers,crudUserInitialState);
     const {modal,handleOpenModal,handleCloseModal} = useModal("hidden");
     const [dataChange,setDataChange] = useState({current:1,search:"",reload:false});
     const [pagination,setPagination] = useState({quantityRowData,totalPages:0});
     const {modal:modelReset,handleOpenModal:handleOpenModalReset,handleCloseModal:handleCloseModalReset} = useModal("hidden");
+    const {modal:passwordModal,handleOpenModal:handlePasswordModal,handleCloseModal:handlePasswordCloseModal} = useModal("hidden");
+
     useEffect(()=>{
         const getRoles = async () => {
             try {
@@ -95,9 +98,15 @@ function Users({dataModules,dataUser,dataRoles}) {
             [e.target.name] : e.target.value
         })
     }
-    const saveUser = async (form,roles) => {
+    const saveUser = async (idUser,data) => {
         try {
-            const resp = form.id ? await apiAxios.put(`/users/${form.id}`,{...form,role:roles},{headers}) : await apiAxios.post('/users',{...form,role:roles},{headers});
+            const headerApi = {
+                headers: {
+                    "Content-Type":"multipart/form-data",
+                    ...headers
+                }
+            }
+            const resp = idUser ? await apiAxios.post(`/users/${idUser}`,data,headerApi) : await apiAxios.post('/users',data,headerApi);
             if(resp.data.redirect !== null){
                 return route.replace(resp.data.redirect);
             }
@@ -168,10 +177,36 @@ function Users({dataModules,dataUser,dataRoles}) {
             console.error(error);
         }
     }
+    const handleSubmitChangePasswordAdmin = async (e) => {
+        e.preventDefault();
+        try {
+            const resp = await apiAxios.put(`/user/password/admin`,{password},{headers});
+            if(resp.data.redirect !== null){
+                return route.replace(resp.data.redirect);
+            }
+            if(resp.data.error){
+                return sweetAlert({title : "Alerta", text: resp.data.message, icon : "warning"});
+            }
+            sweetAlert({title : "Exitoso", text: resp.data.message, icon : "success"});
+            handlePasswordCloseModal();
+        } catch (error) {
+            dispatch({type:TYPES_USER.NO_USERS});
+            console.error(error);
+        }
+    }
+    const openModalChangePassword = async () => {
+        try {
+            const resp = await apiAxios.get(`/user/password/admin`, {headers} );
+            setPassword(resp.data.data.value);
+            handlePasswordModal();
+        } catch (error) {
+            console.error(error);
+        }
+    }
     const deleteUser = async (idUser) => {
         const question = await sweetAlert({title : "Mensaje", text: "¿Deseas eliminar este usuario?", icon : "question",showCancelButton:true});
         if(!question.isConfirmed){
-        r<eturn
+            return
         }
         try {
             const resp = await apiAxios.delete(`/users/${idUser}`,{headers});
@@ -216,7 +251,10 @@ function Users({dataModules,dataUser,dataRoles}) {
             </div>
             <div className='w-full p-6 bg-white rounded-md shadow overflow-x-auto'>
                 <div className="flex items-center justify-between gap-2 flex-wrap mb-2">
-                    <ButtonPrimary text="Agregar" icon={<PlusCircleIcon className='w-5 h-5'/>} onClick={e => openModalNew()}/>
+                    <div className='flex gap-2 flex-wrap'>
+                        <ButtonPrimary text="Agregar" icon={<PlusCircleIcon className='w-5 h-5'/>} onClick={e => openModalNew()}/>
+                        <ButtonPrimary text="Contraseña" icon={<ShieldCheckIcon className='w-5 h-5'/>} onClick={e => openModalChangePassword()}/>
+                    </div>
                     <div style={{width:"300px"}}>
                         <InputSearch placeholder='¿Que estas buscando?' onInput={searchCustomer}/>
                     </div>
@@ -227,6 +265,7 @@ function Users({dataModules,dataUser,dataRoles}) {
         </LoyoutIntranet>
         <FormUser rolesData={state.roles} typeDocumentsData={state.typeDocuments} statusModal={modal} saveUser={saveUser} dataUser={state.userEdit} dataUserRol={state.rolesEdit} closeModal={closeModal}/>
         <FormResetPasswordUser statusModalReset={modelReset} closeModal={closeModalReset} resetPassword={resetPassword}/>
+        <FormResetPasswordAdmin statusModal={passwordModal} handleSubmit={handleSubmitChangePasswordAdmin} password={password} setPassword={setPassword} closeModal={handlePasswordCloseModal}/>
     </>
   )
 }

@@ -82,14 +82,14 @@ function TableOrderAll({ orders, deleteOrder, getOrder, status }) {
                             {
                                 order.order_status > 0 ? <div className='flex gap-1 flex-wrap justify-center'>
                                     <ButtonPrimarySm text="Editar" onClick={e => getOrder(order.id)} icon={<PencilIcon className='w-4 h-4' />} />
-                                    <ButtonDangerSm text="PDF" icon={<ArrowDownTrayIcon className='w-4 h-4' />} onClick={e => downloadPdf(order.id, `PV_${order.order_code}_${order.customer_name.replace(/ /g, '_').toUpperCase()}.pdf`)} />
+                                    <ButtonDangerSm text="PDF" icon={<ArrowDownTrayIcon className='w-4 h-4' />} onClick={e => downloadPdf(order.id, `${order.order_code}_${order.customer_name.replace(/ /g, '_').toUpperCase()}.pdf`)} />
                                     <Dropdown Button={
                                         <ButtonLight icon={<EllipsisVerticalIcon className='w-4 h-4' />} />
                                     } options={[
                                         <Link href={{
                                             pathname: '/intranet/order/view/' + order.id,
                                             query: {
-                                                fileName: `PV_${order.order_code}_${order.customer_name.replace(/ /g, '_').toUpperCase()}.pdf`
+                                                fileName: `${order.order_code}_${order.customer_name.replace(/ /g, '_').toUpperCase()}.pdf`
                                             }
                                         }} target='_blank' className='block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-left'>
                                             Ver PDF

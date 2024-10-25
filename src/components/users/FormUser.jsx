@@ -3,8 +3,10 @@ import Modal from '../Modal'
 import { InputPrimary, SubmitForm } from '../Inputs'
 import { SelectPrimary } from '../Selects'
 import SeccionForm from '../SeccionForm'
-import { XMarkIcon } from '@heroicons/react/24/solid'
+import { ArrowUpTrayIcon, TrashIcon, XMarkIcon } from '@heroicons/react/24/solid'
 import { sweetAlert } from '@/helpers/getAlert'
+import { ButtonDangerSm, ButtonPrimarySm } from '../Buttons'
+import Image from 'next/image'
 
 const dataForm = {
     id:null,
@@ -19,9 +21,10 @@ const dataForm = {
     user_address:"",
     user_email:"",
     user_password:"sistema123",
+    user_avatar: null
 }
 function FormUser({rolesData,typeDocumentsData,saveUser,dataUser,dataUserRol,statusModal,closeModal}) {
-    
+    const [deleteImg,setDeleteImg] = useState(false);
     const [form,setForm] = useState(dataForm);
     const [roles,setRoles] = useState([]);
     const filterLengthDocuments = typeDocumentsData.find(typeDocument => typeDocument.id == form.user_type_document)
@@ -30,6 +33,10 @@ function FormUser({rolesData,typeDocumentsData,saveUser,dataUser,dataUserRol,sta
         max: filterLengthDocuments && filterLengthDocuments.document_length
     };
     const edit = Object.keys(dataUser).length;
+    useEffect(()=>{
+        setForm(edit ? dataUser : dataForm);
+        setDeleteImg(false);
+    },[dataUser]);
     useEffect(()=>{
         setRoles(dataUserRol ? dataUserRol : [])
     },[dataUserRol])
@@ -47,7 +54,24 @@ function FormUser({rolesData,typeDocumentsData,saveUser,dataUser,dataUserRol,sta
         if(!roles.length){
             return sweetAlert({title : "Alerta", text: "Debes seleccionar al menos un rol", icon : "warning"});
         }
-        saveUser(form,roles.map(role => role.id));
+        const data = new FormData();
+        for (const key in form) {
+            if (Object.hasOwnProperty.call(form, key) && form[key] && key != 'user_avatar') {
+                data.append(key,form[key])                
+            }
+        }
+        if(form.id){
+            data.append('_method','PUT');
+            if(deleteImg){
+                data.append('delete_img','true');
+            }
+        }
+        data.append('roles',JSON.stringify(roles.map(role => role.id)))
+        const inputImage = document.querySelector("#upload-file");
+        if(inputImage.value){
+            data.append('user_avatar',inputImage.files[0]);
+        }
+        saveUser(form.id,data);
     }
     const handleDeleteRole = (idRole) => {
         setRoles(roles.filter(role => role.id != idRole))
@@ -66,6 +90,36 @@ function FormUser({rolesData,typeDocumentsData,saveUser,dataUser,dataUserRol,sta
     const handleSaveModal = () => {
         const formUser = document.querySelector("#form-user-submit");
         formUser.click();
+    }
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if(!file){
+            setForm({
+                ...form,
+                user_avatar : null
+            })
+        }
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setForm({
+                ...form,
+                user_avatar : reader.result
+            })
+        }
+        if(file){
+            reader.readAsDataURL(file);
+        }
+    }
+    const handleClickUpload = (e) =>{
+        document.querySelector("#upload-file").click();
+    }
+    const handleDeleteImg = () => {
+        setForm({
+            ...form,
+            user_avatar:null
+        })
+        document.querySelector("#upload-file").value = null;
+        setDeleteImg(true);
     }
   return (
     <Modal title={edit ? 'Editar usuario' : 'Nuevo usuario'} status={statusModal} onSave={handleSaveModal} handleCloseModal={closeModal}>
@@ -102,6 +156,14 @@ function FormUser({rolesData,typeDocumentsData,saveUser,dataUser,dataUserRol,sta
                     <option value="M">Masculino</option>
                     <option value="F">Femenino</option>
                 </SelectPrimary>            
+            </div>
+            <div className="col-span-full">
+                <div className="flex gap-2 items-center">
+                    <input type="file" id='upload-file' accept='image/*' hidden onChange={handleImageChange} />
+                    <Image src={form.user_avatar ? form.user_avatar : "/img/no-pictures.png"} alt="Imagen previa" width={100} height={100} priority/>
+                    <ButtonPrimarySm text="Subir" icon={<ArrowUpTrayIcon className='w-4 h-6'/>} onClick={handleClickUpload}/>
+                    {form.user_avatar && <ButtonDangerSm text="Borrar" icon={<TrashIcon className='w-4 h-6'/>} onClick={handleDeleteImg}/>}
+                </div>
             </div>
             <div className="col-span-full">
                 <SeccionForm title="Datos del sistema"/>

@@ -35,7 +35,9 @@ const initalForm = {
     quotation_project: "",
     quotation_warranty:"Defecto de fábrica, reemplazo inmediato.\nSegún Carta de Garantía.",
     quotation_conditions: "",
-    quotation_way_to_pay:"CRÉDITO 15 DÍAS"
+    quotation_way_to_pay:"CRÉDITO 15 DÍAS",
+    quotation_warranty_1: "",
+    quotation_warranty_2: ""
 }
 const initialAmountDetails = {
     quotation_amount: "0.00",
@@ -52,11 +54,16 @@ function quotationNew({ dataUser, dataModules, dataRoles }) {
     const [customers, setCustomers] = useState([]);
     const editorRefObservation = useRef(null);
     const editorRefCondition = useRef(null);
+    const editorRefWarrantyColumn1 = useRef(null);
+    const editorRefWarrantyColumn2 = useRef(null);
+
     const { modal, handleOpenModal, handleCloseModal } = useModal("hidden");
     const editorDetails = useRef(null);
     const [editorDetail, setEditorDetail] = useState({
         quotation_observations: "",
-        quotation_conditions: ""
+        quotation_conditions: "",
+        quotation_warranty_1: "",
+        quotation_warranty_2: ""
     });
     const route = useRouter();
     const headers = getCookie();
@@ -187,6 +194,8 @@ function quotationNew({ dataUser, dataModules, dataRoles }) {
             ...form,
             quotation_conditions: editorRefCondition.current.getContent(),
             quotation_observations: editorRefObservation.current.getContent(),
+            quotation_warranty_1: editorRefWarrantyColumn1.current.getContent(),
+            quotation_warranty_2: editorRefWarrantyColumn2.current.getContent(),
             products
         }
         try {
@@ -206,6 +215,8 @@ function quotationNew({ dataUser, dataModules, dataRoles }) {
             setProducts([]);
             editorRefCondition.current.setContent(editorDetail.quotation_conditions);
             editorRefObservation.current.setContent(editorDetail.quotation_observations);
+            editorRefWarrantyColumn1.current.setContent(editorDetail.quotation_warranty_1);
+            editorRefWarrantyColumn2.current.setContent(editorDetail.quotation_warranty_2);
             window.open(`/intranet/quotation/view/${resp.data.id}?fileName=${resp.data.fileName}`, '_blank');
         } catch (error) {
             console.error(error);
@@ -247,6 +258,8 @@ function quotationNew({ dataUser, dataModules, dataRoles }) {
             ...form,
             quotation_conditions: editorRefCondition.current.getContent(),
             quotation_observations: editorRefObservation.current.getContent(),
+            quotation_warranty_1: editorRefWarrantyColumn1.current.getContent(),
+            quotation_warranty_2: editorRefWarrantyColumn2.current.getContent(),
             products
         }, {
             responseType: 'blob',
@@ -330,7 +343,10 @@ function quotationNew({ dataUser, dataModules, dataRoles }) {
                             <SeccionForm title="Datos adicionales" />
                         </div>
                         <div className="col-span-full mb-2">
-                            <TextareaPrimary label="Garantías" name="quotation_warranty" value={form.quotation_warranty || ''} onChange={handleChangeForm}/>
+                            <EditorText label="Garantía - Primera columna" initialValue={form.quotation_warranty_1} id="quotation_warranty_1" editorRef={editorRefWarrantyColumn1} />
+                        </div>
+                        <div className="col-span-full mb-2">
+                            <EditorText label="Garantía - Segunda columna" initialValue={form.quotation_warranty_2} id="quotation_warranty_2" editorRef={editorRefWarrantyColumn2} />
                         </div>
                         <div className="col-span-full mb-2">
                             <EditorText label="Observaciones" initialValue={form.quotation_observations} id="quotation_observations" editorRef={editorRefObservation} />

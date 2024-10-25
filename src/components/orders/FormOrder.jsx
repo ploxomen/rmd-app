@@ -34,7 +34,8 @@ const initalForm = {
     order_province: "",
     order_status: "",
     quotations_total: 0,
-    order_file_update: ""
+    order_file_update: "",
+    order_retaining_customer: ""
 }
 
 function FormOrder({ statusModal, orderEdit, quotationsNew, departaments, districsAll, provincesAll, customers, quotationsEdit, handleCloseModal, handleSaveModalClose }) {
@@ -279,6 +280,13 @@ function FormOrder({ statusModal, orderEdit, quotationsNew, departaments, distri
                         {
                             districts.map(district => <option value={district.id} key={district.id}>{district.district_name}</option>)
                         }
+                    </SelectPrimary>
+                </div>
+                <div className='col-span-full md:col-span-6 lg:col-span-4'>
+                    <SelectPrimary label="Empresa retenedora" name="order_retaining_customer" inputRequired={'required'} value={form.order_retaining_customer || ''} onChange={handleForm}>
+                        <option value="">Ninguno</option>
+                        <option value="SI">SI</option>
+                        <option value="NO">NO</option>
                     </SelectPrimary>
                 </div>
                 <div className='col-span-full'>

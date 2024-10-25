@@ -25,6 +25,8 @@ const initalForm = {
     quotation_conditions: "",
     quotation_observations: "",
     quotation_way_to_pay: "",
+    quotation_warranty_1: "",
+    quotation_warranty_2: "",
     order_id: null
 }
 const initialAmountDetails = {
@@ -40,6 +42,8 @@ function FormQuotation({ statusModal, customers, quotationEdit, contactsList, pr
     const editorDetails = useRef(null);
     const editorRefObservation = useRef(null);
     const editorRefCondition = useRef(null);
+    const editorRefWarrantyColumn1 = useRef(null);
+    const editorRefWarrantyColumn2 = useRef(null);
     const [amountDetails, setAmountDetails] = useState(initialAmountDetails);
     const headers = getCookie();
     const isDisabled = form.order_id
@@ -183,6 +187,8 @@ function FormQuotation({ statusModal, customers, quotationEdit, contactsList, pr
             ...form,
             quotation_conditions: editorRefCondition.current.getContent(),
             quotation_observations: editorRefObservation.current.getContent(),
+            quotation_warranty_1: editorRefWarrantyColumn1.current.getContent(),
+            quotation_warranty_2: editorRefWarrantyColumn2.current.getContent(),
             products
         }
         try {
@@ -204,7 +210,7 @@ function FormQuotation({ statusModal, customers, quotationEdit, contactsList, pr
         }
     }
     const handleTypeAmmountChange = (value, productId) => {
-        setProducts(products.map(product => product.id == productId ? { ...product, type_ammount: value, price_unit: (value == "P. P. Cliente" ? product.price_public_customer : product.price_distributor||0) } : product))
+        setProducts(products.map(product => product.id == productId ? { ...product, type_ammount: value, price_unit: (value == "P. P. Cliente" ? product.price_public_customer : product.price_distributor || 0) } : product))
     }
     return (
         <>
@@ -259,13 +265,16 @@ function FormQuotation({ statusModal, customers, quotationEdit, contactsList, pr
                         }
                     </div>
                     <div className="col-span-full overflow-x-auto">
-                        <TableQuotation products={products} formatMoney={form.quotation_type_money} handleDetailChange={handleDetailChange} handleDeleteDetail={handleDeleteDetail} includeIgv={form.quotation_include_igv} dataTotal={{ discount: form.quotation_discount, igv: amountDetails.quotation_igv, amount: amountDetails.quotation_amount, total: amountDetails.quotation_total }} handleChangeDiscount={handleChangeForm} handleDetails={handleAddDescription} handleVerifNull={handleVerifNull} handleChangeTypeAmmount={handleTypeAmmountChange}/>
+                        <TableQuotation products={products} formatMoney={form.quotation_type_money} handleDetailChange={handleDetailChange} handleDeleteDetail={handleDeleteDetail} includeIgv={form.quotation_include_igv} dataTotal={{ discount: form.quotation_discount, igv: amountDetails.quotation_igv, amount: amountDetails.quotation_amount, total: amountDetails.quotation_total }} handleChangeDiscount={handleChangeForm} handleDetails={handleAddDescription} handleVerifNull={handleVerifNull} handleChangeTypeAmmount={handleTypeAmmountChange} />
                     </div>
                     <div className="col-span-full">
                         <SeccionForm title="Datos adicionales" />
                     </div>
                     <div className="col-span-full mb-2">
-                        <TextareaPrimary label="Garantías" name="quotation_warranty" value={form.quotation_warranty || ''} onChange={handleChangeForm}/>
+                        <EditorText label="Garantía - Primera columna" initialValue={form.quotation_warranty_1} id="quotation_warranty_1" editorRef={editorRefWarrantyColumn1} />
+                    </div>
+                    <div className="col-span-full mb-2">
+                        <EditorText label="Garantía - Segunda columna" initialValue={form.quotation_warranty_2} id="quotation_warranty_2" editorRef={editorRefWarrantyColumn2} />
                     </div>
                     <div className="col-span-full mb-2">
                         <EditorText label="Observaciones" initialValue={form.quotation_observations} id="quotation_observations" editorRef={editorRefObservation} />

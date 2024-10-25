@@ -47,7 +47,7 @@ export function ButtonLight({type="button",text,icon,onClick,props}){
         </button>
     )
 }
-export function ButtonSecondarySm({type="button",text,onClick,icon,props}) {
+export function ButtonSecondarySm({type="button",text,onClick,icon,...props}) {
     return (
         <button className="rounded-md relative overflow-hidden inline-flex group items-center justify-center px-2 py-1.5 cursor-pointer border-b-4 border-l-2 hover:bg-blue-600 font-semibold transition-all ease-in-out text-xs shadow-lg bg-gradient-to-tr bg-blue-500 text-white" type={type} onClick={onClick} {...props}>
             <div className="flex justify-center items-center gap-0.5">
