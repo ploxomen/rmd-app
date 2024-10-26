@@ -3,9 +3,10 @@ import TableIntranet from '../TableIntranet'
 
 function TableReport({quotations,status}) {
     const columns = [
-        'Código',
-        'Fecha',
+        'Código Cotización',
+        'Fecha Cotización',
         'Fecha Pedido',
+        'Código Pedido',
         'Vendedor',
         'Razon Social',
         'País',
@@ -20,6 +21,7 @@ function TableReport({quotations,status}) {
                     <td  className="py-2 px-4 text-center">{quotation.quotation_code}</td>
                     <td className="py-2 px-4">{quotation.quotation_date_issue}</td>
                     <td className="py-2 px-4">{quotation.order_create}</td>
+                    <td className="py-2 px-4">{quotation.order_code}</td>
                     <td className="py-2 px-4">{quotation.user_name + ' ' + quotation.user_last_name}</td>
                     <td className="py-2 px-4">{quotation.customer_name}</td>
                     <td className="py-2 px-4">{quotation.contrie}</td>
