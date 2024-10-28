@@ -6,6 +6,7 @@ import { InputPrimary } from '@/components/Inputs';
 import LoyoutIntranet from '@/components/LoyoutIntranet';
 import PaginationTable from '@/components/PaginationTable';
 import TableReport from '@/components/quotations/TableReport';
+import { SelectPrimary } from '@/components/Selects';
 import { getCookie } from '@/helpers/getCookie';
 import { statusQuotations } from '@/helpers/statusQuotations';
 import { verifUser } from '@/helpers/verifUser';
@@ -31,7 +32,8 @@ function Report({dataUser,dataModules,dataRoles}) {
         type:"data",
         reload:false,
         filter_initial:date.toISOString().split('T')[0],
-        filter_final:new Date().toISOString().split('T')[0]
+        filter_final:new Date().toISOString().split('T')[0],
+        order: 0
     });
 
     const handleFilter = (e) => {
@@ -45,12 +47,13 @@ function Report({dataUser,dataModules,dataRoles}) {
         const getData = async () => {
             try {
                 const resp = await apiAxios.get('/quotation-extra/report',{
-                    params:{
+                    params: {
                         show:pagination.quantityRowData,
                         page:dataChange.current,
                         typeInformation:dataChange.type,
                         startDate:dataChange.filter_initial,
-                        finalDate:dataChange.filter_final
+                        finalDate:dataChange.filter_final,
+                        order: dataChange.order
                     },
                     responseType:dataChange.type == "data" ? 'json' : 'blob',
                     headers
@@ -105,6 +108,13 @@ function Report({dataUser,dataModules,dataRoles}) {
                 </div>
                 <div className='max-w-48'>
                     <InputPrimary type='date' value={dataChange.filter_final} name="filter_final" label="Fecha final" onChange={handleFilter}/>
+                </div>
+                <div className='max-w-52 w-full'>
+                    <SelectPrimary label="Pedido" name="order" value={dataChange.order || ''} onChange={handleFilter}>
+                        <option value="0">Sin excepción</option>
+                        <option value="1">Con pedido</option>
+                        <option value="2">Sin pedido</option>
+                    </SelectPrimary>
                 </div>
             </div>
         </div>
