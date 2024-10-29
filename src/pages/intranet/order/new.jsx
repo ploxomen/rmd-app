@@ -74,8 +74,8 @@ function OrderNew({ dataUser, dataModules, dataRoles }) {
   }
   useEffect(() => {
     const getData = async () => {
+      setQuotations([]);
       if (filter.customer == "") {
-        setQuotations([]);
         setIncludeIgv(1);
         return
       }
@@ -119,7 +119,7 @@ function OrderNew({ dataUser, dataModules, dataRoles }) {
     setFilter({
       ...filter,
       reload: !filter.reload
-    })
+    });
   }
   const handleSubmit = async (e) => {
     e.preventDefault();
