@@ -1,5 +1,4 @@
 import { ArrowLeftEndOnRectangleIcon, Bars3Icon, ChevronDownIcon, UserCircleIcon } from '@heroicons/react/24/solid'
-import Image from 'next/image'
 import React, { useEffect, useRef } from 'react'
 import Link from 'next/link';
 import { getCookie } from '@/helpers/getCookie2';
@@ -54,7 +53,7 @@ function HeaderIntranet({dataRoles,user,handleMenu}) {
         </button>
         <button type='button' className='p-2 bg-white text-placeholder rounded-md' onClick={handleClickRoles}>
           <div className='flex gap-1 items-center'>
-            <Image src={user.user_avatar ? process.env.NEXT_PUBLIC_API_URL + '/' + user.user_avatar : "/img/user.png"} quality={100} width={30} height={30}/>
+            <img src={user.user_avatar ? process.env.NEXT_PUBLIC_API_URL + '/' + user.user_avatar : "/img/user.png"} width={30} height={30} loading='lazy'/>
             <ChevronDownIcon className='w-4 h-4'/>
           </div>
         </button>

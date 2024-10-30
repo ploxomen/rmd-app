@@ -3,12 +3,10 @@ import '@/app/globals.css';
 import { ButtonLogin } from '@/components/Buttons';
 import Header from '@/components/Header';
 import { useState } from 'react';
-import workSpace from '@/img/logo.jpg';
 import apiAxios from '@/axios';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/solid';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation'
-import Image from 'next/image';
 import React from 'react';
 export async function getServerSideProps(context) {
     const userCookie = context.req.cookies;
@@ -59,7 +57,7 @@ export default function Login(){
             <Header title="Iniciar sesión" description='Accede al sistema integrado'/>
             <div className='bg-layout p-5 flex justify-center items-center min-h-dvh' style={{backgroundImage:"url('/img/login-fondo.jpg')", backgroundRepeat:'no-repeat',backgroundPosition:'center', backgroundSize:'cover'}}>
                 <div className='bg-white px-4 py-7 max-w-md rounded-lg shadow-md'>
-                    <Image src={workSpace} width={120} height={120} className='m-auto'/>
+                    <img src='/img/logo.jpg' width={120} height={120} className='m-auto'/>
                     {
                         incorrectUser && <div className='px-6 pt-2 pb-3 bg-red-100 rounded flex gap-2 items-center'>
                             <ExclamationTriangleIcon className='w-4 h-4 text-red-500'/>

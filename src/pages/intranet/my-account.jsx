@@ -9,7 +9,6 @@ import { ButtonDangerSm, ButtonPrimary, ButtonPrimarySm } from '@/components/But
 import { ArrowUpTrayIcon, PaperAirplaneIcon, TrashIcon } from '@heroicons/react/24/solid';
 import { getCookie } from '@/helpers/getCookie';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
 import { sweetAlert } from '@/helpers/getAlert';
 export async function getServerSideProps(context) {
     const userCookie = context.req.cookies;
@@ -188,7 +187,7 @@ function MyAccount({dataUser,dataModules,dataRoles}) {
                 </div>
                 <div className="col-span-full flex gap-2 items-center mb-3">
                     <input type="file" id='upload-file' accept='image/*' hidden onChange={handleImageChange} />
-                    <Image src={form.user_avatar ? form.user_avatar : "/img/user.png"} alt="Imagen avatar" width={100} height={100} quality={100} priority/>
+                    <img src={form.user_avatar ? form.user_avatar : "/img/user.png"} alt="Imagen avatar" width={100} height={100}/>
                     <ButtonPrimarySm text="Subir" icon={<ArrowUpTrayIcon className='w-4 h-6'/>} onClick={handleClickUpload}/>
                     {form.user_avatar && <ButtonDangerSm text="Borrar" icon={<TrashIcon className='w-4 h-6'/>} onClick={handleDeleteImg}/>}
                 </div>

@@ -1,6 +1,5 @@
 import '@/app/globals.css';
 import Head from 'next/head'
-import Image from 'next/image'
 import React, { useState } from 'react'
 import { InputLogin } from '@/components/Inputs';
 import { ButtonDanger, ButtonPrimary } from '@/components/Buttons';
@@ -9,7 +8,6 @@ import { getCookie } from '@/helpers/getCookie';
 import apiAxios from '@/axios';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
-import workSpace from '@/img/logo.jpg';
 import { sweetAlert } from '@/helpers/getAlert';
 export async function getServerSideProps(context) {
     const userCookie = context.req.cookies;
@@ -103,7 +101,7 @@ function UserReset() {
         <div className='bg-white px-4 py-7 max-w-md rounded-lg shadow-md'>
             <form onSubmit={handleSubmit}>
                 <div className="mb-1">
-                    <Image src={workSpace} width={120} height={120} className='m-auto'/>
+                    <img src='/img/logo.jpg' width={120} height={120} className='m-auto'/>
                 </div>
                 <div className="mb-5">
                     <small className="text-sm text-paragraph">Su cuenta a sido restaurada por un administrador o es la primera vez que ingresa al sistema, por favor establesca una contraseña para acceder al sistema</small>

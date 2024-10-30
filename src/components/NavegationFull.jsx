@@ -1,6 +1,5 @@
 import { listIcons } from '@/helpers/listIcons';
 import { useRouter } from 'next/router';
-import Image from 'next/image';
 import Link from 'next/link';
 import { forwardRef } from 'react';
 const NavegationFull = forwardRef(({listModules,user,closeMenu},ref) => {
@@ -18,7 +17,7 @@ const NavegationFull = forwardRef(({listModules,user,closeMenu},ref) => {
         <aside ref={ref} id='content-module' className="md:left-0 -left-[260px] fixed top-0 bottom-0 h-dvh z-20" onClick={closeMenu}>
             <div className='w-[260px] py-3 bg-white h-full overflow-y-auto navigation-scroll' onClick={e => e.stopPropagation()}>
             <div className="py-4 text-center">
-                <Image alt='Avatar' width={80} height={80} quality={100} src={user.user_avatar ? process.env.NEXT_PUBLIC_API_URL + '/' + user.user_avatar : "/img/user.png"} className='m-auto'/>
+                <img alt='Avatar' width={80} height={80} src={user.user_avatar ? process.env.NEXT_PUBLIC_API_URL + '/' + user.user_avatar : "/img/user.png"} loading='lazy' className='m-auto'/>
                 <h3 className='pt-2'>{user.user_name}</h3>
             </div>
             <ul>

@@ -10,7 +10,6 @@ import { SelectPrimary } from '@/components/Selects';
 import { getCookie } from '@/helpers/getCookie';
 import { statusQuotations } from '@/helpers/statusQuotations';
 import { verifUser } from '@/helpers/verifUser';
-import workSpace from '@/img/man.png';
 import { DocumentArrowDownIcon } from '@heroicons/react/24/solid';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'

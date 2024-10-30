@@ -5,7 +5,6 @@ import SeccionForm from '../SeccionForm';
 import { getCookie } from '@/helpers/getCookie';
 import { SelectPrimary } from '../Selects';
 import apiAxios from '@/axios';
-import Image from 'next/image';
 import { ButtonDangerSm, ButtonPrimary, ButtonPrimarySm } from '../Buttons';
 import { ArrowUpTrayIcon, TrashIcon } from '@heroicons/react/24/solid';
 import { sweetAlert } from '@/helpers/getAlert';
@@ -168,7 +167,7 @@ function FormProduct({statusModal,closeModal,handleSave,productEdit,categories,s
             <div className="col-span-full">
                 <div className="flex gap-2 items-center">
                     <input type="file" id='upload-file' accept='image/*' hidden onChange={handleImageChange} />
-                    <Image src={form.product_img ? form.product_img : "/img/no-pictures.png"} alt="Imagen previa" width={100} height={100} priority/>
+                    <img src={form.product_img ? form.product_img : "/img/no-pictures.png"} alt="Imagen previa" width={100} height={100} loading='lazy'/>
                     <ButtonPrimarySm text="Subir" icon={<ArrowUpTrayIcon className='w-4 h-6'/>} onClick={handleClickUpload}/>
                     {form.product_img && <ButtonDangerSm text="Borrar" icon={<TrashIcon className='w-4 h-6'/>} onClick={handleDeleteImg}/>}
                 </div>

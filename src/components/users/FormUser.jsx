@@ -6,8 +6,6 @@ import SeccionForm from '../SeccionForm'
 import { ArrowUpTrayIcon, TrashIcon, XMarkIcon } from '@heroicons/react/24/solid'
 import { sweetAlert } from '@/helpers/getAlert'
 import { ButtonDangerSm, ButtonPrimarySm } from '../Buttons'
-import Image from 'next/image'
-
 const dataForm = {
     id:null,
     user_type_document: "",
@@ -160,7 +158,7 @@ function FormUser({rolesData,typeDocumentsData,saveUser,dataUser,dataUserRol,sta
             <div className="col-span-full">
                 <div className="flex gap-2 items-center">
                     <input type="file" id='upload-file' accept='image/*' hidden onChange={handleImageChange} />
-                    <Image src={form.user_avatar ? form.user_avatar : "/img/no-pictures.png"} alt="Imagen previa" width={100} height={100} priority/>
+                    <img src={form.user_avatar ? form.user_avatar : "/img/no-pictures.png"} alt="Imagen previa" width={100} height={100}/>
                     <ButtonPrimarySm text="Subir" icon={<ArrowUpTrayIcon className='w-4 h-6'/>} onClick={handleClickUpload}/>
                     {form.user_avatar && <ButtonDangerSm text="Borrar" icon={<TrashIcon className='w-4 h-6'/>} onClick={handleDeleteImg}/>}
                 </div>

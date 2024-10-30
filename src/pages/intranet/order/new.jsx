@@ -123,24 +123,24 @@ function OrderNew({ dataUser, dataModules, dataRoles }) {
   }
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const quotationsNew = quotations.filter(quotation => quotation.checked === 1);
-    if (!quotationsNew.length) {
+    const quotationsActive = quotations.filter(quotation => quotation.checked === 1);
+    if (!quotationsActive.length) {
       return sweetAlert({ title: "Alerta", text: "Debe elegir al menos una cotización", icon: "warning" });
     }
-    for (let i = 0; i < quotationsNew.length; i++) {
+    for (let i = 0; i < quotationsActive.length; i++) {
       if (i === 0) {
         continue;
       }
-      if (quotationsNew[i - 1].quotation_project !== quotationsNew[i].quotation_project) {
+      if (quotationsActive[i - 1].quotation_project !== quotationsActive[i].quotation_project) {
         return sweetAlert({ title: "Alerta", text: "Las cotizaciones deben tener el mismo proyecto", icon: "warning" });
       }
-      if (quotationsNew[i - 1].contact_name !== quotationsNew[i].contact_name) {
+      if (quotationsActive[i - 1].contact_name !== quotationsActive[i].contact_name) {
         return sweetAlert({ title: "Alerta", text: "Las cotizaciones deben tener el mismo contacto", icon: "warning" });
       }
-      if (quotationsNew[i - 1].contact_email !== quotationsNew[i].contact_email) {
+      if (quotationsActive[i - 1].contact_email !== quotationsActive[i].contact_email) {
         return sweetAlert({ title: "Alerta", text: "Las cotizaciones deben tener el mismo email", icon: "warning" });
       }
-      if (quotationsNew[i - 1].contact_number !== quotationsNew[i].contact_number) {
+      if (quotationsActive[i - 1].contact_number !== quotationsActive[i].contact_number) {
         return sweetAlert({ title: "Alerta", text: "Las cotizaciones deben tener el mismo teléfono", icon: "warning" });
       }
     }
@@ -159,14 +159,14 @@ function OrderNew({ dataUser, dataModules, dataRoles }) {
     if (form.order_os) {
       formData.append('order_os', form.order_os);
     }
-    formData.append('order_project', quotations[0].quotation_project);
-    formData.append('order_contact_email', quotations[0].contact_email);
-    formData.append('order_contact_telephone', quotations[0].contact_number);
-    formData.append('order_contact_name', quotations[0].contact_name);
+    formData.append('order_project', quotationsActive[0].quotation_project);
+    formData.append('order_contact_email', quotationsActive[0].contact_email);
+    formData.append('order_contact_telephone', quotationsActive[0].contact_number);
+    formData.append('order_contact_name', quotationsActive[0].contact_name);
     formData.append('order_money', filter.money);
     formData.append('order_igv', filter.includeIgv);
     formData.append('customer_id', filter.customer);
-    formData.append('quotations', JSON.stringify(quotationsNew));
+    formData.append('quotations', JSON.stringify(quotationsActive));
     try {
       const resp = await apiAxios.post('order', formData, {
         headers: {
