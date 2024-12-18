@@ -6,7 +6,6 @@ import ContentWrapper from './ContentWrapper'
 function LoyoutIntranet({title,description,children,modules,user,roles}) {
   const refMenu = useRef(null);
   const handleCloseMenu = () => {
-    console.log(document.documentElement.clientWidth < 768, refMenu.current.classList.contains('menu-content'))
     if(document.documentElement.clientWidth < 768 && refMenu.current.classList.contains('menu-content')){
       refMenu.current.classList.remove('menu-content')
     }
