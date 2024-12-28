@@ -1,181 +1,289 @@
-import React, { useEffect, useRef, useState } from 'react'
-import Modal from '../Modal'
-import { InputPrimary, SubmitForm, TextareaPrimary, Toogle } from '../Inputs';
-import SeccionForm from '../SeccionForm';
-import { getCookie } from '@/helpers/getCookie';
-import { SelectPrimary } from '../Selects';
-import apiAxios from '@/axios';
-import { ButtonDangerSm, ButtonPrimary, ButtonPrimarySm } from '../Buttons';
-import { ArrowUpTrayIcon, TrashIcon } from '@heroicons/react/24/solid';
-import { sweetAlert } from '@/helpers/getAlert';
-import EditorText from '../EditorText';
+import React, { useEffect, useRef, useState } from "react";
+import Modal from "../Modal";
+import { InputPrimary, SubmitForm, Toogle } from "../Inputs";
+import SeccionForm from "../SeccionForm";
+import { SelectPrimary } from "../Selects";
+import { ButtonDangerSm, ButtonPrimarySm } from "../Buttons";
+import { ArrowUpTrayIcon, TrashIcon } from "@heroicons/react/24/solid";
+import EditorText from "../EditorText";
+import Select from "react-select";
+import { optionsUnitsMeasurements } from "@/helpers/listUnitsMeasurements";
+import Label from "../Label";
 const dataForm = {
-    product_name:"",
-    product_description:"",
-    product_buy:"",
-    product_public_customer:"",
-    product_categorie:"",
-    product_distributor:"",
-    product_service:false,
-    sub_categorie:"",
-    product_img: null,
-    product_code: null
-}
-function FormProduct({statusModal,closeModal,handleSave,productEdit,categories,subcategoriesData}) {
-    const [form,setForm] = useState(dataForm);
-    const [subcategories,setSubcategories] = useState([]);
-    const [deleteImg,setDeleteImg] = useState(false);
-    const editorDescription = useRef(null);
-    const headers = getCookie();
-    const edit = Object.keys(productEdit).length;
-    useEffect(()=>{
-        setForm(edit ? productEdit : dataForm);
-        setDeleteImg(false);
-    },[productEdit]);
-    useEffect(()=>{
-        setSubcategories(subcategoriesData.length ? subcategoriesData : []);
-    },[subcategoriesData]);
-    const hanbleSendModal = () => {
-        const formProduct = document.querySelector("#form-product-submit");
-        formProduct.click();
+  product_name: "",
+  product_description: "",
+  product_buy: "",
+  product_public_customer: "",
+  product_categorie: "",
+  product_distributor: "",
+  product_service: false,
+  sub_categorie: null,
+  product_substore: '',
+  product_img: null,
+  product_unit_measurement: "TU",
+  product_code: null,
+};
+function FormProduct({
+  statusModal,
+  closeModal,
+  handleSave,
+  productEdit,
+  categories,
+  stores
+}) {
+  const [form, setForm] = useState(dataForm);
+  const [deleteImg, setDeleteImg] = useState(false);
+  const editorDescription = useRef(null);
+  const edit = Object.keys(productEdit).length;
+  useEffect(() => {
+    setForm( edit ? productEdit : dataForm);
+    setDeleteImg(false);
+  }, [productEdit]);
+  const hanbleSendModal = () => {
+    const formProduct = document.querySelector("#form-product-submit");
+    formProduct.click();
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const data = new FormData();
+    for (const key in form) {
+      if (
+        Object.hasOwnProperty.call(form, key) &&
+        form[key] &&
+        key != "product_img"
+      ) {
+        data.append(key, form[key]);
+      }
     }
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const data = new FormData();
-        for (const key in form) {
-            if (Object.hasOwnProperty.call(form, key) && form[key] && key != 'product_img') {
-                data.append(key,form[key])                
-            }
-        }
-        if(form.id){
-            data.append('_method','PUT');
-            if(deleteImg){
-                data.append('delete_img','true');
-            }
-        }
-        data.append('product_description',editorDescription.current.getContent());
-        const inputImage = document.querySelector("#upload-file");
-        if(inputImage.value){
-            data.append('product_img',inputImage.files[0]);
-        }
-        handleSave(data);
+    if (form.id) {
+      data.append("_method", "PUT");
+      if (deleteImg) {
+        data.append("delete_img", "true");
+      }
     }
-    const handleChangeForm = async (e) => {
-        const key = e.target.name;
-        const value = e.target.value;
-        if(key == "product_service"){
-            setForm({
-                ...form,
-                product_service : !form.product_service
-            })
-            return
-        }
-        setForm({
-            ...form,
-            [key] : value
-        })
-        if(key == 'product_categorie'){
-            try {   
-                const resp = await apiAxios.get('/product-subcategorie/' + value,{headers});
-                setSubcategories(resp.data.data);
-            } catch (error) {
-                console.error(error);
-                sweetAlert({title : "Error", text: "Ocurrió un error al obtener las subcategorías", icon : "error"});
-            }
-        }
+    data.append("product_description", editorDescription.current.getContent());
+    const inputImage = document.querySelector("#upload-file");
+    if (inputImage.value) {
+      data.append("product_img", inputImage.files[0]);
     }
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        if(!file){
-            setForm({
-                ...form,
-                product_img : null
-            })
-        }
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setForm({
-                ...form,
-                product_img : reader.result
-            })
-        }
-        if(file){
-            reader.readAsDataURL(file);
-        }
+    handleSave(data);
+  };
+  const handleChangeForm = async (e) => {
+    const key = e.target.name;
+    const value = e.target.value;
+    if (key == "product_service") {
+      setForm({
+        ...form,
+        product_service: !form.product_service,
+      });
+      return;
     }
-    const handleDeleteImg = () => {
-        setForm({
-            ...form,
-            product_img:null
-        })
-        document.querySelector("#upload-file").value = null;
-        setDeleteImg(true);
+    setForm({
+      ...form,
+      [key]: value,
+    });
+  };
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) {
+      setForm({
+        ...form,
+        product_img: null,
+      });
     }
-    const handleClickUpload = (e) =>{
-        document.querySelector("#upload-file").click();
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setForm({
+        ...form,
+        product_img: reader.result,
+      });
+    };
+    if (file) {
+      reader.readAsDataURL(file);
     }
+  };
+  const handleDeleteImg = () => {
+    setForm({
+      ...form,
+      product_img: null,
+    });
+    document.querySelector("#upload-file").value = null;
+    setDeleteImg(true);
+  };
+  const handleClickUpload = (e) => {
+    document.querySelector("#upload-file").click();
+  };
   return (
-    <Modal status={statusModal} maxWidth='max-w-[750px]' title={edit ? 'Editar producto' : 'Nuevo producto'} onSave={hanbleSendModal} handleCloseModal={closeModal}>
-        <form  className='grid grid-cols-6 gap-x-3 gap-y-0' onSubmit={handleSubmit}>
-            <div className="col-span-full">
-                <SeccionForm title="Datos del producto"/>
+    <Modal
+      status={statusModal}
+      maxWidth="max-w-[750px]"
+      title={edit ? "Editar producto" : "Nuevo producto"}
+      onSave={hanbleSendModal}
+      handleCloseModal={closeModal}
+    >
+      <form
+        className="grid grid-cols-12 gap-x-3 gap-y-0"
+        onSubmit={handleSubmit}
+      >
+        <div className="col-span-full">
+          <SeccionForm title="Datos del producto" />
+        </div>
+        {form.product_code !== null && (
+          <div className="col-span-full md:col-span-3">
+            <InputPrimary
+              label="Código"
+              inputRequired="required"
+              name="product_code"
+              value={form.product_code || ""}
+              onChange={handleChangeForm}
+            />
+          </div>
+        )}
+        <div
+          className={`${
+            form.product_code !== null
+              ? "col-span-full md:col-span-9"
+              : "col-span-full"
+          }`}
+        >
+          <InputPrimary
+            label="Producto"
+            inputRequired="required"
+            name="product_name"
+            value={form.product_name || ""}
+            onChange={handleChangeForm}
+          />
+        </div>
+        <div className="col-span-full">
+          <Toogle
+            text="Establecer como servicio"
+            onChange={handleChangeForm}
+            checked={form.product_service}
+            name="product_service"
+          />
+        </div>
+        <div className="col-span-full mb-4">
+          <EditorText
+            label="Descripción"
+            initialValue={form.product_description}
+            id="quotation_observations"
+            editorRef={editorDescription}
+          />
+        </div>
+        {!form.product_service && (
+          <>
+            <div className="col-span-6 lg:col-span-4">
+              <InputPrimary
+                label="P. Producción"
+                step="0.01"
+                min="0"
+                type="number"
+                name="product_buy"
+                value={form.product_buy || ""}
+                onChange={handleChangeForm}
+              />
             </div>
-            {form.product_code !== null && <div className='col-span-full md:col-span-1'>
-                <InputPrimary label="Código" inputRequired='required' name="product_code" value={form.product_code||''} onChange={handleChangeForm}/>
-            </div>}
-            <div className={`${form.product_code !== null ? 'col-span-full md:col-span-5' : 'col-span-full'}`}>
-                <InputPrimary label="Producto" inputRequired='required' name="product_name" value={form.product_name||''} onChange={handleChangeForm}/>
+            <div className="col-span-6 lg:col-span-4">
+              <InputPrimary
+                label="P. Público Cliente"
+                step="0.01"
+                min="0"
+                type="number"
+                inputRequired="required"
+                name="product_public_customer"
+                value={form.product_public_customer || ""}
+                onChange={handleChangeForm}
+              />
             </div>
-            <div className="col-span-full">
-                <Toogle text="Establecer como servicio" onChange={handleChangeForm} checked={form.product_service} name="product_service"/>
+            <div className="col-span-6 lg:col-span-4">
+              <InputPrimary
+                label="P. Distribuidor"
+                step="0.01"
+                min="0"
+                type="number"
+                name="product_distributor"
+                value={form.product_distributor || ""}
+                onChange={handleChangeForm}
+              />
             </div>
-            <div className="col-span-full mb-4">
-                <EditorText label="Descripción" initialValue={form.product_description} id="quotation_observations" editorRef={editorDescription}/>
-            </div>
-            {
-                !form.product_service
-                &&
-                <>
-                    <div className="col-span-3">
-                        <InputPrimary label="P. Producción" step="0.01" min="0" type='number' name="product_buy" value={form.product_buy||''} onChange={handleChangeForm}/>
-                    </div>
-                    <div className="col-span-3">
-                        <InputPrimary label="P. Público Cliente" step="0.01" min="0" type='number' inputRequired='required' name="product_public_customer" value={form.product_public_customer||''} onChange={handleChangeForm}/>
-                    </div>
-                    <div className="col-span-3">
-                        <InputPrimary label="P. Distribuidor" step="0.01" min="0" type='number' name="product_distributor" value={form.product_distributor||''} onChange={handleChangeForm}/>
-                    </div>
-                </>
-            }
-            
-            <div className="col-span-3">
-                <SelectPrimary label="Categorías" inputRequired='required' name="product_categorie" value={form.product_categorie||''} onChange={handleChangeForm}>
-                    <option value="">Seleccione una opción</option>
-                    {
-                        categories.map(categorie => <option value={categorie.id} key={categorie.id}>{categorie.categorie_name}</option>)
-                    }
-                </SelectPrimary>
-            </div>
-            <div className="col-span-3">
-                <SelectPrimary label="Subcategorías" inputRequired='required' name="sub_categorie" value={form.sub_categorie||''} onChange={handleChangeForm}>
-                    <option value="">Seleccione una opción</option>
-                    {
-                        subcategories.map(subcategorie => <option value={subcategorie.id} key={subcategorie.id}>{subcategorie.sub_categorie_name}</option>)
-                    }
-                </SelectPrimary>
-            </div>
-            <div className="col-span-full">
-                <div className="flex gap-2 items-center">
-                    <input type="file" id='upload-file' accept='image/*' hidden onChange={handleImageChange} />
-                    <img src={form.product_img ? form.product_img : "/img/no-pictures.png"} alt="Imagen previa" width={100} height={100} loading='lazy'/>
-                    <ButtonPrimarySm text="Subir" icon={<ArrowUpTrayIcon className='w-4 h-6'/>} onClick={handleClickUpload}/>
-                    {form.product_img && <ButtonDangerSm text="Borrar" icon={<TrashIcon className='w-4 h-6'/>} onClick={handleDeleteImg}/>}
-                </div>
-            </div>
-            <SubmitForm id="form-product-submit"/>
-        </form>
+          </>
+        )}
+        <div className="col-span-6">
+          <Label text="Almacen" htmlFor="product_substore_id" required />
+          <Select
+            instanceId="product_substore_id"
+            placeholder="Seleccione una opción"
+            name="product_substore"
+            options={stores}
+            value={stores.flatMap(obj => obj.options).filter(option => option.value === form.product_substore)}
+            onChange={(e) => setForm({ ...form, product_substore: e.value })}
+            menuPosition="fixed"
+          />
+        </div>
+        <div className="col-span-6 mb-2">
+          <Label text="Categoria" htmlFor="product_categorie_id" required />
+          <Select
+            instanceId="product_categorie_id"
+            placeholder="Seleccione una opción"
+            name="product_categorie"
+            options={categories}
+            value={categories.flatMap(obj => obj.options).filter( option => option.value === form.sub_categorie)}
+            onChange={(e) => setForm({ ...form, sub_categorie: e.value })}
+            menuPosition="fixed"
+          />
+        </div>
+        <div className="col-span-6">
+          <SelectPrimary
+            label="Unidades de medida"
+            inputRequired="required"
+            name="product_unit_measurement"
+            value={form.product_unit_measurement || ""}
+            onChange={handleChangeForm}
+          >
+            <option value="">Seleccione una opción</option>
+            {optionsUnitsMeasurements.map((unit, unitKey) => (
+              <option value={unit.value} key={unitKey}>
+                {unit.label}
+              </option>
+            ))}
+          </SelectPrimary>
+        </div>
+        
+
+        <div className="col-span-full">
+          <div className="flex gap-2 items-center">
+            <input
+              type="file"
+              id="upload-file"
+              accept="image/*"
+              hidden
+              onChange={handleImageChange}
+            />
+            <img
+              src={form.product_img ? form.product_img : "/img/no-pictures.png"}
+              alt="Imagen previa"
+              width={100}
+              height={100}
+              loading="lazy"
+            />
+            <ButtonPrimarySm
+              text="Subir"
+              icon={<ArrowUpTrayIcon className="w-4 h-6" />}
+              onClick={handleClickUpload}
+            />
+            {form.product_img && (
+              <ButtonDangerSm
+                text="Borrar"
+                icon={<TrashIcon className="w-4 h-6" />}
+                onClick={handleDeleteImg}
+              />
+            )}
+          </div>
+        </div>
+        <SubmitForm id="form-product-submit" />
+      </form>
     </Modal>
-  )
+  );
 }
 
-export default FormProduct
+export default FormProduct;

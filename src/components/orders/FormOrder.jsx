@@ -14,6 +14,7 @@ import { getDistrics } from '@/helpers/getDistrics';
 import { ButtonPrimary, ButtonSecondarySm } from '../Buttons';
 import { ArrowPathIcon } from '@heroicons/react/24/solid';
 import { optionsConditionsPayOrder } from '@/helpers/optionsConditionsPayOrder';
+import Label from '../Label';
 
 const initalForm = {
     id: null,
@@ -210,7 +211,7 @@ function FormOrder({ statusModal, orderEdit, quotationsNew, departaments, distri
                     <SeccionForm title="Datos del cliente" />
                 </div>
                 <div className="col-span-full md:col-span-6">
-                    <label htmlFor="customer" className="text-placeholder text-sm mb-1 block dark:text-white">Cliente<span className="text-red-500 font-bold pl-1">*</span></label>
+                    <Label text='Cliente' htmlFor='customer' required/>
                     <Select instanceId='customer' isDisabled={disabledEdit} placeholder="Seleccione un cliente" name='customer' options={customers} menuPosition='fixed' value={customers.filter(customer => customer.value === form.customer_id)} />
                 </div>
                 <div className="col-span-full md:col-span-6">

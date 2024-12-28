@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Modal from '../Modal'
 import SeccionForm from '../SeccionForm'
-import { InputPrimary, SubmitForm, TextareaPrimary } from '../Inputs'
+import { InputPrimary, SubmitForm } from '../Inputs'
 import { SelectPrimary } from '../Selects';
 import Select from 'react-select';
 import TableQuotation from './TableQuotation';
@@ -9,6 +9,7 @@ import EditorText from '../EditorText';
 import apiAxios from '@/axios';
 import { getCookie } from '@/helpers/getCookie';
 import { sweetAlert } from '@/helpers/getAlert';
+import Label from '../Label';
 const initalForm = {
     id: null,
     quotation_date_issue: "",
@@ -41,6 +42,7 @@ function FormQuotation({ statusModal, customers, quotationEdit, contactsList, pr
     const [products, setProducts] = useState([]);
     const editorDetails = useRef(null);
     const editorRefObservation = useRef(null);
+    const editorMethodPayment = useRef(null);
     const editorRefCondition = useRef(null);
     const editorRefWarrantyColumn1 = useRef(null);
     const editorRefWarrantyColumn2 = useRef(null);
@@ -189,6 +191,7 @@ function FormQuotation({ statusModal, customers, quotationEdit, contactsList, pr
             quotation_observations: editorRefObservation.current.getContent(),
             quotation_warranty_1: editorRefWarrantyColumn1.current.getContent(),
             quotation_warranty_2: editorRefWarrantyColumn2.current.getContent(),
+            quotation_way_to_pay: editorMethodPayment.current.getContent(),
             products
         }
         try {
@@ -231,15 +234,12 @@ function FormQuotation({ statusModal, customers, quotationEdit, contactsList, pr
                     <div className="col-span-full md:col-span-4">
                         <InputPrimary label="Tipo cambio" disabled={isDisabled} inputRequired={form.quotation_type_money == 'USD' ? 'required' : ''} step="0.01" type='number' min="0" name="quotation_type_change" value={form.quotation_type_change || ''} onChange={e => !isDisabled && handleChangeForm(e)} />
                     </div>
-                    <div className="col-span-full md:col-span-4">
-                        <InputPrimary label="Forma de pago" type='text' inputRequired='required' name="quotation_way_to_pay" value={form.quotation_way_to_pay || ''} onChange={handleChangeForm} />
-                    </div>
                     <div className="col-span-full">
                         <SeccionForm title="Datos del cliente" />
                     </div>
                     <div className="col-span-full md:col-span-6">
                         <div className="col-span-full md:col-span-6 text-placeholder">
-                            <label htmlFor="quotation_customer" className="text-sm mb-1 block dark:text-white">Cliente <span className="text-red-500 font-bold pl-1">*</span> </label>
+                            <Label text='Cliente' htmlFor='quotation_customer' required/>
                             <Select instanceId='quotation_customer' isDisabled={isDisabled} placeholder="Seleccione un cliente" name='quotation_customer' options={customers} onChange={e => !isDisabled && handleContact(e)} menuPosition='fixed' value={customers.filter(customer => customer.value === form.quotation_customer)} />
                         </div>
                     </div>
@@ -278,6 +278,9 @@ function FormQuotation({ statusModal, customers, quotationEdit, contactsList, pr
                     </div>
                     <div className="col-span-full mb-2">
                         <EditorText label="Observaciones" initialValue={form.quotation_observations} id="quotation_observations" editorRef={editorRefObservation} />
+                    </div>
+                    <div className="col-span-full mb-2">
+                        <EditorText label="Forma de pago" initialValue={form.quotation_way_to_pay} id="quotation_way_to_pay" editorRef={editorMethodPayment} />
                     </div>
                     <div className="col-span-full mb-2">
                         <EditorText label="Condiciones" initialValue={form.quotation_conditions} id="quotation_conditions" editorRef={editorRefCondition} />

@@ -3,13 +3,15 @@ export const TYPES_PRODUCTS = {
     NO_PRODUCTS:"NO_PRODUCTS",
     RESET_EDIT:"RESET_EDIT",
     ALL_CATEGORIES:"ALL_CATEGORIES",
-    GET_PRODUCT:"GET_PRODUCT"
+    GET_PRODUCT:"GET_PRODUCT",
+    ALL_STORES: "ALL_STORES"
 }
 export const initialStateProduct = {
     products:[],
     categories:[],
     subcategories:[],
-    productEdit:{}
+    productEdit:{},
+    stores : []
 }
 export const reducerProducts = (state,actions) => {
     switch (actions.type) {
@@ -26,6 +28,12 @@ export const reducerProducts = (state,actions) => {
             return {
                 ...state,
                 categories:actions.payload
+            }
+        }
+        case TYPES_PRODUCTS.ALL_STORES:{
+            return {
+                ...state,
+                stores:actions.payload
             }
         }
         case TYPES_PRODUCTS.GET_PRODUCT:{

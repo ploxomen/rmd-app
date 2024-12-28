@@ -13,6 +13,7 @@ import { verifUser } from '@/helpers/verifUser';
 import { useModal } from '@/hooks/useModal';
 import { TYPES_PRODUCTS, initialStateProduct, reducerProducts } from '@/reducers/crudProducts';
 import { DocumentArrowDownIcon, PlusCircleIcon } from '@heroicons/react/24/solid';
+import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useReducer, useState } from 'react'
 const quantityRowData = 25;
@@ -30,14 +31,21 @@ function products({dataModules,dataUser,dataRoles}) {
   useEffect(()=>{
     const getData = async () => {
         try {
-            const resq = await apiAxios.get('product-categorie',{headers});
+            const resq = await axios.all([
+              apiAxios.get('product-categorie',{headers}),
+              apiAxios.get('product-store',{headers}),
+            ])
             dispatch({
                 type:TYPES_PRODUCTS.ALL_CATEGORIES,
-                payload:resq.data.data
+                payload:resq[0].data.data
             });
+            dispatch({
+              type:TYPES_PRODUCTS.ALL_STORES,
+              payload:resq[1].data.data
+          });
         } catch (error) {
           dispatch({type:TYPES_PRODUCTS.NO_PRODUCTS});
-          sweetAlert({title : "Error", text: "Error al obtener las categorías", icon : "error"});
+          sweetAlert({title : "Error", text: "Error al obtener los datos", icon : "error"});
         }
     }
     getData();
@@ -203,7 +211,7 @@ function products({dataModules,dataUser,dataRoles}) {
             <PaginationTable currentPage={dataChange.current} quantityRow={pagination.quantityRowData} totalData={pagination.totalPages} handleChangePage={handleChangePage}/>
           </div>
       </LoyoutIntranet>
-      <FormProduct categories={state.categories} statusModal={modal} closeModal={closeModal} handleSave={saveProduct} productEdit={state.productEdit} subcategoriesData={state.subcategories}/>
+      <FormProduct categories={state.categories} statusModal={modal} closeModal={closeModal} handleSave={saveProduct} productEdit={state.productEdit} subcategoriesData={state.subcategories} stores={state.stores}/>
     </>
   )
 }

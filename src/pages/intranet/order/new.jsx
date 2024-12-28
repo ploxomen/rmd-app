@@ -18,6 +18,7 @@ import axios from 'axios';
 import { getProvinces } from '@/helpers/getProvinces';
 import { getDistrics } from '@/helpers/getDistrics';
 import { optionsConditionsPayOrder } from '@/helpers/optionsConditionsPayOrder';
+import Label from '@/components/Label';
 export async function getServerSideProps(context) {
   const userCookie = context.req.cookies;
   return await verifUser(userCookie, '/order/new');
@@ -203,7 +204,7 @@ function OrderNew({ dataUser, dataModules, dataRoles }) {
       <BanerModule imageBanner='/baners/Group 15.jpg' title="Nuevo pedido" />
       <div className='w-full p-6 mb-4 bg-white rounded-md shadow grid grid-cols-12 gap-x-3 gap-y-0'>
         <div className="col-span-full md:col-span-6 lg:col-span-8 mb-3">
-          <label htmlFor="customer" className="text-placeholder text-sm mb-1 block dark:text-white">Cliente<span className="text-red-500 font-bold pl-1">*</span></label>
+          <Label text='Cliente' htmlFor='customer' required/>
           <Select instanceId='customer' placeholder="Seleccione un cliente" name='customer' options={customers} onChange={handleChangeFilter} menuPosition='fixed' value={filter.customer == '' ? [] : customers.find(customer => customer.value == filter.customer)} />
         </div>
         <div className="col-span-full md:col-span-3 lg:col-span-2">

@@ -1,7 +1,6 @@
 import '@/app/globals.css';
 import apiAxios from '@/axios';
 import BanerModule from '@/components/BanerModule'
-import { ButtonPrimary } from '@/components/Buttons';
 import { InputSearch } from '@/components/Inputs';
 import LoyoutIntranet from '@/components/LoyoutIntranet'
 import PaginationTable from '@/components/PaginationTable';

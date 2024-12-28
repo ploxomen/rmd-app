@@ -19,6 +19,7 @@ function TableOrderAll({ orders, deleteOrder, getOrder, status }) {
         'Subtotal',
         'IGV',
         'Total',
+        'Responsable',
         'Estado',
         'Acciones'
     ]
@@ -77,6 +78,7 @@ function TableOrderAll({ orders, deleteOrder, getOrder, status }) {
                         <td className="py-2 px-4">{parseMoney(order.order_mount, order.order_money)}</td>
                         <td className="py-2 px-4">{parseMoney(order.order_mount_igv, order.order_money)}</td>
                         <td className="py-2 px-4">{parseMoney(order.order_total, order.order_money)}</td>
+                        <td className="py-2 px-4">{order.responsable_usuario}</td>
                         <td className="py-2 px-4">{status[order.order_status].element}</td>
                         <td className="py-2 px-4 text-center">
                             {

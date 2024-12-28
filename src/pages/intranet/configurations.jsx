@@ -24,11 +24,13 @@ const initialForm = {
     business_phone:"",
     business_email:"",
     business_page:"",
-    business_bank:""
+    business_bank:"",
+    quotation_method_payment: ""
 }
 function Configurations({dataRoles,dataUser,dataModules}) {
     const [form,setForm] = useState(initialForm);
     const eidtorRefBanks = useRef();
+    const editorMethodPayment = useRef();
     const editorConditions = useRef();
     const attentionHours = useRef();
     const editorObservations = useRef();
@@ -68,6 +70,7 @@ function Configurations({dataRoles,dataUser,dataModules}) {
                 attention_hours: attentionHours.current.getContent(),
                 quotation_warranty_1: editorRefWarrantyColumn1.current.getContent(),
                 quotation_warranty_2: editorRefWarrantyColumn2.current.getContent(),
+                quotation_method_payment: editorMethodPayment.current.getContent()
             },{headers});
             if(resp.data.redirect !== null){
                 return route.replace(resp.data.redirect);
@@ -123,6 +126,9 @@ function Configurations({dataRoles,dataUser,dataModules}) {
                 </div>
                 <div className="col-span-full mb-2">
                     <EditorText label="Datos bancarios" initialValue={form.business_bank} id="configuration_bank" editorRef={eidtorRefBanks}/>
+                </div>
+                <div className="col-span-full mb-2">
+                    <EditorText label="Forma de pago" initialValue={form.quotation_method_payment} id="configuration_method_payment" editorRef={editorMethodPayment}/>
                 </div>
                 <div className="col-span-full mb-2">
                     <EditorText label="Garantía - Primera columna" initialValue={form.quotation_warranty_1} id="quotation_warranty_1" editorRef={editorRefWarrantyColumn1}/>

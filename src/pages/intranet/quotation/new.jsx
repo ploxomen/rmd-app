@@ -3,6 +3,7 @@ import BanerModule from '@/components/BanerModule';
 import { ButtonDanger, ButtonPrimary } from '@/components/Buttons';
 import EditorText from '@/components/EditorText';
 import { InputPrimary, TextareaPrimary } from '@/components/Inputs';
+import Label from '@/components/Label';
 import LoyoutIntranet from '@/components/LoyoutIntranet';
 import Modal from '@/components/Modal';
 import SeccionForm from '@/components/SeccionForm';
@@ -35,7 +36,7 @@ const initalForm = {
     quotation_project: "",
     quotation_warranty:"Defecto de fábrica, reemplazo inmediato.\nSegún Carta de Garantía.",
     quotation_conditions: "",
-    quotation_way_to_pay:"CRÉDITO 15 DÍAS",
+    quotation_method_payment:"",
     quotation_warranty_1: "",
     quotation_warranty_2: ""
 }
@@ -56,6 +57,7 @@ function quotationNew({ dataUser, dataModules, dataRoles }) {
     const editorRefCondition = useRef(null);
     const editorRefWarrantyColumn1 = useRef(null);
     const editorRefWarrantyColumn2 = useRef(null);
+    const editorMethodPayment = useRef(null);
 
     const { modal, handleOpenModal, handleCloseModal } = useModal("hidden");
     const editorDetails = useRef(null);
@@ -63,7 +65,8 @@ function quotationNew({ dataUser, dataModules, dataRoles }) {
         quotation_observations: "",
         quotation_conditions: "",
         quotation_warranty_1: "",
-        quotation_warranty_2: ""
+        quotation_warranty_2: "",
+        quotation_method_payment:""
     });
     const route = useRouter();
     const headers = getCookie();
@@ -196,6 +199,7 @@ function quotationNew({ dataUser, dataModules, dataRoles }) {
             quotation_observations: editorRefObservation.current.getContent(),
             quotation_warranty_1: editorRefWarrantyColumn1.current.getContent(),
             quotation_warranty_2: editorRefWarrantyColumn2.current.getContent(),
+            quotation_way_to_pay: editorMethodPayment.current.getContent(),
             products
         }
         try {
@@ -217,6 +221,7 @@ function quotationNew({ dataUser, dataModules, dataRoles }) {
             editorRefObservation.current.setContent(editorDetail.quotation_observations);
             editorRefWarrantyColumn1.current.setContent(editorDetail.quotation_warranty_1);
             editorRefWarrantyColumn2.current.setContent(editorDetail.quotation_warranty_2);
+            editorMethodPayment.current.setContent(editorDetail.quotation_method_payment);
             window.open(`/intranet/quotation/view/${resp.data.id}?fileName=${resp.data.fileName}`, '_blank');
         } catch (error) {
             console.error(error);
@@ -260,6 +265,7 @@ function quotationNew({ dataUser, dataModules, dataRoles }) {
             quotation_observations: editorRefObservation.current.getContent(),
             quotation_warranty_1: editorRefWarrantyColumn1.current.getContent(),
             quotation_warranty_2: editorRefWarrantyColumn2.current.getContent(),
+            quotation_way_to_pay: editorMethodPayment.current.getContent(),
             products
         }, {
             responseType: 'blob',
@@ -299,16 +305,14 @@ function quotationNew({ dataUser, dataModules, dataRoles }) {
                         <div className="col-span-full md:col-span-4">
                             <InputPrimary label="Tipo cambio" type='number' inputRequired={form.quotation_type_money == 'USD' ? 'required' : ''} step="0.01" min="0" name="quotation_type_change" value={form.quotation_type_change || ''} onChange={handleChangeForm} />
                         </div>
-                        <div className="col-span-full md:col-span-4">
-                            <InputPrimary label="Forma de pago" type='text' inputRequired='required' name="quotation_way_to_pay" value={form.quotation_way_to_pay || ''} onChange={handleChangeForm} />
-                        </div>
+                        
                     </div>
                     <div className='w-full p-6 mb-4 bg-white rounded-md shadow grid grid-cols-12 gap-x-3 gap-y-0'>
                         <div className="col-span-full">
                             <SeccionForm title="Datos del cliente" />
                         </div>
                         <div className="col-span-full md:col-span-6 text-placeholder">
-                            <label htmlFor="quotation_customer" className="text-sm mb-1 block dark:text-white">Cliente <span className="text-red-500 font-bold pl-1">*</span></label>
+                            <Label text='Cliente' htmlFor='quotation_customer' required/>
                             <Select instanceId='quotation_customer' placeholder="Seleccione un cliente" name='quotation_customer' options={customers} onChange={handleContact} menuPosition='fixed' />
                         </div>
                         <div className="col-span-full md:col-span-6">
@@ -350,6 +354,9 @@ function quotationNew({ dataUser, dataModules, dataRoles }) {
                         </div>
                         <div className="col-span-full mb-2">
                             <EditorText label="Observaciones" initialValue={form.quotation_observations} id="quotation_observations" editorRef={editorRefObservation} />
+                        </div>
+                        <div className="col-span-full mb-2">
+                            <EditorText label="Forma de pago" initialValue={form.quotation_method_payment} id="quotation_method_payment" editorRef={editorMethodPayment} />
                         </div>
                         <div className="col-span-full mb-2">
                             <EditorText label="Condiciones" initialValue={form.quotation_conditions} id="quotation_conditions" editorRef={editorRefCondition} />
