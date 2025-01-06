@@ -106,7 +106,6 @@ function RawMaterial({ dataModules, dataUser, dataRoles }) {
       console.error(error);
     }
   };
-  const viewHistory = (idProduct) => {};
   const deleteHistory = async (idHistory) => {
     const question = await sweetAlert({title : "Mensaje", text: "¿Deseas eliminar los registro de la materia prima de este producto?", icon : "question",showCancelButton:true});
     if(!question.isConfirmed){
@@ -257,7 +256,6 @@ function RawMaterial({ dataModules, dataUser, dataRoles }) {
           <TableRawMaterial
             products={products}
             addHistory={addHistory}
-            viewHistory={viewHistory}
             deleteHistory={deleteHistory}
           />
           <PaginationTable

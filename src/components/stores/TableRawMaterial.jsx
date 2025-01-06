@@ -3,8 +3,9 @@ import TableIntranet from "../TableIntranet";
 import { parseMoney } from "@/helpers/utilities";
 import { ButtonDangerSm, ButtonPrimarySm, ButtonSecondarySm } from "../Buttons";
 import { EyeIcon, PlusIcon, TrashIcon } from "@heroicons/react/24/solid";
+import Link from "next/link";
 
-function TableRawMaterial({ products, addHistory, viewHistory, deleteHistory }) {
+function TableRawMaterial({ products, addHistory, deleteHistory }) {
   const columns = [
     "Código",
     "Producto",
@@ -40,11 +41,20 @@ function TableRawMaterial({ products, addHistory, viewHistory, deleteHistory }) 
                   onClick={(e) => addHistory(product.product_id)}
                   icon={<PlusIcon className="w-4 h-4" />}
                 />
-                <ButtonSecondarySm
-                  text="Historial"
-                  onClick={(e) => viewHistory(product.id)}
-                  icon={<EyeIcon className="w-4 h-4" />}
-                />
+                <Link
+                  className="rounded-md relative overflow-hidden inline-flex group items-center justify-center px-2 py-1.5 cursor-pointer border-b-4 border-l-2 hover:bg-blue-600 font-semibold transition-all ease-in-out text-xs shadow-lg bg-gradient-to-tr bg-blue-500 text-white"
+                  href={{
+                    pathname: `/intranet/raw-material-history`,
+                    query: {
+                      raw_material: product.id
+                    }
+                  }}
+                >
+                  <div className="flex justify-center items-center gap-0.5">
+                    <EyeIcon className="w-4 h-4" />
+                    <span className="relative">Historial</span>
+                  </div>
+                </Link>
                 <ButtonDangerSm
                   text="Eliminar"
                   onClick={(e) => deleteHistory(product.id)}

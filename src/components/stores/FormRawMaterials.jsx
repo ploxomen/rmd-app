@@ -8,18 +8,28 @@ import { optionsUnitsMeasurements } from "@/helpers/listUnitsMeasurements";
 
 const initialDataForm = {
   product_id: null,
+  history_id: null,
   material_hist_bill: "",
   material_hist_total_buy: "",
   material_hist_guide: "",
   material_hist_amount: "",
   material_hist_price_buy: "",
+  material_hist_name_product: null,
   material_hist_igv: true,
   material_hist_money: "PEN",
-  material_hist_unit_measurement: '',
+  material_hist_unit_measurement: "",
   material_hist_total_buy: "",
 };
 
-function FormRawMaterials({ statusModal, listProduct, handleCloseModal, handleValidProduct, handleSaveHistory, productEdit}) {
+function FormRawMaterials({
+  statusModal,
+  listProduct,
+  handleCloseModal,
+  handleValidProduct,
+  handleSaveHistory,
+  productEdit,
+  elemetHistory = false,
+}) {
   const [form, setForm] = useState(initialDataForm);
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -32,12 +42,22 @@ function FormRawMaterials({ statusModal, listProduct, handleCloseModal, handleVa
     });
   };
   useEffect(() => {
-    setForm(Object.keys(productEdit).length ? {
-        ...form,
-        product_id: productEdit.id,
-        material_hist_unit_measurement: productEdit.product_unit_measurement||''
-    } : initialDataForm)
-  },[productEdit])
+    if (elemetHistory) {
+      return setForm(
+        Object.keys(productEdit).length ? productEdit : initialDataForm
+      );
+    }
+    setForm(
+      Object.keys(productEdit).length
+        ? {
+            ...form,
+            product_id: productEdit.id,
+            material_hist_unit_measurement:
+              productEdit.product_unit_measurement || "",
+          }
+        : initialDataForm
+    );
+  }, [productEdit]);
   const hanbleSendModal = () => {
     const formProduct = document.querySelector("#form-product-submit");
     formProduct.click();
@@ -46,7 +66,7 @@ function FormRawMaterials({ statusModal, listProduct, handleCloseModal, handleVa
     <Modal
       status={statusModal}
       maxWidth="max-w-[750px]"
-      title={form.id ? "Editar almacen" : "Nuevo almacen"}
+      title={elemetHistory ? "Editar historial" : "Agregar historial"}
       onSave={hanbleSendModal}
       handleCloseModal={handleCloseModal}
     >
@@ -61,21 +81,21 @@ function FormRawMaterials({ statusModal, listProduct, handleCloseModal, handleVa
             inputRequired="required"
             name="material_hist_bill"
             value={form.material_hist_bill}
-            onChange={ (e) => {
-                if(Object.keys(productEdit).length){
-                    setForm({
-                        ...form,
-                        material_hist_bill: e.target.value,
-                    })
-                }else{
-                    setForm({
-                        ...form,
-                        material_hist_bill: e.target.value,
-                        product_id: null,
-                        material_hist_unit_measurement:""
-                    })
-                }
-                handleValidProduct(e.target.value)
+            onChange={(e) => {
+              if (Object.keys(productEdit).length) {
+                setForm({
+                  ...form,
+                  material_hist_bill: e.target.value,
+                });
+              } else {
+                setForm({
+                  ...form,
+                  material_hist_bill: e.target.value,
+                  product_id: null,
+                  material_hist_unit_measurement: "",
+                });
+              }
+              handleValidProduct(e.target.value);
             }}
           />
         </div>
@@ -89,21 +109,40 @@ function FormRawMaterials({ statusModal, listProduct, handleCloseModal, handleVa
           />
         </div>
         <div className="col-span-full mb-2">
-          <Label text="Productos" htmlFor="product_list" required />
-          <Select
-            instanceId="product_list"
-            isDisabled={false}
-            placeholder="Seleccione un producto"
-            name="product_id"
-            options={listProduct}
-            onChange={(e) => {
-                setForm({ ...form, product_id: e.value,material_hist_unit_measurement: e.product_unit_measurement||''})
-            }}
-            menuPosition="fixed"
-            value={listProduct.filter(
-              (product) => product.value === form.product_id
-            )}
-          />
+          {!elemetHistory ? (
+            <>
+              <Label text="Productos" htmlFor="product_list" required />
+              <Select
+                instanceId="product_list"
+                isDisabled={false}
+                placeholder="Seleccione un producto"
+                name="product_id"
+                options={listProduct}
+                onChange={(e) => {
+                  setForm({
+                    ...form,
+                    product_id: e.value,
+                    material_hist_unit_measurement:
+                      e.product_unit_measurement || "",
+                  });
+                }}
+                menuPosition="fixed"
+                value={listProduct.filter(
+                  (product) => product.value === form.product_id
+                )}
+              />
+            </>
+          ) : (
+            <>
+              <InputPrimary
+                label="Producto"
+                type="text"
+                value={form.material_hist_name_product}
+                inputRequired={true}
+                disabled={true}
+              />
+            </>
+          )}
         </div>
         <div className="col-span-6">
           <InputPrimary
@@ -117,21 +156,21 @@ function FormRawMaterials({ statusModal, listProduct, handleCloseModal, handleVa
           />
         </div>
         <div className="col-span-6">
-          <SelectPrimary
-            label="Unidad medida"
-            inputRequired="required"
-            disabled={true}
-            name="material_hist_unit_measurement"
-            value={form.material_hist_unit_measurement}
-            onChange={handleChangeForm}
-          >
-            <option value="">Ninguno</option>
-            {optionsUnitsMeasurements.map((unit, unitKey) => (
-              <option key={unitKey} value={unit.value}>
-                {unit.label}
-              </option>
-            ))}
-          </SelectPrimary>
+            <SelectPrimary
+              label="Unidad medida"
+              inputRequired="required"
+              disabled={true}
+              name="material_hist_unit_measurement"
+              value={form.material_hist_unit_measurement}
+              onChange={handleChangeForm}
+            >
+              <option value="">Ninguno</option>
+              {optionsUnitsMeasurements.map((unit, unitKey) => (
+                <option key={unitKey} value={unit.value}>
+                  {unit.label}
+                </option>
+              ))}
+            </SelectPrimary>
         </div>
         <div className="col-span-6">
           <SelectPrimary
@@ -154,15 +193,29 @@ function FormRawMaterials({ statusModal, listProduct, handleCloseModal, handleVa
             inputRequired="required"
             name="material_hist_price_buy"
             value={form.material_hist_price_buy}
-            onChange={e => {
-                setForm({ ...form, material_hist_price_buy: e.target.value,material_hist_total_buy: form.material_hist_igv ? (e.target.value * 1.18).toFixed(2) :  e.target.value})
+            onChange={(e) => {
+              setForm({
+                ...form,
+                material_hist_price_buy: e.target.value,
+                material_hist_total_buy: form.material_hist_igv
+                  ? (e.target.value * 1.18).toFixed(2)
+                  : e.target.value,
+              });
             }}
           />
         </div>
         <div className="col-span-full">
           <Toogle
             text="Incluir IGV"
-            onChange={e => setForm({...form, material_hist_igv: e.target.checked, material_hist_total_buy: e.target.checked ? (form.material_hist_price_buy * 1.18).toFixed(2) :  form.material_hist_price_buy})}
+            onChange={(e) =>
+              setForm({
+                ...form,
+                material_hist_igv: e.target.checked,
+                material_hist_total_buy: e.target.checked
+                  ? (form.material_hist_price_buy * 1.18).toFixed(2)
+                  : form.material_hist_price_buy,
+              })
+            }
             checked={form.material_hist_igv}
             name="material_hist_igv"
           />
