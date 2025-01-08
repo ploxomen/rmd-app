@@ -13,8 +13,8 @@ import { useModal } from "@/hooks/useModal";
 import Link from "next/link";
 import { ArrowUturnLeftIcon } from "@heroicons/react/24/solid";
 export async function getServerSideProps(context) {
-  const { query } = context;
-  const userCookie = context.req.cookies;
+  const { query, req  } = context;
+  const userCookie = req.cookies;
   const valid = await verifUser(userCookie, "/raw-material");
   const contentCookieUser = JSON.parse(userCookie.authenticate);
   const headers = {

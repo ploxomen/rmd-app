@@ -5,10 +5,12 @@ import { InputSearch } from "@/components/Inputs";
 import Label from "@/components/Label";
 import LoyoutIntranet from "@/components/LoyoutIntranet";
 import PaginationTable from "@/components/PaginationTable";
+import { SelectPrimary } from "@/components/Selects";
 import FormRawMaterials from "@/components/stores/FormRawMaterials";
 import TableRawMaterial from "@/components/stores/TableRawMaterial";
 import { sweetAlert } from "@/helpers/getAlert";
 import { getCookie } from "@/helpers/getCookie";
+import { listStores } from "@/helpers/listStores";
 import { verifUser } from "@/helpers/verifUser";
 import { useModal } from "@/hooks/useModal";
 import { PlusCircleIcon } from "@heroicons/react/24/solid";
@@ -31,12 +33,17 @@ function RawMaterial({ dataModules, dataUser, dataRoles }) {
     current: 1,
     search: "",
     reload: false,
+    label: ""
   });
   const closeModal = () => {
-    setProductsForm(productsForm.map(proForm => {return {...proForm, isDisabled: false} }));
+    setProductsForm(
+      productsForm.map((proForm) => {
+        return { ...proForm, isDisabled: false };
+      })
+    );
     setEditProduct({});
     handleCloseModal();
-  }
+  };
   const [pagination, setPagination] = useState({
     quantityRowData,
     totalPages: 0,
@@ -48,19 +55,23 @@ function RawMaterial({ dataModules, dataUser, dataRoles }) {
         return route.replace(resp.data.redirect);
       }
       sweetAlert({
-          title: "Mensaje",
-          text: resp.data.message,
-          icon: resp.data.error ? "error" : "success",
+        title: "Mensaje",
+        text: resp.data.message,
+        icon: resp.data.error ? "error" : "success",
+      });
+      if (!resp.data.error) {
+        handleCloseModal();
+        setEditProduct({});
+        setProductsForm(
+          productsForm.map((proForm) => {
+            return { ...proForm, isDisabled: false };
+          })
+        );
+        setDataChange({
+          ...dataChange,
+          reload: !dataChange.reload,
         });
-        if(!resp.data.error){
-            handleCloseModal();
-            setEditProduct({});
-            setProductsForm(productsForm.map(proForm => {return {...proForm, isDisabled: false} }));
-            setDataChange({
-                ...dataChange,
-                reload: !dataChange.reload,
-            });
-        }
+      }
     } catch (error) {
       sweetAlert({
         title: "Error",
@@ -71,9 +82,13 @@ function RawMaterial({ dataModules, dataUser, dataRoles }) {
     }
   };
   const handleValidProduct = async (codeBill) => {
-    if(!codeBill){
-        setProductsForm(productsForm.map(proForm => {return {...proForm, isDisabled: false} }));
-        return false;
+    if (!codeBill) {
+      setProductsForm(
+        productsForm.map((proForm) => {
+          return { ...proForm, isDisabled: false };
+        })
+      );
+      return false;
     }
     try {
       const resp = await apiAxios.get(
@@ -107,26 +122,44 @@ function RawMaterial({ dataModules, dataUser, dataRoles }) {
     }
   };
   const deleteHistory = async (idHistory) => {
-    const question = await sweetAlert({title : "Mensaje", text: "¿Deseas eliminar los registro de la materia prima de este producto?", icon : "question",showCancelButton:true});
-    if(!question.isConfirmed){
-      return
+    const question = await sweetAlert({
+      title: "Mensaje",
+      text: "¿Deseas eliminar los registro de la materia prima de este producto?",
+      icon: "question",
+      showCancelButton: true,
+    });
+    if (!question.isConfirmed) {
+      return;
     }
     try {
-        const resp = await apiAxios.delete(`/raw-material/${idHistory}`,{headers});
-        if(resp.data.redirect !== null){
-            return route.replace(resp.data.redirect);
-        }
-        if(resp.data.error){
-          return sweetAlert({title : "Alerta", text: resp.data.message, icon : "warning"});
-        }
-        setDataChange({
-            ...dataChange,
-            reload:!dataChange.reload
-        })
-        sweetAlert({title : "Exitoso", text: resp.data.message, icon : "success"});
+      const resp = await apiAxios.delete(`/raw-material/${idHistory}`, {
+        headers,
+      });
+      if (resp.data.redirect !== null) {
+        return route.replace(resp.data.redirect);
+      }
+      if (resp.data.error) {
+        return sweetAlert({
+          title: "Alerta",
+          text: resp.data.message,
+          icon: "warning",
+        });
+      }
+      setDataChange({
+        ...dataChange,
+        reload: !dataChange.reload,
+      });
+      sweetAlert({
+        title: "Exitoso",
+        text: resp.data.message,
+        icon: "success",
+      });
     } catch (error) {
-        sweetAlert({title : "Error", text:'Error al eliminar el registro', icon : "error"});
-        
+      sweetAlert({
+        title: "Error",
+        text: "Error al eliminar el registro",
+        icon: "error",
+      });
     }
   };
   const addHistory = async (idProduct) => {
@@ -173,6 +206,7 @@ function RawMaterial({ dataModules, dataUser, dataRoles }) {
             show: pagination.quantityRowData,
             page: dataChange.current,
             search: dataChange.search,
+            subStore: dataChange.label
           },
         });
         if (resp.data.redirect !== null) {
@@ -199,9 +233,8 @@ function RawMaterial({ dataModules, dataUser, dataRoles }) {
       try {
         const all = await axios.all([
           apiAxios.get("/quotation-extra/products", { headers }),
-          apiAxios.get("/product-store", { headers }),
         ]);
-        setFilterStores(all[1].data.data);
+        setFilterStores(listStores.flatMap((obj) => obj.options));
         setProductsForm(all[0].data.data);
       } catch (error) {
         console.error(error);
@@ -230,14 +263,21 @@ function RawMaterial({ dataModules, dataUser, dataRoles }) {
         <div className="w-full p-6 bg-white rounded-md shadow overflow-x-auto">
           <div className="flex w-full items-center justify-between gap-2 flex-wrap mb-2">
             <div style={{ width: "350px" }}>
-              <Label text="Almacen" htmlFor="filter_stores" />
-              <Select
-                instanceId="filter_stores"
-                placeholder="Seleccione una opción"
-                name="product_substore"
-                options={filterStores}
-                menuPosition="fixed"
-              />
+              <SelectPrimary
+                name="customer"
+                label="Etiquetas"
+                value={dataChange.label}
+                onChange={(e) =>
+                  setDataChange({ ...dataChange, label: e.target.value })
+                }
+              >
+                <option value="">Todos</option>
+                {filterStores.map((store) => (
+                  <option value={store.value} key={store.value}>
+                    {store.label}
+                  </option>
+                ))}
+              </SelectPrimary>
             </div>
             <div style={{ width: "300px" }}>
               <InputSearch

@@ -9,7 +9,8 @@ function TableRawMaterial({ products, addHistory, deleteHistory }) {
   const columns = [
     "Código",
     "Producto",
-    "Sub almacen",
+    "Almacen",
+    "Etiqueta",
     "Stock",
     "Costo Compra",
     "Acciones",
@@ -29,7 +30,8 @@ function TableRawMaterial({ products, addHistory, deleteHistory }) {
               {product.id.toString().padStart(3, "0")}
             </td>
             <td className="py-2 px-4">{product.product_name}</td>
-            <td className="py-2 px-4">{product.store_sub_name}</td>
+            <td className="py-2 px-4">{product.product_store}</td>
+            <td className="py-2 px-4">{product.product_label}</td>
             <td className="py-2 px-4">{product.raw_material_stock}</td>
             <td className="py-2 px-4">
               {parseMoney(product.raw_material_price_buy, product.raw_material_money)}

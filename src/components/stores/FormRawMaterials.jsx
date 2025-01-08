@@ -95,8 +95,8 @@ function FormRawMaterials({
                   material_hist_unit_measurement: "",
                 });
               }
-              handleValidProduct(e.target.value);
             }}
+            onBlur={e => handleValidProduct(e.target.value)}
           />
         </div>
         <div className="col-span-6">

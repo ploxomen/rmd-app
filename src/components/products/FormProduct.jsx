@@ -9,6 +9,7 @@ import EditorText from "../EditorText";
 import Select from "react-select";
 import { optionsUnitsMeasurements } from "@/helpers/listUnitsMeasurements";
 import Label from "../Label";
+import { listStores } from "@/helpers/listStores";
 const dataForm = {
   product_name: "",
   product_description: "",
@@ -18,7 +19,8 @@ const dataForm = {
   product_distributor: "",
   product_service: false,
   sub_categorie: null,
-  product_substore: '',
+  product_store: "",
+  product_label: "",
   product_img: null,
   product_unit_measurement: "TU",
   product_code: null,
@@ -29,15 +31,16 @@ function FormProduct({
   handleSave,
   productEdit,
   categories,
-  stores
 }) {
   const [form, setForm] = useState(dataForm);
   const [deleteImg, setDeleteImg] = useState(false);
   const editorDescription = useRef(null);
+  const [labels,setLabels] = useState([]);
   const edit = Object.keys(productEdit).length;
   useEffect(() => {
-    setForm( edit ? productEdit : dataForm);
+    setForm(edit ? productEdit : dataForm);
     setDeleteImg(false);
+    handleStore(productEdit.product_store);
   }, [productEdit]);
   const hanbleSendModal = () => {
     const formProduct = document.querySelector("#form-product-submit");
@@ -102,6 +105,16 @@ function FormProduct({
       reader.readAsDataURL(file);
     }
   };
+  const handleStore = (value) =>{
+    if(!value){
+      return setLabels([]);
+    }
+    listStores.forEach(store => {
+      if(store.value === value){
+        return setLabels(store.options)
+      }
+    });
+  }
   const handleDeleteImg = () => {
     setForm({
       ...form,
@@ -209,16 +222,38 @@ function FormProduct({
           </>
         )}
         <div className="col-span-6">
-          <Label text="Almacen" htmlFor="product_substore_id" required />
-          <Select
-            instanceId="product_substore_id"
-            placeholder="Seleccione una opción"
-            name="product_substore"
-            options={stores}
-            value={stores.flatMap(obj => obj.options).filter(option => option.value === form.product_substore)}
-            onChange={(e) => setForm({ ...form, product_substore: e.value })}
-            menuPosition="fixed"
-          />
+          <SelectPrimary
+            label="Tipos de almacén"
+            inputRequired="required"
+            name="product_store"
+            value={form.product_store || ""}
+            onChange={ e => {
+              handleStore(e.target.value);
+              handleChangeForm(e);
+            }}
+          >
+            <option value="">Seleccione una opción</option>
+            {listStores.map((store, keyStore) => (
+              <option value={store.value} key={keyStore}>
+                {store.label}
+              </option>
+            ))}
+          </SelectPrimary>
+        </div>
+        <div className="col-span-6">
+          <SelectPrimary
+            label="Etiqueta"
+            name="product_label"
+            value={form.product_label || ""}
+            onChange={handleChangeForm}
+          >
+            <option value="">Seleccione una opción</option>
+            {labels.map((label, keyLabel) => (
+              <option value={label.value} key={keyLabel}>
+                {label.label}
+              </option>
+            ))}
+          </SelectPrimary>
         </div>
         <div className="col-span-6 mb-2">
           <Label text="Categoria" htmlFor="product_categorie_id" required />
@@ -227,7 +262,9 @@ function FormProduct({
             placeholder="Seleccione una opción"
             name="product_categorie"
             options={categories}
-            value={categories.flatMap(obj => obj.options).filter( option => option.value === form.sub_categorie)}
+            value={categories
+              .flatMap((obj) => obj.options)
+              .filter((option) => option.value === form.sub_categorie)}
             onChange={(e) => setForm({ ...form, sub_categorie: e.value })}
             menuPosition="fixed"
           />
@@ -248,8 +285,6 @@ function FormProduct({
             ))}
           </SelectPrimary>
         </div>
-        
-
         <div className="col-span-full">
           <div className="flex gap-2 items-center">
             <input
