@@ -25,23 +25,23 @@ function TableRawMaterial({ products, addHistory, deleteHistory }) {
         </tr>
       ) : (
         products.map((product) => (
-          <tr className="bg-white dark:bg-gray-800" key={product.id}>
-            <td className="py-2 px-4 text-center">
+          <tr className="bg-white dark:bg-gray-800 text-xs" key={product.id}>
+            <td className="p-1 text-center">
               {product.id.toString().padStart(3, "0")}
             </td>
-            <td className="py-2 px-4">{product.product_name}</td>
-            <td className="py-2 px-4">{product.product_store}</td>
-            <td className="py-2 px-4">{product.product_label}</td>
-            <td className="py-2 px-4">{product.raw_material_stock}</td>
-            <td className="py-2 px-4">
+            <td className="p-1 text-center">{product.product_name}</td>
+            <td className="p-1 text-center">{product.product_store}</td>
+            <td className="p-1 text-center">{product.product_label}</td>
+            <td className="p-1 text-center">{product.raw_material_stock}</td>
+            <td className="p-1">
               {parseMoney(product.raw_material_price_buy, product.raw_material_money)}
             </td>
-            <td className="py-2 px-4">
+            <td className="p-1">
               <div className="flex gap-1 flex-wrap justify-center">
                 <ButtonPrimarySm
-                  text="Agregar"
                   onClick={(e) => addHistory(product.product_id)}
                   icon={<PlusIcon className="w-4 h-4" />}
+                  title='Agregar historial'
                 />
                 <Link
                   className="rounded-md relative overflow-hidden inline-flex group items-center justify-center px-2 py-1.5 cursor-pointer border-b-4 border-l-2 hover:bg-blue-600 font-semibold transition-all ease-in-out text-xs shadow-lg bg-gradient-to-tr bg-blue-500 text-white"
@@ -51,16 +51,14 @@ function TableRawMaterial({ products, addHistory, deleteHistory }) {
                       raw_material: product.id
                     }
                   }}
+                  title='Ver historial'
                 >
-                  <div className="flex justify-center items-center gap-0.5">
-                    <EyeIcon className="w-4 h-4" />
-                    <span className="relative">Historial</span>
-                  </div>
+                  <EyeIcon className="w-4 h-4" />
                 </Link>
                 <ButtonDangerSm
-                  text="Eliminar"
                   onClick={(e) => deleteHistory(product.id)}
                   icon={<TrashIcon className="w-4 h-4" />}
+                  title='Eliminar del almacen'
                 />
               </div>
             </td>

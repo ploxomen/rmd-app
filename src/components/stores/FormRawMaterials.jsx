@@ -189,7 +189,7 @@ function FormRawMaterials({
             label="Precio compra"
             type="number"
             min="1"
-            steep="0.01"
+            step="0.01"
             inputRequired="required"
             name="material_hist_price_buy"
             value={form.material_hist_price_buy}

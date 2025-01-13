@@ -26,42 +26,42 @@ function TableHistoryMaterial({ histories, deleteHistory, viewHistory}) {
         </tr>
       ) : (
         histories.map((history) => (
-          <tr className="bg-white dark:bg-gray-800" key={history.id}>
-            <td className="py-2 px-4 text-center">
+          <tr className="bg-white dark:bg-gray-800 text-xs" key={history.id}>
+            <td className="p-1 text-center">
               {history.id.toString().padStart(3, "0")}
             </td>
-            <td className="py-2 px-4">{history.material_hist_bill}</td>
-            <td className="py-2 px-4">{history.material_hist_guide}</td>
-            <td className="py-2 px-4">{history.material_hist_amount}</td>
-            <td className="py-2 px-4">
+            <td className="p-1 text-center">{history.material_hist_bill}</td>
+            <td className="p-1 text-center">{history.material_hist_guide}</td>
+            <td className="p-1 text-center">{history.material_hist_amount}</td>
+            <td className="p-1 text-center">
               {parseMoney(
                 history.material_hist_price_buy,
                 history.material_hist_money
               )}
             </td>
-            <td className="py-2 px-4">
+            <td className="p-1 text-center">
               {parseMoney(
                 history.material_price_igv,
                 history.material_hist_money
               )}
             </td>
-            <td className="py-2 px-4">
+            <td className="p-1 text-center">
               {parseMoney(
                 history.material_hist_total_buy,
                 history.material_hist_money
               )}
             </td>
-            <td className="py-2 px-4">{history.user_name}</td>
-            <td className="py-2 px-4">
+            <td className="p-1 text-center">{history.user_name}</td>
+            <td className="p-1">
               <div className="flex gap-1 flex-wrap justify-center">
                 <ButtonPrimarySm
-                  text="Editar"
                   onClick={(e) => viewHistory(history.id)}
                   icon={<PencilIcon className="w-4 h-4" />}
+                  title='Editar historial'
                 />
                 <ButtonDangerSm
-                  text="Eliminar"
                   onClick={(e) => deleteHistory(history.id)}
+                  title='Eliminar historial'
                   icon={<TrashIcon className="w-4 h-4" />}
                 />
               </div>

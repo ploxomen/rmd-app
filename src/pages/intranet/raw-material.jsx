@@ -286,13 +286,6 @@ function RawMaterial({ dataModules, dataUser, dataRoles }) {
               />
             </div>
           </div>
-          <div className="block lg:flex lg:justify-end mb-2">
-            <ButtonDanger
-              text="Agregar"
-              icon={<PlusCircleIcon className="w-5 h-5" />}
-              onClick={handleOpenModal}
-            />
-          </div>
           <TableRawMaterial
             products={products}
             addHistory={addHistory}
