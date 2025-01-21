@@ -27,7 +27,7 @@ function TableRawMaterial({ products, addHistory, deleteHistory }) {
         products.map((product) => (
           <tr className="bg-white dark:bg-gray-800 text-xs" key={product.id}>
             <td className="p-1 text-center">
-              {product.id.toString().padStart(3, "0")}
+              {product.product_code.toString().padStart(3, "0")}
             </td>
             <td className="p-1 text-center">{product.product_name}</td>
             <td className="p-1 text-center">{product.product_store}</td>
