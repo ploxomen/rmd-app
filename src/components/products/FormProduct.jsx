@@ -246,6 +246,7 @@ function FormProduct({
             name="product_label"
             value={form.product_label || ""}
             onChange={handleChangeForm}
+            inputRequired={labels.length ? true : false}
           >
             <option value="">Seleccione una opción</option>
             {labels.map((label, keyLabel) => (
