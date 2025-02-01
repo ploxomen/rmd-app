@@ -38,11 +38,11 @@ function TableAllQuotation({quotations,status,getQuotation,deleteQuotation,downl
                                             fileName:`FP_${quotation.quotation_code.replace('/','_')}_${quotation.customer_name.replace(/ /g,'_').toUpperCase()}.pdf`
                                         }
                                     }} target='_blank'>
-                                        <ButtonSecondarySm text="PDF" icon={<EyeIcon className='w-4 h-4'/>}/>
+                                        <ButtonSecondarySm title="PDF" icon={<EyeIcon className='w-4 h-4'/>}/>
                                     </Link>
-                                    <ButtonDangerSm text="PDF" onClick={e=> downloadPdf(quotation.id,`FP_${quotation.quotation_code.replace('/','_')}_${quotation.customer_name.replace(/ /g,'_').toUpperCase()}.pdf`)} icon={<ArrowDownTrayIcon className='w-4 h-4'/>}/>
-                                    <ButtonPrimarySm text="Editar" onClick={e=> getQuotation(quotation.id)} icon={<PencilIcon className='w-4 h-4'/>}/>
-                                    <ButtonDangerSm text="Anular" onClick={e => deleteQuotation(quotation.id)} icon={<TrashIcon className='w-4 h-4'/>}/>
+                                    <ButtonDangerSm title="PDF" onClick={e=> downloadPdf(quotation.id,`FP_${quotation.quotation_code.replace('/','_')}_${quotation.customer_name.replace(/ /g,'_').toUpperCase()}.pdf`)} icon={<ArrowDownTrayIcon className='w-4 h-4'/>}/>
+                                    <ButtonPrimarySm title="Editar" onClick={e=> getQuotation(quotation.id)} icon={<PencilIcon className='w-4 h-4'/>}/>
+                                    <ButtonDangerSm title="Anular" onClick={e => deleteQuotation(quotation.id)} icon={<TrashIcon className='w-4 h-4'/>}/>
                                 </div> : <strong className='text-red-500 font-bold block text-center'>Sin acciones</strong>
                             }
                         </td>

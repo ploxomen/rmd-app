@@ -27,7 +27,7 @@ const initialStateValueFilters = {
     search:"",
     reload:false
 }
-const quantityRowData = 25;
+const quantityRowData = 20;
 export async function getServerSideProps(context) {
     const userCookie = context.req.cookies;
     return await verifUser(userCookie,'/order/all');
