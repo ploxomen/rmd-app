@@ -231,11 +231,13 @@ function All({dataUser,dataModules,dataRoles}) {
                 </SelectPrimary>
               </div>
           </div>
-          <div className='w-full p-6 bg-white rounded-md shadow overflow-x-auto'>
+          <div className='w-full p-6 bg-white rounded-md shadow'>
               <div style={{width:"300px"}} className='ml-auto mb-4'>
                 <InputSearch placeholder='¿Que estas buscando?' onInput={e => handleChangeFilter('search',e.target.value)}/>
               </div>
-              <TableAllQuotation quotations={state.quotations} deleteQuotation={deleteQuotation} getQuotation={getQuotation} status={filters.status} downloadPdf={downloadPdf}/>
+              <div className='overflow-x-auto'>
+                <TableAllQuotation quotations={state.quotations} deleteQuotation={deleteQuotation} getQuotation={getQuotation} status={filters.status} downloadPdf={downloadPdf}/>
+              </div>
               <PaginationTable currentPage={dataChange.current} quantityRow={pagination.quantityRowData} totalData={pagination.totalPages} handleChangePage={handleChangePage}/>
           </div>
       </LoyoutIntranet>

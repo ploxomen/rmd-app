@@ -70,21 +70,21 @@ function TableOrderAll({ orders, deleteOrder, getOrder, status }) {
             {
                 !orders.length ? <tr className="bg-white dark:bg-gray-800"><td colSpan="100%" className='text-center font-bold'>No se encontraron pedidos</td></tr> : orders.map(order => (
                     <tr className="bg-white dark:bg-gray-800" key={order.id}>
-                        <td className="py-2 px-4 text-center">{order.order_code}</td>
-                        <td className="py-2 px-4 text-center">{order.date_created}</td>
-                        <td className="py-2 px-4 text-center">{order.date_issue}</td>
-                        <td className="py-2 px-4">{order.customer_name}</td>
-                        <td className="py-2 px-4 text-center">{order.sub_categorie_name}</td>
-                        <td className="py-2 px-4">{parseMoney(order.order_mount, order.order_money)}</td>
-                        <td className="py-2 px-4">{parseMoney(order.order_mount_igv, order.order_money)}</td>
-                        <td className="py-2 px-4">{parseMoney(order.order_total, order.order_money)}</td>
-                        <td className="py-2 px-4">{order.responsable_usuario}</td>
-                        <td className="py-2 px-4">{status[order.order_status].element}</td>
-                        <td className="py-2 px-4 text-center">
+                        <td className="p-1 text-center">{order.order_code}</td>
+                        <td className="p-1 text-center">{order.date_created}</td>
+                        <td className="p-1 text-center">{order.date_issue}</td>
+                        <td className="p-1">{order.customer_name}</td>
+                        <td className="p-1 text-center">{order.sub_categorie_name}</td>
+                        <td className="p-1">{parseMoney(order.order_mount, order.order_money)}</td>
+                        <td className="p-1">{parseMoney(order.order_mount_igv, order.order_money)}</td>
+                        <td className="p-1">{parseMoney(order.order_total, order.order_money)}</td>
+                        <td className="p-1">{order.responsable_usuario}</td>
+                        <td className="p-1">{status[order.order_status].element}</td>
+                        <td className="p-1 text-center">
                             {
                                 order.order_status > 0 ? <div className='flex gap-1 flex-wrap justify-center'>
-                                    <ButtonPrimarySm text="Editar" onClick={e => getOrder(order.id)} icon={<PencilIcon className='w-4 h-4' />} />
-                                    <ButtonDangerSm text="PDF" icon={<ArrowDownTrayIcon className='w-4 h-4' />} onClick={e => downloadPdf(order.id, `${order.order_code}_${order.customer_name.replace(/ /g, '_').toUpperCase()}.pdf`)} />
+                                    <ButtonPrimarySm title="Editar" onClick={e => getOrder(order.id)} icon={<PencilIcon className='w-4 h-4' />} />
+                                    <ButtonDangerSm title="Descargar PDF" icon={<ArrowDownTrayIcon className='w-4 h-4' />} onClick={e => downloadPdf(order.id, `${order.order_code}_${order.customer_name.replace(/ /g, '_').toUpperCase()}.pdf`)} />
                                     <Dropdown Button={
                                         <ButtonLight icon={<EllipsisVerticalIcon className='w-4 h-4' />} />
                                     } options={[

@@ -1,7 +1,7 @@
 import '@/app/globals.css';
 import apiAxios from '@/axios';
 import BanerModule from '@/components/BanerModule'
-import { InputSearch } from '@/components/Inputs';
+import { InputPrimary, InputSearch } from '@/components/Inputs';
 import LoyoutIntranet from '@/components/LoyoutIntranet'
 import PaginationTable from '@/components/PaginationTable';
 import { SelectPrimary } from '@/components/Selects';
@@ -10,19 +10,24 @@ import TableOrderAll from '@/components/orders/TableOrderAll';
 import { sweetAlert } from '@/helpers/getAlert';
 import { getCookie } from '@/helpers/getCookie';
 import { statusOrders } from '@/helpers/statusQuotations';
+import { parseMoney } from '@/helpers/utilities';
 import { verifUser } from '@/helpers/verifUser';
 import { useModal } from '@/hooks/useModal';
 import { TYPES_ORDERS, ordersInitialReducer, reducerOrders } from '@/reducers/crudOrders';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useReducer, useState } from 'react'
+let monthBefore = new Date();
+monthBefore.setMonth(new Date().getMonth() - 1);
 const initialStateFilters = {
     customers:[],
-    status:statusOrders
+    status:statusOrders,
 }
 const initialStateValueFilters = {
     customer:"",
     status:"",
+    date_ini: new Date().toISOString().split("T")[0],
+    date_fin : monthBefore.toISOString().split("T")[0],
     current:1,
     search:"",
     reload:false
@@ -32,8 +37,14 @@ export async function getServerSideProps(context) {
     const userCookie = context.req.cookies;
     return await verifUser(userCookie,'/order/all');
 }
+const amountsInitial = {
+    total: 0,
+    igv: 0,
+    amount: 0
+}
 function OrderAll({dataUser,dataModules,dataRoles}) {
     const [filters,setFilters] = useState(initialStateFilters);
+    const [amounts,setAmounts] = useState(amountsInitial);
     const [state,dispatch] = useReducer(reducerOrders,ordersInitialReducer);
     const [dataChange,setDataChange] = useState(initialStateValueFilters);
     const [pagination,setPagination] = useState({quantityRowData,totalPages:0});
@@ -68,9 +79,7 @@ function OrderAll({dataUser,dataModules,dataRoles}) {
                 params:{
                   show:pagination.quantityRowData,
                   page:dataChange.current,
-                  search:dataChange.search,
-                  customer:dataChange.customer,
-                  status:dataChange.status
+                  ...dataChange
                 }
               });
               if(resp.data.redirect !== null){
@@ -80,6 +89,8 @@ function OrderAll({dataUser,dataModules,dataRoles}) {
                 ...pagination,
                 totalPages:resp.data.totalOrders
               })
+              const {igv,amount,total} = resp.data
+              setAmounts({igv,amount,total});
               dispatch({
                   type:TYPES_ORDERS.ALL_ORDERS,
                   payload:resp.data.data
@@ -192,12 +203,34 @@ function OrderAll({dataUser,dataModules,dataRoles}) {
                         }
                     </SelectPrimary>
                 </div>
+                <div className="col-span-full md:col-span-6 lg:col-span-3">
+                    <InputPrimary label='Fecha Inicio' type='date' inputRequired='required' name='date_ini' value={dataChange.date_ini} onChange={handleChangeFilter} />
+                </div>
+                <div className="col-span-full md:col-span-6 lg:col-span-3">
+                    <InputPrimary label='Fecha Fin' type='date' inputRequired='required' name='date_fin' value={dataChange.date_fin} onChange={handleChangeFilter} />
+                </div>
             </div>
-            <div className='w-full p-6 bg-white rounded-md shadow overflow-x-auto overflow-y-hidden'>
+            <div className='w-full p-6 bg-white rounded-md shadow'>
+                <div className='flex gap-3 mb-4 flex-wrap justify-center'>
+                    <div className='px-4 py-2 border-t-4 border-indigo-300 text-center bg-slate-50'>
+                        <span className='block text-xs text-slate-500'>Subtotal</span>
+                        <span className='font-semibold text-sm text-slate-600'>{parseMoney(amounts.amount,'PEN')}</span>
+                    </div>
+                    <div className='px-4 py-2 border-t-4 border-red-300 text-center bg-slate-50'>
+                        <span className='block text-xs text-slate-500'>I.G.V</span>
+                        <span className='font-semibold text-sm text-slate-600'>{parseMoney(amounts.igv,'PEN')}</span>
+                    </div>
+                    <div className='px-4 py-2 border-t-4 border-blue-300 text-center bg-slate-50'>
+                        <span className='block text-xs text-slate-500'>Total</span>
+                        <span className='font-semibold text-sm text-slate-600'>{parseMoney(amounts.total,'PEN')}</span>
+                    </div>
+                </div>
                 <div style={{width:"300px"}} className='mb-4 ml-auto'>
                     <InputSearch placeholder='¿Que estas buscando?' onInput={searchCustomer}/>
                 </div>
-                <TableOrderAll orders={state.orders} deleteOrder={deleteOrder} getOrder={getOrder} status={filters.status}/>
+                <div className='overflow-x-auto overflow-y-hidden'>
+                    <TableOrderAll orders={state.orders} deleteOrder={deleteOrder} getOrder={getOrder} status={filters.status}/>
+                </div>
                 <PaginationTable currentPage={dataChange.current} quantityRow={pagination.quantityRowData} totalData={pagination.totalPages} handleChangePage={handleChangePage}/>
             </div>
         </LoyoutIntranet>
