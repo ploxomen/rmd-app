@@ -278,11 +278,14 @@ function products({ dataModules, dataUser, dataRoles }) {
               />
             </div>
           </div>
-          <TableProduct
-            products={state.products}
-            getProduct={getProduct}
-            deleteProduct={deleteProduct}
-          />
+          <div className="overflow-x-auto mb-4">
+            <TableProduct
+              products={state.products}
+              getProduct={getProduct}
+              deleteProduct={deleteProduct}
+            />
+          </div>
+
           <PaginationTable
             currentPage={dataChange.current}
             quantityRow={pagination.quantityRowData}

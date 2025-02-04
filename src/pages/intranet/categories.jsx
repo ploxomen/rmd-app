@@ -151,7 +151,9 @@ function categories({dataModules,dataUser,dataRoles}) {
                     <InputSearch placeholder='¿Que estas buscando?' onInput={searchCategories}/>
                 </div>
             </div>
+            <div className="overflow-x-auto mb-4">
             <TableCategorie categories={state.categories} getCategorie={getCategorie} deleteCategorie={deleteCategorie}/>
+            </div>
             <PaginationTable currentPage={dataChange.current} quantityRow={pagination.quantityRowData} totalData={pagination.totalPages} handleChangePage={handleChangePage}/>
         </div>
     </LoyoutIntranet>

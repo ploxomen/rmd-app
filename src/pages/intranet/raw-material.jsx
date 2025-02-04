@@ -1,39 +1,50 @@
 import apiAxios from "@/axios";
 import BanerModule from "@/components/BanerModule";
-import { ButtonDanger } from "@/components/Buttons";
-import { InputSearch } from "@/components/Inputs";
+import { ButtonDanger, ButtonPrimarySm } from "@/components/Buttons";
+import { InputPrimary, InputSearch } from "@/components/Inputs";
 import Label from "@/components/Label";
 import LoyoutIntranet from "@/components/LoyoutIntranet";
 import PaginationTable from "@/components/PaginationTable";
 import { SelectPrimary } from "@/components/Selects";
+import FormMoney from "@/components/stores/FormMoney";
 import FormRawMaterials from "@/components/stores/FormRawMaterials";
 import TableRawMaterial from "@/components/stores/TableRawMaterial";
 import { sweetAlert } from "@/helpers/getAlert";
 import { getCookie } from "@/helpers/getCookie";
 import { listStores } from "@/helpers/listStores";
+import { parseMoney } from "@/helpers/utilities";
 import { verifUser } from "@/helpers/verifUser";
 import { useModal } from "@/hooks/useModal";
-import { PlusCircleIcon } from "@heroicons/react/24/solid";
+import { PencilIcon } from "@heroicons/react/24/solid";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import Select from "react-select";
 export async function getServerSideProps(context) {
   const userCookie = context.req.cookies;
   return await verifUser(userCookie, "/raw-material");
 }
+const initialMoneyChange = {
+  money: 0,
+  attempt: 0,
+};
 const quantityRowData = 25;
 function RawMaterial({ dataModules, dataUser, dataRoles }) {
   const [products, setProducts] = useState([]);
   const [productsForm, setProductsForm] = useState([]);
   const [editProduct, setEditProduct] = useState({});
+  const [moneyChange, setMoneyChange] = useState(initialMoneyChange);
   const [filterStores, setFilterStores] = useState([]);
   const { modal, handleOpenModal, handleCloseModal } = useModal("hidden");
+  const {
+    modal: modalMoney,
+    handleOpenModal: openModalMoney,
+    handleCloseModal: closeModalMoney,
+  } = useModal("hidden");
   const headers = getCookie();
   const [dataChange, setDataChange] = useState({
     current: 1,
     search: "",
     reload: false,
-    label: ""
+    label: "",
   });
   const closeModal = () => {
     setProductsForm(
@@ -124,7 +135,7 @@ function RawMaterial({ dataModules, dataUser, dataRoles }) {
   const deleteHistory = async (idHistory) => {
     const question = await sweetAlert({
       title: "Mensaje",
-      text: "¿Deseas eliminar los registro de la materia prima de este producto?",
+      text: "¿Deseas eliminar el historial de este producto?",
       icon: "question",
       showCancelButton: true,
     });
@@ -206,7 +217,7 @@ function RawMaterial({ dataModules, dataUser, dataRoles }) {
             show: pagination.quantityRowData,
             page: dataChange.current,
             search: dataChange.search,
-            subStore: dataChange.label
+            subStore: dataChange.label,
           },
         });
         if (resp.data.redirect !== null) {
@@ -233,9 +244,17 @@ function RawMaterial({ dataModules, dataUser, dataRoles }) {
       try {
         const all = await axios.all([
           apiAxios.get("/quotation-extra/products", { headers }),
+          apiAxios.get("money/change", { headers }),
         ]);
         setFilterStores(listStores.flatMap((obj) => obj.options));
         setProductsForm(all[0].data.data);
+        if (all[1].data.value === null) {
+          return openModalMoney();
+        }
+        setMoneyChange({
+          attempt: all[1].data.value.change_attempts,
+          money: all[1].data.value.change_soles,
+        });
       } catch (error) {
         console.error(error);
         sweetAlert({
@@ -261,23 +280,44 @@ function RawMaterial({ dataModules, dataUser, dataRoles }) {
           title="Almacén Materia Prima"
         />
         <div className="w-full p-6 bg-white rounded-md shadow overflow-x-auto">
-          <div className="flex w-full items-center justify-between gap-2 flex-wrap mb-2">
-            <div style={{ width: "350px" }}>
-              <SelectPrimary
-                name="customer"
-                label="Etiquetas"
-                value={dataChange.label}
-                onChange={(e) =>
-                  setDataChange({ ...dataChange, label: e.target.value })
-                }
-              >
-                <option value="">Todos</option>
-                {filterStores.map((store) => (
-                  <option value={store.value} key={store.value}>
-                    {store.label}
-                  </option>
-                ))}
-              </SelectPrimary>
+          <div className="flex items-center justify-between gap-2 flex-wrap mb-2">
+            <div className="flex items-center gap-x-4 flex-wrap mb-2">
+              <div style={{ width: "350px" }}>
+                <SelectPrimary
+                  name="customer"
+                  label="Etiquetas"
+                  inputRequired="required"
+                  value={dataChange.label}
+                  onChange={(e) =>
+                    setDataChange({ ...dataChange, label: e.target.value })
+                  }
+                >
+                  <option value="">Todos</option>
+                  {filterStores.map((store) => (
+                    <option value={store.value} key={store.value}>
+                      {store.label}
+                    </option>
+                  ))}
+                </SelectPrimary>
+              </div>
+              <div style={{ width: "200px" }}>
+                <div className="flex gap-3">
+                  <div className="text-sm">
+                    <span className="text-sm block dark:text-white text-placeholder">
+                      Tipo de cambio
+                    </span>
+                    <span className="text-slate-600 font-semibold">
+                      {parseMoney(moneyChange.money, "PEN")}
+                    </span>
+                  </div>
+                  {
+                    moneyChange.attempt !== 2 && <ButtonPrimarySm onClick={openModalMoney} icon={<PencilIcon className="size-4" />} title='Editar tipo de cambio' />
+                  }
+                </div>
+                <small className="text-red-500">
+                  Intentos: {moneyChange.attempt}
+                </small>
+              </div>
             </div>
             <div style={{ width: "300px" }}>
               <InputSearch
@@ -286,7 +326,9 @@ function RawMaterial({ dataModules, dataUser, dataRoles }) {
               />
             </div>
           </div>
+
           <TableRawMaterial
+            money={moneyChange.money}
             products={products}
             addHistory={addHistory}
             deleteHistory={deleteHistory}
@@ -300,12 +342,19 @@ function RawMaterial({ dataModules, dataUser, dataRoles }) {
         </div>
       </LoyoutIntranet>
       <FormRawMaterials
+        valueMoney={moneyChange}
         statusModal={modal}
         listProduct={productsForm}
         handleCloseModal={closeModal}
         handleValidProduct={handleValidProduct}
         handleSaveHistory={handleSaveHistory}
         productEdit={editProduct}
+      />
+      <FormMoney
+        status={modalMoney}
+        valueMoney={moneyChange}
+        changeMoney={setMoneyChange}
+        closeModal={closeModalMoney}
       />
     </>
   );

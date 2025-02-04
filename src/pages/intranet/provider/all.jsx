@@ -6,16 +6,16 @@ import { TYPES_CUSTOMERS, customersIntialState, reducerCustomers } from '@/reduc
 import BanerModule from '@/components/BanerModule';
 import { ButtonPrimary } from '@/components/Buttons';
 import {PlusCircleIcon } from '@heroicons/react/24/solid';
-import TableCustomer from '@/components/customers/TableCustomer';
 import apiAxios from '@/axios';
 import { getCookie } from '@/helpers/getCookie';
 import axios from 'axios';
-import FormCustomer from '@/components/customers/FormCustomer';
 import { useModal } from '@/hooks/useModal';
 import { InputSearch } from '@/components/Inputs';
 import PaginationTable from '@/components/PaginationTable';
 import { useRouter } from 'next/navigation';
 import { sweetAlert } from '@/helpers/getAlert';
+import FormProvider from '@/components/providers/FormProvider';
+import TableProvider from '@/components/providers/TableProvider';
 
 export async function getServerSideProps(context) {
   const userCookie = context.req.cookies;
@@ -58,7 +58,7 @@ function customers({dataModules,dataUser,dataRoles}) {
   useEffect(()=>{
     const getData = async () => {
       try {
-          const resp = await apiAxios.get('/customer',{
+          const resp = await apiAxios.get('/provider',{
             headers,
             params:{
               show:pagination.quantityRowData,
@@ -79,14 +79,14 @@ function customers({dataModules,dataUser,dataRoles}) {
           });
       } catch (error) {
           dispatch({type:TYPES_CUSTOMERS.NO_CUSTOMERS});
-          sweetAlert({title : "Error", text: "Error al obtener los clientes", icon : "error"});
+          sweetAlert({title : "Error", text: "Error al obtener los proveedors", icon : "error"});
       }
     }
     getData();
   },[dataChange])
   const handleSaveCustomer = async (form,contacts) =>{
     try {
-        const resp = !form.id ? await apiAxios.post('/customer',{...form,contacts},{headers}) : await apiAxios.put('/customer/'+form.id,{...form,contacts},{headers});
+        const resp = !form.id ? await apiAxios.post('/provider',{...form,contacts},{headers}) : await apiAxios.put('/provider/'+form.id,{...form,contacts},{headers});
         if(resp.data.redirect !== null){
           return route.replace(resp.data.redirect);
         }
@@ -101,12 +101,12 @@ function customers({dataModules,dataUser,dataRoles}) {
         closeModal();
     } catch (error) {
         console.error(error)
-        sweetAlert({title : "Error", text: "Error alguardar los datos del cliente", icon : "error"});
+        sweetAlert({title : "Error", text: "Error alguardar los datos del proveedor", icon : "error"});
     }
   }
   const getCustomer = async (idCustomer) => {
     try {
-        const resp = await apiAxios.get(`/customer/${idCustomer}`,{headers});
+        const resp = await apiAxios.get(`/provider/${idCustomer}`,{headers});
         if(resp.data.redirect !== null){
             return route.replace(resp.data.redirect);
         }
@@ -115,14 +115,14 @@ function customers({dataModules,dataUser,dataRoles}) {
         }
         const customer = resp.data.data;
         dispatch({
-            type:TYPES_CUSTOMERS.GET_CUSTOMER,
-            payload:customer
+            type: TYPES_CUSTOMERS.GET_CUSTOMER,
+            payload: customer
         });
         handleOpenModal();
     } catch (error) {
         dispatch({type:TYPES_CUSTOMERS.NO_CUSTOMERS});
         console.error(error);
-        sweetAlert({title : "Error", text: "Error al obtener al cliente", icon : "error"});            ;
+        sweetAlert({title : "Error", text: "Error al obtener al proveedor", icon : "error"});            ;
     }
   }
   const closeModal = async () => {
@@ -136,12 +136,12 @@ function customers({dataModules,dataUser,dataRoles}) {
     setDataChange({...dataChange,current:number});
   }
   const handleDeleteCustomer = async (idCustomer) => {
-    const question = await sweetAlert({title : "Mensaje", text: "¿Deseas eliminar este cliente?", icon : "question",showCancelButton:true});
+    const question = await sweetAlert({title : "Mensaje", text: "¿Deseas eliminar este proveedor?", icon : "question",showCancelButton:true});
     if(!question.isConfirmed){
       return
     }
     try {
-        const resp = await apiAxios.delete(`/customer/${idCustomer}`,{headers});
+        const resp = await apiAxios.delete(`/provider/${idCustomer}`,{headers});
         if(resp.data.redirect !== null){
             return route.replace(resp.data.redirect);
         }
@@ -167,9 +167,9 @@ function customers({dataModules,dataUser,dataRoles}) {
   }
   return (
     <>
-      <LoyoutIntranet title="Clientes" description="Administración de clientes" user={dataUser} modules={dataModules} roles={dataRoles}>
-          <BanerModule imageBanner='/baners/Group 12.jpg' title="Administración de clientes"/>
-          <div className='w-full p-6 bg-white rounded-md shadow overflow-x-auto'>
+      <LoyoutIntranet title="proveedors" description="Administración de proveedores" user={dataUser} modules={dataModules} roles={dataRoles}>
+          <BanerModule imageBanner='/baners/Group 12.jpg' title="Administración de proveedores"/>
+          <div className='w-full p-6 bg-white rounded-md shadow'>
               <div className="flex items-center justify-between gap-2 flex-wrap mb-2">
                 <div>
                   <ButtonPrimary text="Agregar" icon={<PlusCircleIcon className='w-5 h-5'/>} onClick={handleOpenModal}/>
@@ -179,12 +179,12 @@ function customers({dataModules,dataUser,dataRoles}) {
                 </div>
               </div>
               <div className="overflow-x-auto mb-4">
-              <TableCustomer customers={state.customers} getCustomer={getCustomer} deleteCustomer={handleDeleteCustomer}/>
+                <TableProvider customers={state.customers} getCustomer={getCustomer} deleteCustomer={handleDeleteCustomer}/>
               </div>
               <PaginationTable currentPage={dataChange.current} quantityRow={pagination.quantityRowData} totalData={pagination.totalPages} handleChangePage={handleChangePage}/>
           </div>
       </LoyoutIntranet>
-      <FormCustomer closeModal={closeModal} contries={state.contries} typeDocumentsData={state.typeDocuments} statusModal={modal} customerEdit={state.customerEdit} contactsEdit={state.customerContactsEdit} pronvincesData={state.provinces} districtsData={state.districts} departamentsData={state.departaments} handleSaveCustomer={handleSaveCustomer}/>
+      <FormProvider closeModal={closeModal} contries={state.contries} typeDocumentsData={state.typeDocuments} statusModal={modal} customerEdit={state.customerEdit} contactsEdit={state.customerContactsEdit} pronvincesData={state.provinces} districtsData={state.districts} departamentsData={state.departaments} handleSaveCustomer={handleSaveCustomer}/>
     </>
   )
 }

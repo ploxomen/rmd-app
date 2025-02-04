@@ -33,8 +33,8 @@ function TableProduct({products,getProduct,deleteProduct}) {
                         <td className="py-2 px-4">{product.product_label}</td>
                         <td className="py-2 px-4">
                             <div className='flex gap-1 flex-wrap justify-center'>
-                                <ButtonPrimarySm text="Editar" onClick={e=> getProduct(product.id)} icon={<PencilIcon className='w-4 h-4'/>}/>
-                                <ButtonDangerSm text="Eliminar" onClick={e => deleteProduct(product.id)} icon={<TrashIcon className='w-4 h-4'/>}/>
+                                <ButtonPrimarySm title="Editar" onClick={e=> getProduct(product.id)} icon={<PencilIcon className='w-4 h-4'/>}/>
+                                <ButtonDangerSm title="Eliminar" onClick={e => deleteProduct(product.id)} icon={<TrashIcon className='w-4 h-4'/>}/>
                             </div>
                         </td>
                     </tr>

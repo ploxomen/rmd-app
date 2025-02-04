@@ -171,6 +171,8 @@ function RawMaterialHistory({
       }
       setEditProduct({
         ...resp.data.data,
+        material_hist_total_buy: resp.data.data.material_hist_money === 'PEN' ? resp.data.data.material_hist_total_buy_pen : resp.data.data.material_hist_total_buy_usd,
+        material_hist_igv: resp.data.data.material_hist_igv == 0 ? false : true,
         material_hist_name_product: nameProduct,
         material_hist_unit_measurement: measurementProduct,
       });
@@ -245,7 +247,7 @@ function RawMaterialHistory({
             No existe ningún historial relacionado
           </h1>
         ) : (
-          <div className="w-full p-6 bg-white rounded-md shadow overflow-x-auto">
+          <div className="w-full p-6 bg-white rounded-md shadow">
             <div className="flex items-center justify-between gap-2 flex-wrap mb-2">
               <div style={{ width: "190px" }}>
                 <Link
@@ -268,11 +270,14 @@ function RawMaterialHistory({
                 />
               </div>
             </div>
+            <div className="overflow-x-auto">
             <TableHistoryMaterial
               histories={histories}
               deleteHistory={deleteHistory}
               viewHistory={viewHistory}
             />
+            </div>
+            
             <PaginationTable
               currentPage={dataChange.current}
               quantityRow={pagination.quantityRowData}
@@ -283,6 +288,7 @@ function RawMaterialHistory({
         )}
       </LoyoutIntranet>
       <FormRawMaterials
+        valueMoney={0}
         statusModal={modal}
         listProduct={[]}
         handleCloseModal={closeModal}

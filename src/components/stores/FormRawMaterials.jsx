@@ -10,6 +10,7 @@ const initialDataForm = {
   product_id: null,
   history_id: null,
   material_hist_bill: "",
+  material_hist_total_type_change: null,
   material_hist_total_buy: "",
   material_hist_guide: "",
   material_hist_amount: "",
@@ -18,10 +19,11 @@ const initialDataForm = {
   material_hist_igv: true,
   material_hist_money: "PEN",
   material_hist_unit_measurement: "",
-  material_hist_total_buy: "",
+  material_hist_total_include_type_change: true
 };
 
 function FormRawMaterials({
+  valueMoney,
   statusModal,
   listProduct,
   handleCloseModal,
@@ -144,18 +146,30 @@ function FormRawMaterials({
             </>
           )}
         </div>
-        <div className="col-span-6">
-          <InputPrimary
-            label="Cantidad"
-            type="number"
-            min="1"
+        <div className="col-span-6 lg:col-span-4">
+          <SelectPrimary
+            label="Moneda"
             inputRequired="required"
-            name="material_hist_amount"
-            value={form.material_hist_amount}
+            name="material_hist_money"
+            value={form.material_hist_money}
             onChange={handleChangeForm}
-          />
+          >
+            <option value="PEN">Soles (S/)</option>
+            <option value="USD">Dolares ($)</option>
+          </SelectPrimary>
         </div>
-        <div className="col-span-6">
+        <div className="col-span-6 lg:col-span-4">
+          <InputPrimary
+            label="Tipo cambio"
+            type="number"
+            min="0.1"
+            step="0.01"
+            inputRequired="required"
+            disabled
+            value={valueMoney.money||form.material_hist_total_type_change}
+          />
+        </div> 
+        <div className="col-span-6 lg:col-span-4">
             <SelectPrimary
               label="Unidad medida"
               inputRequired="required"
@@ -172,19 +186,26 @@ function FormRawMaterials({
               ))}
             </SelectPrimary>
         </div>
-        <div className="col-span-6">
-          <SelectPrimary
-            label="Moneda"
+        <div className="col-span-6 lg:col-span-4">
+          <InputPrimary
+            label="Cantidad"
+            type="number"
+            min="1"
             inputRequired="required"
-            name="material_hist_money"
-            value={form.material_hist_money}
-            onChange={handleChangeForm}
-          >
-            <option value="PEN">Soles (S/)</option>
-            <option value="USD">Dolares ($)</option>
-          </SelectPrimary>
+            name="material_hist_amount"
+            value={form.material_hist_amount}
+            onChange={(e) => {
+              setForm({
+                ...form,
+                material_hist_amount: e.target.value,
+                material_hist_total_buy: form.material_hist_igv
+                  ? (e.target.value * 1.18 * form.material_hist_price_buy).toFixed(2)
+                  : e.target.value * form.material_hist_price_buy,
+              });
+            }}
+          />
         </div>
-        <div className="col-span-6">
+        <div className="col-span-6 lg:col-span-4">
           <InputPrimary
             label="Precio compra"
             type="number"
@@ -198,29 +219,13 @@ function FormRawMaterials({
                 ...form,
                 material_hist_price_buy: e.target.value,
                 material_hist_total_buy: form.material_hist_igv
-                  ? (e.target.value * 1.18).toFixed(2)
-                  : e.target.value,
+                  ? (e.target.value * 1.18 * form.material_hist_amount).toFixed(2)
+                  : e.target.value * form.material_hist_amount,
               });
             }}
           />
         </div>
-        <div className="col-span-full">
-          <Toogle
-            text="Incluir IGV"
-            onChange={(e) =>
-              setForm({
-                ...form,
-                material_hist_igv: e.target.checked,
-                material_hist_total_buy: e.target.checked
-                  ? (form.material_hist_price_buy * 1.18).toFixed(2)
-                  : form.material_hist_price_buy,
-              })
-            }
-            checked={form.material_hist_igv}
-            name="material_hist_igv"
-          />
-        </div>
-        <div className="col-span-6">
+        <div className="col-span-6 lg:col-span-4">
           <InputPrimary
             label="Total compra"
             type="number"
@@ -231,6 +236,35 @@ function FormRawMaterials({
             value={form.material_hist_total_buy}
             onChange={handleChangeForm}
           />
+        </div>
+        <div className="col-span-full">
+          <div className="flex gap-x-4 gap-y-2">
+          <Toogle
+            text="Incluir IGV"
+            onChange={(e) =>
+              setForm({
+                ...form,
+                material_hist_igv: e.target.checked,
+                material_hist_total_buy: e.target.checked
+                  ? (form.material_hist_price_buy * 1.18 * form.material_hist_amount).toFixed(2)
+                  : form.material_hist_price_buy * form.material_hist_amount,
+              })
+            }
+            checked={form.material_hist_igv}
+            name="material_hist_igv"
+          />
+          <Toogle
+            text="Incluir Cambio"
+            onChange={(e) =>
+              setForm({
+                ...form,
+                material_hist_total_include_type_change: e.target.checked,
+              })
+            }
+            checked={form.material_hist_total_include_type_change}
+            name="material_hist_total_include_type_change"
+          />
+          </div>
         </div>
         <SubmitForm id="form-product-submit" />
       </form>

@@ -4,7 +4,6 @@ import { InputPrimary, SubmitForm, TextareaPrimary } from "../Inputs";
 import CreatableSelect from 'react-select/creatable'
 import Label from "../Label";
 import SeccionForm from "../SeccionForm";
-import apiAxios from "@/axios";
 const dataForm = {
     id: null,
   store_name: "",

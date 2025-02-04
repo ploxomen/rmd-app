@@ -259,7 +259,9 @@ function Users({dataModules,dataUser,dataRoles}) {
                         <InputSearch placeholder='¿Que estas buscando?' onInput={searchCustomer}/>
                     </div>
                 </div>
+                <div className="overflow-x-auto mb-4">
                 <TableUser users={state.users} getUser={getUser}  modelReset={openModalReset} deleteUser={deleteUser}/>
+                </div>
                 <PaginationTable currentPage={dataChange.current} quantityRow={pagination.quantityRowData} totalData={pagination.totalPages} handleChangePage={handleChangePage}/>
             </div>
         </LoyoutIntranet>

@@ -4,13 +4,16 @@ import { parseMoney } from "@/helpers/utilities";
 import { ButtonDangerSm, ButtonPrimarySm, ButtonSecondarySm } from "../Buttons";
 import { EyeIcon, PlusIcon, TrashIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
+import { sweetAlert } from "@/helpers/getAlert";
+import { optionsUnitsMeasurements } from "@/helpers/listUnitsMeasurements";
 
-function TableRawMaterial({ products, addHistory, deleteHistory }) {
+function TableRawMaterial({ money, products, addHistory, deleteHistory }) {
   const columns = [
     "Código",
     "Producto",
     "Almacen",
     "Etiqueta",
+    "Unidad",
     "Stock",
     "Costo Compra",
     "Acciones",
@@ -32,6 +35,7 @@ function TableRawMaterial({ products, addHistory, deleteHistory }) {
             <td className="p-1 text-center">{product.product_name}</td>
             <td className="p-1 text-center">{product.product_store}</td>
             <td className="p-1 text-center">{product.product_label}</td>
+            <td className="p-1 text-center">{optionsUnitsMeasurements.find(unit => unit.value === product.product_unit_measurement)?.label}</td>
             <td className="p-1 text-center">{product.raw_material_stock}</td>
             <td className="p-1">
               {parseMoney(product.raw_material_price_buy, product.raw_material_money)}
@@ -39,7 +43,7 @@ function TableRawMaterial({ products, addHistory, deleteHistory }) {
             <td className="p-1">
               <div className="flex gap-1 flex-wrap justify-center">
                 <ButtonPrimarySm
-                  onClick={(e) => addHistory(product.product_id)}
+                  onClick={(e) => money == 0 ? sweetAlert({title: "Alerta",text: "No se estableció el tipo de cambio",icon: "warning" }) : addHistory(product.product_id)}
                   icon={<PlusIcon className="w-4 h-4" />}
                   title='Agregar historial'
                 />

@@ -228,7 +228,7 @@ function OrderAll({dataUser,dataModules,dataRoles}) {
                 <div style={{width:"300px"}} className='mb-4 ml-auto'>
                     <InputSearch placeholder='¿Que estas buscando?' onInput={searchCustomer}/>
                 </div>
-                <div className='overflow-x-auto overflow-y-hidden'>
+                <div className='overflow-x-auto overflow-y-hidden mb-4'>
                     <TableOrderAll orders={state.orders} deleteOrder={deleteOrder} getOrder={getOrder} status={filters.status}/>
                 </div>
                 <PaginationTable currentPage={dataChange.current} quantityRow={pagination.quantityRowData} totalData={pagination.totalPages} handleChangePage={handleChangePage}/>

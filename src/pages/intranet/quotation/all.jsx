@@ -235,7 +235,7 @@ function All({dataUser,dataModules,dataRoles}) {
               <div style={{width:"300px"}} className='ml-auto mb-4'>
                 <InputSearch placeholder='¿Que estas buscando?' onInput={e => handleChangeFilter('search',e.target.value)}/>
               </div>
-              <div className='overflow-x-auto'>
+              <div className='overflow-x-auto mb-4'>
                 <TableAllQuotation quotations={state.quotations} deleteQuotation={deleteQuotation} getQuotation={getQuotation} status={filters.status} downloadPdf={downloadPdf}/>
               </div>
               <PaginationTable currentPage={dataChange.current} quantityRow={pagination.quantityRowData} totalData={pagination.totalPages} handleChangePage={handleChangePage}/>

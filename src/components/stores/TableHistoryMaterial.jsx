@@ -12,7 +12,9 @@ function TableHistoryMaterial({ histories, deleteHistory, viewHistory}) {
     "Cantidad",
     "P. Compra",
     "I.G.V",
-    "Total",
+    "Tipo Cambio",
+    "Total S/",
+    "Total $",
     "Usuario",
     "Acciones",
   ];
@@ -41,15 +43,27 @@ function TableHistoryMaterial({ histories, deleteHistory, viewHistory}) {
             </td>
             <td className="p-1 text-center">
               {parseMoney(
-                history.material_price_igv,
+                history.material_hist_igv,
                 history.material_hist_money
               )}
             </td>
             <td className="p-1 text-center">
-              {parseMoney(
-                history.material_hist_total_buy,
-                history.material_hist_money
-              )}
+              {history.material_hist_total_include_type_change ? parseMoney(
+                history.material_hist_total_type_change,
+                'PEN'
+              ) : 'No incluido'}
+            </td>
+            <td className="p-1 text-center">
+              {history.material_hist_total_include_type_change ? parseMoney(
+                history.material_hist_total_buy_pen,
+                'PEN'
+              ) : parseMoney(0,'PEN')}
+            </td>
+            <td className="p-1 text-center">
+              {history.material_hist_money === 'USD' ? parseMoney(
+                history.material_hist_total_buy_usd,
+                'USD'
+              ) : parseMoney(0,'USD')}
             </td>
             <td className="p-1 text-center">{history.user_name}</td>
             <td className="p-1">
