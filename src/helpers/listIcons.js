@@ -1,4 +1,4 @@
-import { ArrowRightCircleIcon, HomeModernIcon, UserIcon,HomeIcon, UsersIcon, TagIcon, CubeIcon, CurrencyDollarIcon, CurrencyBangladeshiIcon, Cog6ToothIcon, FlagIcon, ArrowPathRoundedSquareIcon, BuildingStorefrontIcon} from '@heroicons/react/24/solid'
+import { ArrowRightCircleIcon, HomeModernIcon, UserIcon,HomeIcon, UsersIcon, TagIcon, CubeIcon, CurrencyDollarIcon, CurrencyBangladeshiIcon, Cog6ToothIcon, FlagIcon, ArrowPathRoundedSquareIcon, BuildingStorefrontIcon, FunnelIcon, IdentificationIcon, ArchiveBoxIcon} from '@heroicons/react/24/solid'
 const classSizeIcon = "h-5 w-5";
 export const listIcons = [
     {
@@ -56,5 +56,17 @@ export const listIcons = [
     {
         name:"almacen",
         Icon: <BuildingStorefrontIcon className={classSizeIcon}/> 
+    },
+    {
+        name:"reporte-cotizaciones",
+        Icon: <FunnelIcon className={classSizeIcon}/> 
+    },
+    {
+        name:"provider",
+        Icon: <IdentificationIcon className={classSizeIcon}/> 
+    },
+    {
+        name:"box-storage",
+        Icon: <ArchiveBoxIcon className={classSizeIcon}/> 
     }
 ]
