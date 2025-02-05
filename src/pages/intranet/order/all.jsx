@@ -211,6 +211,13 @@ function OrderAll({dataUser,dataModules,dataRoles}) {
                 </div>
             </div>
             <div className='w-full p-6 bg-white rounded-md shadow'>
+                <div style={{width:"300px"}} className='mb-4 ml-auto'>
+                    <InputSearch placeholder='¿Que estas buscando?' onInput={searchCustomer}/>
+                </div>
+                <div className='overflow-x-auto overflow-y-hidden mb-4'>
+                    <TableOrderAll orders={state.orders} deleteOrder={deleteOrder} getOrder={getOrder} status={filters.status}/>
+                </div>
+                <PaginationTable currentPage={dataChange.current} quantityRow={pagination.quantityRowData} totalData={pagination.totalPages} handleChangePage={handleChangePage}/>
                 <div className='flex gap-3 mb-4 flex-wrap justify-center'>
                     <div className='px-4 py-2 border-t-4 border-indigo-300 text-center bg-slate-50'>
                         <span className='block text-xs text-slate-500'>Subtotal</span>
@@ -225,13 +232,6 @@ function OrderAll({dataUser,dataModules,dataRoles}) {
                         <span className='font-semibold text-sm text-slate-600'>{parseMoney(amounts.total,'PEN')}</span>
                     </div>
                 </div>
-                <div style={{width:"300px"}} className='mb-4 ml-auto'>
-                    <InputSearch placeholder='¿Que estas buscando?' onInput={searchCustomer}/>
-                </div>
-                <div className='overflow-x-auto overflow-y-hidden mb-4'>
-                    <TableOrderAll orders={state.orders} deleteOrder={deleteOrder} getOrder={getOrder} status={filters.status}/>
-                </div>
-                <PaginationTable currentPage={dataChange.current} quantityRow={pagination.quantityRowData} totalData={pagination.totalPages} handleChangePage={handleChangePage}/>
             </div>
         </LoyoutIntranet>
         <FormOrder statusModal={modal} quotationsNew={state.quotationsNew} departaments={departaments} districsAll={state.districs} provincesAll={state.provinces} customers={filters.customers} orderEdit={state.orderEdit} quotationsEdit={state.quotationsEdit} handleCloseModal={closeModal} handleSaveModalClose={handleSaveModalClose}/>
