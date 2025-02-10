@@ -11,9 +11,11 @@ import TableHistoryMaterial from "@/components/stores/TableHistoryMaterial";
 import FormRawMaterials from "@/components/stores/FormRawMaterials";
 import { useModal } from "@/hooks/useModal";
 import Link from "next/link";
-import { ArrowUturnLeftIcon } from "@heroicons/react/24/solid";
+import { ArrowUturnLeftIcon, PlusIcon } from "@heroicons/react/24/solid";
+import { ButtonPrimarySm } from "@/components/Buttons";
+import axios from "axios";
 export async function getServerSideProps(context) {
-  const { query, req  } = context;
+  const { query, req } = context;
   const userCookie = req.cookies;
   const valid = await verifUser(userCookie, "/raw-material");
   const contentCookieUser = JSON.parse(userCookie.authenticate);
@@ -24,6 +26,7 @@ export async function getServerSideProps(context) {
     nameProduct: null,
     idRawMaterial: null,
     measurementProduct: null,
+    idProduct: null
   };
   try {
     const response = await apiAxios.get(
@@ -35,10 +38,14 @@ export async function getServerSideProps(context) {
     infoProduct.idRawMaterial = response.data.data.idMaterial;
     infoProduct.nameProduct = response.data.data.nameMaterial;
     infoProduct.measurementProduct = response.data.data.measurementProduct;
+    infoProduct.idProduct = response.data.data.idProduct;
+
   } catch (error) {
     infoProduct.idRawMaterial = null;
     infoProduct.nameProduct = null;
     infoProduct.measurementProduct = null;
+    infoProduct.idProduct = null;
+
   }
 
   return {
@@ -54,6 +61,7 @@ function RawMaterialHistory({
   dataUser,
   dataRoles,
   nameProduct,
+  idProduct,
   idRawMaterial,
   measurementProduct,
 }) {
@@ -63,6 +71,33 @@ function RawMaterialHistory({
     search: "",
     reload: false,
   });
+  const handleSaveHistoryAdd = async (dataForm) => {
+    try {
+      const resp = await apiAxios.post("/raw-material", {...dataForm,product_id:idProduct}, { headers });
+      if (resp.data.redirect !== null) {
+        return route.replace(resp.data.redirect);
+      }
+      sweetAlert({
+        title: "Mensaje",
+        text: resp.data.message,
+        icon: resp.data.error ? "error" : "success",
+      });
+      if (!resp.data.error) {
+        handleCloseModal();
+        setDataChange({
+          ...dataChange,
+          reload: !dataChange.reload,
+        });
+      }
+    } catch (error) {
+      sweetAlert({
+        title: "Error",
+        text: "Error al obtener los datos",
+        icon: "error",
+      });
+      console.error(error);
+    }
+  };
   const handleChangePage = (number) => {
     if (!number) {
       return;
@@ -70,9 +105,38 @@ function RawMaterialHistory({
     setDataChange({ ...dataChange, current: number });
   };
   const [histories, setHistories] = useState([]);
+    const [providers, setProviders] = useState([]);
   const { modal, handleOpenModal, handleCloseModal } = useModal("hidden");
   const [editProduct, setEditProduct] = useState({});
-
+  const addHistory = async (idProduct) => {
+    try {
+      const resp = await apiAxios.get(
+        "/raw-material/product-add/" + idProduct,
+        {
+          headers,
+        }
+      );
+      if (resp.data.redirect !== null) {
+        return route.replace(resp.data.redirect);
+      }
+      if(resp.data.data.material_hist_total_type_change === null){
+        return sweetAlert({
+          title: "Alerta",
+          text: "No se ha establecido el tipo de cambio para el día de hoy",
+          icon: "warning",
+        });
+      }
+      setEditProduct({...resp.data.data,material_hist_money: "PEN"});
+      handleOpenModal();
+    } catch (error) {
+      sweetAlert({
+        title: "Error",
+        text: "Error al obtener los datos",
+        icon: "error",
+      });
+      console.error(error);
+    }
+  };
   const [pagination, setPagination] = useState({
     quantityRowData,
     totalPages: 0,
@@ -171,7 +235,10 @@ function RawMaterialHistory({
       }
       setEditProduct({
         ...resp.data.data,
-        material_hist_total_buy: resp.data.data.material_hist_money === 'PEN' ? resp.data.data.material_hist_total_buy_pen : resp.data.data.material_hist_total_buy_usd,
+        material_hist_total_buy:
+          resp.data.data.material_hist_money === "PEN"
+            ? resp.data.data.material_hist_total_buy_pen
+            : resp.data.data.material_hist_total_buy_usd,
         material_hist_igv: resp.data.data.material_hist_igv == 0 ? false : true,
         material_hist_name_product: nameProduct,
         material_hist_unit_measurement: measurementProduct,
@@ -229,6 +296,24 @@ function RawMaterialHistory({
     };
     getData();
   }, [dataChange]);
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const all = await axios.all([
+          apiAxios.get("/raw-material/providers/list", { headers }),
+        ]);
+        setProviders(all[0].data.providers);
+      } catch (error) {
+        console.error(error);
+        sweetAlert({
+          title: "Error",
+          text: "Error al obtener los datos",
+          icon: "error",
+        });
+      }
+    };
+    getData();
+  }, []);
   return (
     <>
       <LoyoutIntranet
@@ -240,7 +325,7 @@ function RawMaterialHistory({
       >
         <BanerModule
           imageBanner="/baners/Group 18.jpg"
-          title='Historial del producto'
+          title="Historial del producto"
         />
         {!idRawMaterial ? (
           <h1 className="text-red-500 text-center text-2xl font-bold">
@@ -261,7 +346,12 @@ function RawMaterialHistory({
                 </Link>
               </div>
               <div className="flex-1">
-                <h2 className="text-center text-lg font-bold text-green-500">{nameProduct}</h2>
+                <div className="flex gap-1 justify-center">
+                  <h2 className="text-center text-lg font-bold text-green-500">
+                    {nameProduct}
+                  </h2>
+                  <ButtonPrimarySm title='Agregar' onClick={ e => addHistory(idProduct)} icon={<PlusIcon className="size-4"/>}/>
+                </div>
               </div>
               <div style={{ width: "300px" }}>
                 <InputSearch
@@ -271,13 +361,13 @@ function RawMaterialHistory({
               </div>
             </div>
             <div className="overflow-x-auto">
-            <TableHistoryMaterial
-              histories={histories}
-              deleteHistory={deleteHistory}
-              viewHistory={viewHistory}
-            />
+              <TableHistoryMaterial
+                histories={histories}
+                deleteHistory={deleteHistory}
+                viewHistory={viewHistory}
+              />
             </div>
-            
+
             <PaginationTable
               currentPage={dataChange.current}
               quantityRow={pagination.quantityRowData}
@@ -291,9 +381,10 @@ function RawMaterialHistory({
         valueMoney={0}
         statusModal={modal}
         listProduct={[]}
+        listProviders={providers}
         handleCloseModal={closeModal}
         handleValidProduct={() => {}}
-        handleSaveHistory={handleSaveHistory}
+        handleSaveHistory={editProduct.history_id ? handleSaveHistory : handleSaveHistoryAdd}
         productEdit={editProduct}
         elemetHistory={true}
       />

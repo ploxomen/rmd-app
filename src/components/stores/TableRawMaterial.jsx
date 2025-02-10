@@ -13,8 +13,8 @@ function TableRawMaterial({ money, products, addHistory, deleteHistory }) {
     "Producto",
     "Almacen",
     "Etiqueta",
-    "Unidad",
     "Stock",
+    "Unidad",
     "Costo Compra",
     "Acciones",
   ];
@@ -35,8 +35,8 @@ function TableRawMaterial({ money, products, addHistory, deleteHistory }) {
             <td className="p-1 text-center">{product.product_name}</td>
             <td className="p-1 text-center">{product.product_store}</td>
             <td className="p-1 text-center">{product.product_label}</td>
-            <td className="p-1 text-center">{optionsUnitsMeasurements.find(unit => unit.value === product.product_unit_measurement)?.label}</td>
             <td className="p-1 text-center">{product.raw_material_stock}</td>
+            <td className="p-1 text-center">{optionsUnitsMeasurements.find(unit => unit.value === product.product_unit_measurement)?.label}</td>
             <td className="p-1">
               {parseMoney(product.raw_material_price_buy, product.raw_material_money)}
             </td>

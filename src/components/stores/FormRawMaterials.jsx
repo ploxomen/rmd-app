@@ -9,6 +9,7 @@ import { optionsUnitsMeasurements } from "@/helpers/listUnitsMeasurements";
 const initialDataForm = {
   product_id: null,
   history_id: null,
+  raw_provider: null,
   material_hist_bill: "",
   material_hist_total_type_change: null,
   material_hist_total_buy: "",
@@ -19,11 +20,12 @@ const initialDataForm = {
   material_hist_igv: true,
   material_hist_money: "PEN",
   material_hist_unit_measurement: "",
-  material_hist_total_include_type_change: true
+  material_hist_total_include_type_change: true,
 };
 
 function FormRawMaterials({
   valueMoney,
+  listProviders,
   statusModal,
   listProduct,
   handleCloseModal,
@@ -68,7 +70,11 @@ function FormRawMaterials({
     <Modal
       status={statusModal}
       maxWidth="max-w-[750px]"
-      title={elemetHistory ? "Editar historial" : "Agregar historial"}
+      title={
+        elemetHistory && form.history_id
+          ? "Editar historial"
+          : "Agregar historial"
+      }
       onSave={hanbleSendModal}
       handleCloseModal={handleCloseModal}
     >
@@ -98,7 +104,7 @@ function FormRawMaterials({
                 });
               }
             }}
-            onBlur={e => handleValidProduct(e.target.value)}
+            onBlur={(e) => handleValidProduct(e.target.value)}
           />
         </div>
         <div className="col-span-6">
@@ -116,7 +122,7 @@ function FormRawMaterials({
               <Label text="Productos" htmlFor="product_list" required />
               <Select
                 instanceId="product_list"
-                isDisabled={false}
+                isDisabled={true}
                 placeholder="Seleccione un producto"
                 name="product_id"
                 options={listProduct}
@@ -128,6 +134,7 @@ function FormRawMaterials({
                       e.product_unit_measurement || "",
                   });
                 }}
+                
                 menuPosition="fixed"
                 value={listProduct.filter(
                   (product) => product.value === form.product_id
@@ -145,6 +152,25 @@ function FormRawMaterials({
               />
             </>
           )}
+        </div>
+        <div className="col-span-full mb-2">
+          <Label text="Proveedores" htmlFor="product_list" required />
+          <Select
+            instanceId="provider_list"
+            placeholder="Seleccione un proveedor"
+            name="provider_list"
+            options={listProviders}
+            onChange={(e) => {
+              setForm({
+                ...form,
+                raw_provider: e.value,
+              });
+            }}
+            menuPosition="fixed"
+            value={listProviders.filter(
+              (prov) => prov.value === form.raw_provider
+            )}
+          />
         </div>
         <div className="col-span-6 lg:col-span-4">
           <SelectPrimary
@@ -166,25 +192,25 @@ function FormRawMaterials({
             step="0.01"
             inputRequired="required"
             disabled
-            value={valueMoney.money||form.material_hist_total_type_change}
+            value={valueMoney.money || form.material_hist_total_type_change}
           />
-        </div> 
+        </div>
         <div className="col-span-6 lg:col-span-4">
-            <SelectPrimary
-              label="Unidad medida"
-              inputRequired="required"
-              disabled={true}
-              name="material_hist_unit_measurement"
-              value={form.material_hist_unit_measurement}
-              onChange={handleChangeForm}
-            >
-              <option value="">Ninguno</option>
-              {optionsUnitsMeasurements.map((unit, unitKey) => (
-                <option key={unitKey} value={unit.value}>
-                  {unit.label}
-                </option>
-              ))}
-            </SelectPrimary>
+          <SelectPrimary
+            label="Unidad medida"
+            inputRequired="required"
+            disabled={true}
+            name="material_hist_unit_measurement"
+            value={form.material_hist_unit_measurement}
+            onChange={handleChangeForm}
+          >
+            <option value="">Ninguno</option>
+            {optionsUnitsMeasurements.map((unit, unitKey) => (
+              <option key={unitKey} value={unit.value}>
+                {unit.label}
+              </option>
+            ))}
+          </SelectPrimary>
         </div>
         <div className="col-span-6 lg:col-span-4">
           <InputPrimary
@@ -199,7 +225,11 @@ function FormRawMaterials({
                 ...form,
                 material_hist_amount: e.target.value,
                 material_hist_total_buy: form.material_hist_igv
-                  ? (e.target.value * 1.18 * form.material_hist_price_buy).toFixed(2)
+                  ? (
+                      e.target.value *
+                      1.18 *
+                      form.material_hist_price_buy
+                    ).toFixed(2)
                   : e.target.value * form.material_hist_price_buy,
               });
             }}
@@ -219,7 +249,9 @@ function FormRawMaterials({
                 ...form,
                 material_hist_price_buy: e.target.value,
                 material_hist_total_buy: form.material_hist_igv
-                  ? (e.target.value * 1.18 * form.material_hist_amount).toFixed(2)
+                  ? (e.target.value * 1.18 * form.material_hist_amount).toFixed(
+                      2
+                    )
                   : e.target.value * form.material_hist_amount,
               });
             }}
@@ -239,31 +271,35 @@ function FormRawMaterials({
         </div>
         <div className="col-span-full">
           <div className="flex gap-x-4 gap-y-2">
-          <Toogle
-            text="Incluir IGV"
-            onChange={(e) =>
-              setForm({
-                ...form,
-                material_hist_igv: e.target.checked,
-                material_hist_total_buy: e.target.checked
-                  ? (form.material_hist_price_buy * 1.18 * form.material_hist_amount).toFixed(2)
-                  : form.material_hist_price_buy * form.material_hist_amount,
-              })
-            }
-            checked={form.material_hist_igv}
-            name="material_hist_igv"
-          />
-          <Toogle
-            text="Incluir Cambio"
-            onChange={(e) =>
-              setForm({
-                ...form,
-                material_hist_total_include_type_change: e.target.checked,
-              })
-            }
-            checked={form.material_hist_total_include_type_change}
-            name="material_hist_total_include_type_change"
-          />
+            <Toogle
+              text="Incluir IGV"
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  material_hist_igv: e.target.checked,
+                  material_hist_total_buy: e.target.checked
+                    ? (
+                        form.material_hist_price_buy *
+                        1.18 *
+                        form.material_hist_amount
+                      ).toFixed(2)
+                    : form.material_hist_price_buy * form.material_hist_amount,
+                })
+              }
+              checked={form.material_hist_igv}
+              name="material_hist_igv"
+            />
+            <Toogle
+              text="Incluir Cambio"
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  material_hist_total_include_type_change: e.target.checked,
+                })
+              }
+              checked={form.material_hist_total_include_type_change}
+              name="material_hist_total_include_type_change"
+            />
           </div>
         </div>
         <SubmitForm id="form-product-submit" />
