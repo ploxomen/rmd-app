@@ -1,8 +1,7 @@
 import apiAxios from "@/axios";
 import BanerModule from "@/components/BanerModule";
-import { ButtonDanger, ButtonPrimarySm } from "@/components/Buttons";
-import { InputPrimary, InputSearch } from "@/components/Inputs";
-import Label from "@/components/Label";
+import { ButtonPrimarySm } from "@/components/Buttons";
+import { InputSearch } from "@/components/Inputs";
 import LoyoutIntranet from "@/components/LoyoutIntranet";
 import PaginationTable from "@/components/PaginationTable";
 import { SelectPrimary } from "@/components/Selects";
