@@ -2,12 +2,12 @@ import BanerModule from "@/components/BanerModule";
 import LoyoutIntranet from "@/components/LoyoutIntranet";
 import CartProductProgress from "@/components/stores/CartProductProgress";
 import { verifUser } from "@/helpers/verifUser";
-import React from "react";
+import React, { memo } from "react";
 export async function getServerSideProps(context) {
   const userCookie = context.req.cookies;
   return await verifUser(userCookie, "/store/product-progress");
 }
-export default function ProductProgress({ dataModules, dataUser, dataRoles }) {
+const ProductProgress = ({ dataModules, dataUser, dataRoles }) => {
   return (
     <LoyoutIntranet
       title="Inicio - Productos en curso"
@@ -42,3 +42,4 @@ export default function ProductProgress({ dataModules, dataUser, dataRoles }) {
     </LoyoutIntranet>
   );
 }
+export default memo(ProductProgress);
