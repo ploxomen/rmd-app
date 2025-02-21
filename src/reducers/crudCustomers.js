@@ -66,7 +66,7 @@ export const reducerCustomers = (state,actions) => {
                 ...state,
                 provinces: actions.payload.provinces,
                 districts: actions.payload.districts,
-                customerEdit: actions.payload.provider,
+                customerEdit: actions.payload.customer,
                 customerContactsEdit: actions.payload.contacts
             }
         }

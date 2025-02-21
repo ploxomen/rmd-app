@@ -207,7 +207,7 @@ function All({dataUser,dataModules,dataRoles}) {
           <BanerModule imageBanner='/baners/Group 9.jpg' title="Administración de cotizaciones"/>
           <div className='w-full p-6 bg-white rounded-md shadow mb-4 grid grid-cols-6 gap-x-2'>
               <div className='col-span-6 md:col-span-4 lg:col-span-2'>
-                <SelectPrimary name="customer" label="Clientes" value={dataChange.customer} onChange={e => handleChangeFilter(e.target.name,e.target.value)}>
+                <SelectPrimary name="customer" inputRequired={true} label="Clientes" value={dataChange.customer} onChange={e => handleChangeFilter(e.target.name,e.target.value)}>
                   <option value="">Todos</option>
                   {
                       filters.customers.map(customer => <option value={customer.value} key={customer.value}>{customer.label}</option>)
@@ -215,7 +215,7 @@ function All({dataUser,dataModules,dataRoles}) {
                 </SelectPrimary>
               </div>
               <div className='col-span-6 md:col-span-4 lg:col-span-2'>
-                <SelectPrimary name="quoter" label="Cotizador" value={dataChange.quoter} onChange={e => handleChangeFilter(e.target.name,e.target.value)}>
+                <SelectPrimary name="quoter" inputRequired={true} label="Cotizador" value={dataChange.quoter} onChange={e => handleChangeFilter(e.target.name,e.target.value)}>
                   <option value="">Todos</option>
                   {
                       filters.users.map(user => <option value={user.id} key={user.id}>{user.user_name + ' ' + user.user_last_name}</option>)
@@ -223,7 +223,7 @@ function All({dataUser,dataModules,dataRoles}) {
                 </SelectPrimary>
               </div>
               <div className='col-span-6 md:col-span-4 lg:col-span-2'>
-                <SelectPrimary name="status" label="Estado" value={dataChange.status} onChange={e => handleChangeFilter(e.target.name,e.target.value)}>
+                <SelectPrimary name="status" inputRequired={true} label="Estado" value={dataChange.status} onChange={e => handleChangeFilter(e.target.name,e.target.value)}>
                   <option value="">Todos</option>
                   {
                       filters.status.map(stat => <option value={stat.value} key={stat.value}>{stat.label}</option>)

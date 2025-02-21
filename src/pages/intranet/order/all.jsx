@@ -26,8 +26,8 @@ const initialStateFilters = {
 const initialStateValueFilters = {
     customer:"",
     status:"",
-    date_ini: new Date().toISOString().split("T")[0],
-    date_fin : monthBefore.toISOString().split("T")[0],
+    date_ini: "",
+    date_fin : "",
     current:1,
     search:"",
     reload:false
@@ -187,7 +187,7 @@ function OrderAll({dataUser,dataModules,dataRoles}) {
             <BanerModule imageBanner='/baners/Group 17.jpg' title="Administración de pedidos"/>
             <div className='w-full p-6 bg-white rounded-md shadow mb-4 grid grid-cols-12 gap-x-3 gap-y-0'>
                 <div className="col-span-full md:col-span-6 lg:col-span-3">
-                    <SelectPrimary label="Clientes" name="customer" value={dataChange.customer||''} onChange={handleChangeFilter}>
+                    <SelectPrimary label="Clientes" inputRequired={true} name="customer" value={dataChange.customer||''} onChange={handleChangeFilter}>
                         <option value="">Todos</option>
 
                         {
@@ -196,7 +196,7 @@ function OrderAll({dataUser,dataModules,dataRoles}) {
                     </SelectPrimary>
                 </div>
                 <div className="col-span-full md:col-span-6 lg:col-span-3">
-                    <SelectPrimary label="Estado" name="status" value={dataChange.status||''} onChange={handleChangeFilter}>
+                    <SelectPrimary label="Estado" inputRequired={true} name="status" value={dataChange.status||''} onChange={handleChangeFilter}>
                         <option value="">Todos</option>
                         {
                             filters.status.map(status => <option key={status.value} value={status.value}>{status.label}</option>)
@@ -204,10 +204,10 @@ function OrderAll({dataUser,dataModules,dataRoles}) {
                     </SelectPrimary>
                 </div>
                 <div className="col-span-full md:col-span-6 lg:col-span-3">
-                    <InputPrimary label='Fecha Inicio' type='date' inputRequired='required' name='date_ini' value={dataChange.date_ini} onChange={handleChangeFilter} />
+                    <InputPrimary label='Fecha Inicio' type='date' name='date_ini' value={dataChange.date_ini} onChange={handleChangeFilter} />
                 </div>
                 <div className="col-span-full md:col-span-6 lg:col-span-3">
-                    <InputPrimary label='Fecha Fin' type='date' inputRequired='required' name='date_fin' value={dataChange.date_fin} onChange={handleChangeFilter} />
+                    <InputPrimary label='Fecha Fin' type='date' name='date_fin' value={dataChange.date_fin} onChange={handleChangeFilter} />
                 </div>
             </div>
             <div className='w-full p-6 bg-white rounded-md shadow'>

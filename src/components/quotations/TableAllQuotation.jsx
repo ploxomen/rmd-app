@@ -20,7 +20,7 @@ function TableAllQuotation({quotations,status,getQuotation,deleteQuotation,downl
         <TableIntranet columns={columns}>
             {
                 !quotations.length ? <tr className="bg-white dark:bg-gray-800"><td colSpan="100%" className='text-center font-bold'>No se registraron cotizaciones</td></tr> : quotations.map(quotation => (
-                    <tr className="bg-white dark:bg-gray-800 text-xs" key={quotation.id}>
+                    <tr className="bg-white dark:bg-gray-800 text-sm" key={quotation.id}>
                         <td  className="py-2 px-4 text-center">{quotation.quotation_code}</td>
                         <td className="py-2 px-4">{quotation.date_issue}</td>
                         <td className="py-2 px-4">{quotation.customer_name}</td>
