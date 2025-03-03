@@ -4,13 +4,15 @@ import Select from "react-select";
 import { InputPrimary, SubmitForm, TextareaPrimary } from "../Inputs";
 import Label from "../Label";
 import { formProductProgress } from "@/helpers/valueFormProductProgress";
+import { optionsUnitsMeasurements } from "@/helpers/listUnitsMeasurements";
+import { SelectPrimary } from "../Selects";
 export default function FormProductProgress({
   products = [],
   statusModal,
   handleCloseModal,
   handleSaveHistory,
   editProductRaw,
-  isEdit = false
+  isEdit = false,
 }) {
   const [form, setForm] = useState(formProductProgress);
   const handleChangeForm = (e) => {
@@ -28,7 +30,6 @@ export default function FormProductProgress({
     handleSaveHistory(form);
   };
   useEffect(() => {
-    console.log(editProductRaw);
     setForm(
       editProductRaw.product_id !== null ? editProductRaw : formProductProgress
     );
@@ -55,11 +56,13 @@ export default function FormProductProgress({
             options={products.map((product) => ({
               label: product.product_name,
               value: product.product_id,
+              unit_measurement: product.product_unit_measurement,
             }))}
             onChange={(e) => {
               setForm({
                 ...form,
                 product_id: e.value,
+                unit_measurement: e.unit_measurement
               });
             }}
             menuPosition="fixed"
@@ -68,34 +71,50 @@ export default function FormProductProgress({
               .map((product) => ({
                 label: product.product_name,
                 value: product.product_id,
+                unit_measurement: product.product_unit_measurement,
               }))}
           />
         </div>
-        <div className="col-span-6">
+        <div className="col-span-6 md:col-span-4">
           <InputPrimary
             label="Fecha"
             type="date"
             name="date"
             inputRequired={true}
-            value={form.date||""}
+            value={form.date || ""}
             onChange={handleChangeForm}
           />
         </div>
-        <div className="col-span-6">
+        <div className="col-span-6 md:col-span-4">
           <InputPrimary
             label="Cantidad"
             type="number"
             name="stock"
             inputRequired={true}
-            value={form.stock||""}
+            value={form.stock || ""}
             onChange={handleChangeForm}
           />
+        </div>
+        <div className="col-span-6 md:col-span-4">
+          <SelectPrimary
+            label="Unidad medida"
+            inputRequired="required"
+            disabled={true}
+            value={form.unit_measurement||""}
+          >
+            <option value="">Ninguno</option>
+            {optionsUnitsMeasurements.map((unit, unitKey) => (
+              <option key={unitKey} value={unit.value}>
+                {unit.label}
+              </option>
+            ))}
+          </SelectPrimary>
         </div>
         <div className="col-span-full">
           <TextareaPrimary
             label="Detalles"
             name="details"
-            value={form.details||""}
+            value={form.details || ""}
             onChange={handleChangeForm}
           />
         </div>

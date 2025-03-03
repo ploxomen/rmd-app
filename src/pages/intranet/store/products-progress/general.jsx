@@ -85,14 +85,14 @@ export default function ProductProgressList({
     <>
       <LoyoutIntranet
         title="Lista - Productos en curso"
-        description="Creación de productos en curso"
+        description="List de los productos en curso"
         user={dataUser}
         modules={dataModules}
         roles={dataRoles}
       >
         <BanerModule
           imageBanner="/baners/Group 10.jpg"
-          title="Lista de productos en curso"
+          title="Resumen Almacen PC"
         />
         <div className="w-full p-6 bg-white rounded-md shadow overflow-x-auto">
           <div className="mb-2">
@@ -106,7 +106,7 @@ export default function ProductProgressList({
               </div>
             </Link>
           </div>
-          <div className="mb-2 flex justify-between items-center">
+          <div className="mb-2 flex justify-between items-center flex-wrap">
             <div className="flex gap-2">
               <div className="w-full max-w-52">
                 <InputPrimary
@@ -147,7 +147,7 @@ export default function ProductProgressList({
             </div>
           </div>
           <TableProductProgress
-            columns={["fecha", "codigo", "producto", "cantidad"]}
+            columns={["codigo", "producto", "unidad de medida", "cantidad"]}
             products={products}
             type="reduce"
           />

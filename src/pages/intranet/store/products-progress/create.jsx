@@ -107,13 +107,14 @@ export default function ProductProgressCreate({
     };
     getData();
   }, []);
-  const addHistory = (productId) => {
+  const addHistory = (productId,unitMeasurement) => {
     if (!productId) {
       return;
     }
     setEditProductRaw({
       ...formProductProgress,
       product_id: productId,
+      unit_measurement: unitMeasurement
     });
     handleOpenModal();
   };
@@ -198,14 +199,14 @@ export default function ProductProgressCreate({
     <>
       <LoyoutIntranet
         title="Crear - Productos en curso"
-        description="Creación de productos en curso"
+        description="Historial de movimientos"
         user={dataUser}
         modules={dataModules}
         roles={dataRoles}
       >
         <BanerModule
           imageBanner="/baners/Group 10.jpg"
-          title="Creación de productos en curso"
+          title="Historial de movimientos"
         />
         <div className="w-full p-6 bg-white rounded-md shadow overflow-x-auto">
           <div className="mb-2">
@@ -227,7 +228,7 @@ export default function ProductProgressCreate({
               }}
             />
           </div>
-          <div className="mb-2 flex justify-between items-center">
+          <div className="mb-2 flex justify-between items-center flex-wrap">
             <div className="flex gap-2">
               <div className="w-full max-w-52">
                 <InputPrimary
@@ -268,7 +269,7 @@ export default function ProductProgressCreate({
             </div>
           </div>
           <TableProductProgress
-            columns={["fecha", "codigo", "producto", "cantidad", "acciones"]}
+            columns={[ "codigo", "producto", "unidad de medida" , "cantidad", "acciones"]}
             products={products}
             addHistory={addHistory}
             deleteHistory={deleteHistory}
