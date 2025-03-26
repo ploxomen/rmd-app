@@ -20,8 +20,6 @@ export default function ProductProgressList({
   dataUser,
   dataRoles,
 }) {
-  let date = new Date();
-  date.setMonth(-1);
   const [pagination, setPagination] = useState({
     quantityRowData,
     totalPages: 0,
@@ -32,8 +30,8 @@ export default function ProductProgressList({
     current: 1,
     search: "",
     reload: false,
-    filter_initial: date.toISOString().split("T")[0],
-    filter_final: new Date().toISOString().split("T")[0],
+    filter_initial: "",
+    filter_final: "",
   });
   let timer = null;
   const serchInfomation = (e) => {
@@ -52,6 +50,7 @@ export default function ProductProgressList({
             page: dataChange.current,
             search: dataChange.search,
             filter_initial: dataChange.filter_initial,
+            agroup: true,
             filter_final: dataChange.filter_final,
           },
         });
@@ -147,7 +146,7 @@ export default function ProductProgressList({
             </div>
           </div>
           <TableProductProgress
-            columns={["codigo", "producto", "unidad de medida", "cantidad"]}
+            columns={["codigo", "producto", "unidad de medida", "cantidad","acciones"]}
             products={products}
             type="reduce"
           />

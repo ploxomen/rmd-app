@@ -25,7 +25,7 @@ const ProductProgress = ({ dataModules, dataUser, dataRoles }) => {
           <CartProductProgress
             url="products-progress/general"
             urlImg="/icons/features.png"
-            title="Lista"
+            title="Resumen almacen PC"
             description="Visualiza la cantidad acumulada de los productos en curso"
             altImg="Lista de tareas en caja"
           />
@@ -33,8 +33,8 @@ const ProductProgress = ({ dataModules, dataUser, dataRoles }) => {
           <CartProductProgress
             url="products-progress/create"
             urlImg="/icons/report.png"
-            title="Creación"
-            description="Crea y visualiza el historial de los productos en curso"
+            title="Historial de movimientos"
+            description="Visualiza todos los movimientos de los productos en curso"
             altImg="Lista de tareas"
           />
         </div>

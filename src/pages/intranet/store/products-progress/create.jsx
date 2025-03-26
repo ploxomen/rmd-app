@@ -24,15 +24,13 @@ export default function ProductProgressCreate({
   dataUser,
   dataRoles,
 }) {
-  let date = new Date();
-  date.setMonth(-1);
   const [pagination, setPagination] = useState({
     quantityRowData,
     totalPages: 0,
   });
   const [products, setProducts] = useState([]);
   const [productsRaw, setProductsRaw] = useState([]);
-  const [editProductRaw, setEditProductRaw] = useState(formProductProgress);
+  const [editProduct, setEditProduct] = useState({});
 
   const { modal, handleOpenModal, handleCloseModal } = useModal("hidden");
 
@@ -41,8 +39,8 @@ export default function ProductProgressCreate({
     current: 1,
     search: "",
     reload: false,
-    filter_initial: date.toISOString().split("T")[0],
-    filter_final: new Date().toISOString().split("T")[0],
+    filter_initial: "",
+    filter_final: "",
   });
   let timer = null;
   const serchInfomation = (e) => {
@@ -83,6 +81,40 @@ export default function ProductProgressCreate({
     };
     getData();
   }, [dataChange]);
+  const handleSaveHistory = async (dataForm) => {
+    try {
+      const method = dataForm.hasOwnProperty('idHistory') ? 'put' : 'post';
+      const url = dataForm.hasOwnProperty('idHistory') ?  "/product-progress/history-one/" + dataForm.idHistory :  "/product-progress";
+      const resp = await apiAxios[method](
+        url,
+        dataForm,
+        { headers }
+      );
+      if (resp.data.redirect !== null) {
+        return route.replace(resp.data.redirect);
+      }
+      sweetAlert({
+        title: "Mensaje",
+        text: resp.data.message,
+        icon: resp.data.error ? "error" : "success",
+      });
+      if (!resp.data.error) {
+        handleCloseModal();
+        setEditProduct({});
+        setDataChange({
+          ...dataChange,
+          reload: !dataChange.reload,
+        });
+      }
+    } catch (error) {
+      sweetAlert({
+        title: "Error",
+        text: "Error al obtener los datos",
+        icon: "error",
+      });
+      console.error(error);
+    }
+  };
   useEffect(() => {
     const getData = async () => {
       try {
@@ -107,21 +139,33 @@ export default function ProductProgressCreate({
     };
     getData();
   }, []);
-  const addHistory = (productId,unitMeasurement) => {
-    if (!productId) {
-      return;
+  const viewHistory = async (idHistory) => {
+    try {
+      const resp = await apiAxios.get(
+        "/product-progress/history-one/" + idHistory,
+        {
+          headers,
+        }
+      );
+      if (resp.data.redirect !== null) {
+        return route.replace(resp.data.redirect);
+      }
+      setEditProduct({...resp.data.data, idHistory});
+      handleOpenModal();
+    } catch (error) {
+      sweetAlert({
+        title: "Error",
+        text: "Error al obtener los datos",
+        icon: "error",
+      });
+      console.error(error);
     }
-    setEditProductRaw({
-      ...formProductProgress,
-      product_id: productId,
-      unit_measurement: unitMeasurement
-    });
-    handleOpenModal();
   };
   const deleteHistory = async (idHistory) => {
     const question = await sweetAlert({
       title: "Mensaje",
-      text: "¿Deseas eliminar este producto en curso?",
+      text:
+        "¿Deseas eliminar este registro del historial?",
       icon: "question",
       showCancelButton: true,
     });
@@ -129,9 +173,12 @@ export default function ProductProgressCreate({
       return;
     }
     try {
-      const resp = await apiAxios.delete(`/product-progress/${idHistory}`, {
-        headers,
-      });
+      const resp = await apiAxios.delete(
+        `/product-progress/history-list/${idHistory}`,
+        {
+          headers,
+        }
+      );
       if (resp.data.redirect !== null) {
         return route.replace(resp.data.redirect);
       }
@@ -165,35 +212,7 @@ export default function ProductProgressCreate({
     }
     setDataChange({ ...dataChange, current: number });
   };
-  const handleSaveHistory = async (dataForm) => {
-    try {
-      const resp = await apiAxios.post("/product-progress", dataForm, {
-        headers,
-      });
-      if (resp.data.redirect !== null) {
-        return route.replace(resp.data.redirect);
-      }
-      sweetAlert({
-        title: "Mensaje",
-        text: resp.data.message,
-        icon: resp.data.error ? "error" : "success",
-      });
-      if (!resp.data.error) {
-        handleCloseModal();
-        setDataChange({
-          ...dataChange,
-          reload: !dataChange.reload,
-        });
-      }
-    } catch (error) {
-      sweetAlert({
-        title: "Error",
-        text: "Error al obtener los datos",
-        icon: "error",
-      });
-      console.error(error);
-    }
-  };
+  
 
   return (
     <>
@@ -223,7 +242,7 @@ export default function ProductProgressCreate({
               text="Agregar"
               icon={<PlusCircleIcon className="w-5 h-5" />}
               onClick={(e) => {
-                setEditProductRaw({...formProductProgress});
+                setEditProduct({...formProductProgress});
                 handleOpenModal();
               }}
             />
@@ -269,9 +288,9 @@ export default function ProductProgressCreate({
             </div>
           </div>
           <TableProductProgress
-            columns={[ "codigo", "producto", "unidad de medida" , "cantidad", "acciones"]}
+            columns={[ "codigo", "producto","fecha", "unidad de medida" , "cantidad","justificacion" , "acciones"]}
             products={products}
-            addHistory={addHistory}
+            viewHistory={viewHistory}
             deleteHistory={deleteHistory}
           />
           <PaginationTable
@@ -285,10 +304,10 @@ export default function ProductProgressCreate({
       <FormProductProgress
         products={productsRaw}
         statusModal={modal}
-        editProductRaw={editProductRaw}
+        editProductRaw={editProduct}
         handleSaveHistory={handleSaveHistory}
         handleCloseModal={handleCloseModal}
-        isEdit={editProductRaw.product_id !== null}
+        isEdit={editProduct.product_id !== null}
       />
     </>
   );
