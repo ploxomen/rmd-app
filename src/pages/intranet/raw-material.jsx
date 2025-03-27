@@ -248,7 +248,7 @@ function RawMaterial({ dataModules, dataUser, dataRoles }) {
           apiAxios.get("/raw-material/providers/list", { headers }),
         ]);
         setProviders(all[2].data.providers);
-        setFilterStores(listStores.flatMap((obj) => obj.options));
+        setFilterStores(listStores.find(value => value.label === "MATERIA PRIMA").options);
         setProductsForm(all[0].data.data);
         if (all[1].data.value === null) {
           return openModalMoney();
@@ -294,7 +294,7 @@ function RawMaterial({ dataModules, dataUser, dataRoles }) {
                     setDataChange({ ...dataChange, label: e.target.value })
                   }
                 >
-                  <option value="">Todos</option>
+                  <option value="">TODOS</option>
                   {filterStores.map((store) => (
                     <option value={store.value} key={store.value}>
                       {store.label}

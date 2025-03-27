@@ -18,13 +18,17 @@ export const listStores = [
         ]
     },
     {
-        value: "PRODUCTO EN CURSO",
-        label: "PRODUCTO EN CURSO",
-        options: []
-    },
-    {
         value: "PRODUCTO TERMINADO",
         label: "PRODUCTO TERMINADO",
-        options: []
+        options: [
+            {
+                value: 'ENSAMBLADO',
+                label: 'ENSAMBLADO',
+            },
+            {
+                value: 'IMPORTADO',
+                label: 'IMPORTADO',
+            },
+        ]
     },
 ]
