@@ -13,38 +13,39 @@ export const useDataList = ({
   const headers = getCookie();
   const timerRef = useRef(null);
   const route = useRouter();
-  const [ loading, setLoading ] = useState(false);
-  const [ filters, setFilters ] = useState({
+  const [loading, setLoading] = useState(false);
+  const [filters, setFilters] = useState({
     show: quantityRowData,
     page: currentPage,
+    reload: 0,
     ...params,
   });
-  const [ dataTotal, setDataTotal ] = useState(0);
-  const [ data, setData ] = useState([]);
-  useEffect(() => {
-    const getData = async () => {
-      setLoading(true);
-      try {
-        const resp = await apiAxios.get(url, {
-          headers,
-          params: filters,
-        });
-        if (resp.data.redirect !== null) {
-          return route.replace(resp.data.redirect);
-        }
-        setDataTotal(resp.data.total);
-        setData(resp.data.data);
-      } catch (error) {
-        sweetAlert({
-          title: 'Error',
-          text: 'Error al obtener los datos',
-          icon: 'error',
-        });
-        console.error(error);
-      } finally {
-        setLoading(false);
+  const [dataTotal, setDataTotal] = useState(0);
+  const [data, setData] = useState([]);
+  const getData = async () => {
+    setLoading(true);
+    try {
+      const resp = await apiAxios.get(url, {
+        headers,
+        params: filters,
+      });
+      if (resp.data.redirect !== null) {
+        return route.replace(resp.data.redirect);
       }
-    };
+      setDataTotal(resp.data.total);
+      setData(resp.data.data);
+    } catch (error) {
+      sweetAlert({
+        title: 'Error',
+        text: 'Error al obtener los datos',
+        icon: 'error',
+      });
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
     getData();
   }, [filters]);
   const changeFilter = (key, value) => {
@@ -56,5 +57,23 @@ export const useDataList = ({
       changeFilter('search', value);
     }, 500);
   };
-  return { loading, filters ,dataTotal, data, serchInfomation, changeFilter };
+  const reloadPage = () => {
+    setFilters(val => ({...val, reload : !filters.reload}))
+  }
+  const responseRequest = (response) => {
+    if (!response.error) {
+      handleCloseModal();
+      reloadPage();
+    }
+  }
+  return {
+    loading,
+    filters,
+    dataTotal,
+    data,
+    reloadPage,
+    getData,
+    serchInfomation,
+    changeFilter,
+  };
 };

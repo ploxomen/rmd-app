@@ -48,10 +48,21 @@ export default function ProductFinalyGeneral({
   const {
     handleNewForm: handleNewProductFinaly,
     data: formFinalyData,
+    responseRequest: reponseRequestImport,
     modal: modalFinalyData,
     handleCloseModal: handleCloseModalFinaly,
   } = useFormFinaly();
-  const {details : assembleDetails, data : assembleForm, modal : assembleModal, handleNewForm : handleAssetNewForm, handleDeleteDetail, handleAddDetail,handleChangeMaterial, handleCloseModal : handleCloseModalAssem} = useFormAssambled();
+  const {
+    details: assembleDetails,
+    responseRequest: reponseRequestAssem,
+    data: assembleForm,
+    modal: assembleModal,
+    handleNewForm: handleAssetNewForm,
+    handleDeleteDetail,
+    handleAddDetail,
+    handleChangeMaterial,
+    handleCloseModal: handleCloseModalAssem,
+  } = useFormAssambled();
 
   useEffect(() => {
     const getData = async () => {
@@ -84,7 +95,7 @@ export default function ProductFinalyGeneral({
       >
         <BanerModule
           imageBanner="/baners/Group 17.jpg"
-          title="Almacén Materia Prima"
+          title="Almacén Productos Terminados"
         />
         <div className="w-full p-6 bg-white rounded-md shadow overflow-x-auto">
           <div className="flex items-center justify-between gap-2 flex-wrap mb-2">
@@ -159,11 +170,13 @@ export default function ProductFinalyGeneral({
         handleDeleteDetail={handleDeleteDetail}
         handleAddDetail={handleAddDetail}
         viewModal={assembleModal}
-        handleChangeMaterial = {handleChangeMaterial}
-        products = {products}
+        callbackResponse={reponseRequestAssem}
+        handleChangeMaterial={handleChangeMaterial}
+        products={products}
       />
       <FormProductFinalyImport
         formData={formFinalyData}
+        callbackResponse={reponseRequestImport}
         viewModal={modalFinalyData}
         listProviders={providers}
         handleClose={handleCloseModalFinaly}

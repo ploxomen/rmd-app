@@ -22,7 +22,7 @@ export default function FormProductFinalyAssem({
     idSubmit: "form-product-assembled-submit",
     method: formData.hasOwnProperty("id") ? "put" : "post",
     url: formData.hasOwnProperty("id")
-      ? `/products-finaly/${formData.id}`
+      ? `/product-finaly-extra/history/assembled/${formData.id}`
       : "/products-finaly",
     callbackResponse,
   });

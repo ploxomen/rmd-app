@@ -1,5 +1,8 @@
 import { useState } from 'react';
 import { useModal } from '../useModal';
+import { sweetAlert } from '@/helpers/getAlert';
+import { getCookie } from '@/helpers/getCookie';
+import apiAxios from '@/axios';
 const form = {
   product_finaly_id: null,
   product_name: '',
@@ -9,7 +12,9 @@ const form = {
   product_finaly_amount: '',
   product_price_client: '',
 };
-export const useFormAssambled = (products) => {
+export const useFormAssambled = (reloadPage = () => {}) => {
+  const headers = getCookie();
+  const [loading, setLoading] = useState(false);
   const { modal, handleCloseModal, handleOpenModal } = useModal('hidden');
   const [data, setData] = useState(form);
   const [details, setDetails] = useState([]);
@@ -49,15 +54,79 @@ export const useFormAssambled = (products) => {
       details.map(value => value.detail_id === id ? { ...value, ...newValue } : value)
     );
   };
-
+  const handleGetHistory = async (id) =>{
+    setLoading(true);
+    try {
+      const { data } = await apiAxios.get(`/product-finaly-extra/history/assembled/${id}`, { headers });
+      if(!data.error){
+        setData(data.data);
+        setDetails(data.details);
+      }
+      handleOpenModal();
+    } catch (error) {
+      console.error(error);
+      sweetAlert({
+        title: "Error",
+        text: "Error al obtener el detalle del historial",
+        icon: "error",
+      }); 
+    }finally{
+      setLoading(false);
+    }
+}
+const handleDeleteHistory = async (historyId) => {
+  const question = await sweetAlert({
+    title: 'Mensaje',
+    text: '¿Deseas eliminar este historial?',
+    icon: 'question',
+    showCancelButton: true,
+  });
+  if (!question.isConfirmed) {
+    return;
+  }
+  setLoading(true);
+  try {
+    const { data } = await apiAxios.delete(
+      `/product-finaly-extra/history/assembled/${historyId}`,
+      { headers }
+    );
+    if(!data.error){
+      sweetAlert({
+        title: 'Mensaje',
+        text: data.message,
+        icon: 'success',
+      });
+      reloadPage();
+    }
+  } catch (error) {
+    sweetAlert({
+      title: 'Error',
+      text: 'Error al obtener el historial',
+      icon: 'error',
+    });
+    console.error(error);
+  } finally {
+    setLoading(false);
+  }
+}
+const responseRequest = (response) => {
+  if (!response.error) {
+    handleCloseModal();
+    reloadPage();
+  }
+}
   return {
     handleAddDetail,
     handleNewForm,
     data,
+    responseRequest,
+    loading,
+    handleDeleteHistory,
     details,
     modal,
     handleCloseModal,
     handleDeleteDetail,
     handleChangeMaterial,
+    handleGetHistory
   };
 };

@@ -1,5 +1,8 @@
 import { useState } from 'react';
 import { useModal } from '../useModal';
+import apiAxios from '@/axios';
+import { getCookie } from '@/helpers/getCookie';
+import { sweetAlert } from '@/helpers/getAlert';
 const form = {
   product_finaly_id: null,
   product_finaly_hist_bill: '',
@@ -14,30 +17,95 @@ const form = {
   product_finaly_price_buy: '',
   product_finaly_total_buy: '',
 };
-export const useFormFinaly = () => {
+export const useFormFinaly = (reloadPage = () => {}) => {
   const { modal, handleCloseModal, handleOpenModal } = useModal('hidden');
   const [data, setData] = useState(form);
-
+  const headers = getCookie();
+  const [loading, setLoading] = useState(false);
   const handleNewForm = ({
     product_name,
     product_finaly_unit_measurement,
     product_finaly_type_change,
-    product_id
+    product_id,
   }) => {
     setData((val) => ({
       ...val,
       product_name,
       product_finaly_unit_measurement,
       product_finaly_type_change,
-      product_id
+      product_id,
     }));
     handleOpenModal();
   };
-  const handleViewHistory = (productFinalyId) => {
-    
-  }
+  const handleGetHistory = async (historyId) => {
+    setLoading(true);
+    try {
+      const { data } = await apiAxios.get(
+        `/product-finaly-extra/history/imported/${historyId}`,
+        { headers }
+      );
+      setData(data.data);
+      handleOpenModal();
+    } catch (error) {
+      sweetAlert({
+        title: 'Error',
+        text: 'Error al obtener el historial',
+        icon: 'error',
+      });
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const handleDeleteHistory = async (historyId) => {
+    const question = await sweetAlert({
+      title: 'Mensaje',
+      text: '¿Deseas eliminar este historial?',
+      icon: 'question',
+      showCancelButton: true,
+    });
+    if (!question.isConfirmed) {
+      return;
+    }
+    setLoading(true);
+    try {
+      const { data } = await apiAxios.delete(
+        `/product-finaly-extra/history/imported/${historyId}`,
+        { headers }
+      );
+      if(!data.error){
+        sweetAlert({
+          title: 'Mensaje',
+          text: data.message,
+          icon: 'success',
+        });
+        reloadPage();
+      }
+    } catch (error) {
+      sweetAlert({
+        title: 'Error',
+        text: 'Error al obtener el historial',
+        icon: 'error',
+      });
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
   const responseRequest = (response) => {
-    
-  }
-  return {handleNewForm,data,modal,handleViewHistory,handleCloseModal, responseRequest}
+    if (!response.error) {
+      handleCloseModal();
+      reloadPage();
+    }
+  };
+  return {
+    handleNewForm,
+    data,
+    modal,
+    loading,
+    handleGetHistory,
+    handleCloseModal,
+    responseRequest,
+    handleDeleteHistory,
+  };
 };

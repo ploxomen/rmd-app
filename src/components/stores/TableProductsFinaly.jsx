@@ -85,9 +85,9 @@ export default function TableProductsFinaly({
                 <Link
                   className="rounded-md relative overflow-hidden inline-flex group items-center justify-center px-2 py-1.5 cursor-pointer border-b-4 border-l-2 hover:bg-blue-600 font-semibold transition-all ease-in-out text-xs shadow-lg bg-gradient-to-tr bg-blue-500 text-white"
                   href={{
-                    pathname: `/intranet/store/products-finaly-history`,
+                    pathname: `/intranet/store/products-finaly/histories`,
                     query: {
-                      raw_material: product.product_finaly_id,
+                      product_finaly: product.product_finaly_id,
                     },
                   }}
                   title="Ver historial"

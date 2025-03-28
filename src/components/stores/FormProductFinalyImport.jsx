@@ -18,7 +18,7 @@ export default function FormProductFinalyImport({
     data: formData,
     idSubmit: "form-product-imported-submit",
     method: formData.hasOwnProperty("id") ? "put" : "post",
-    url : formData.hasOwnProperty("id") ? `/products-finaly/${formData.id}`  : "/products-finaly",
+    url : formData.hasOwnProperty("id") ? `/product-finaly-extra/history/imported/${formData.id}`  : "/products-finaly",
     callbackResponse
   });
   return (
