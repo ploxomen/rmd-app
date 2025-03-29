@@ -15,11 +15,13 @@ export const useMoney = () => {
     const getData = async () => {
       try {
         const { data } = await apiAxios.get('/money/change', { headers });
+        if(!data.value){
+          return handleOpenModal();
+        }
         setMoneyChange({
           attempt: data.value.change_attempts,
           money: data.value.change_soles,
         });
-        !data.value.change_soles && handleOpenModal();
       } catch (error) {
         console.error(error);
       }

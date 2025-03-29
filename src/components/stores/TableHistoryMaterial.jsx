@@ -4,7 +4,7 @@ import { parseMoney } from "@/helpers/utilities";
 import { ButtonDangerSm, ButtonPrimarySm } from "../Buttons";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
 
-function TableHistoryMaterial({ histories, deleteHistory, viewHistory}) {
+function TableHistoryMaterial({ histories, deleteHistory, viewHistory }) {
   const columns = [
     "Código",
     "N° Factura",
@@ -36,49 +36,54 @@ function TableHistoryMaterial({ histories, deleteHistory, viewHistory}) {
             <td className="p-1 text-center">{history.material_hist_guide}</td>
             <td className="p-1 text-center">{history.material_hist_amount}</td>
             <td className="p-1 text-center">
-              {parseMoney(
-                history.material_hist_price_buy,
-                history.material_hist_money
-              )}
+              {history.material_hist_money &&
+                parseMoney(
+                  history.material_hist_price_buy,
+                  history.material_hist_money
+                )}
             </td>
             <td className="p-1 text-center">
-              {parseMoney(
-                history.material_hist_igv,
-                history.material_hist_money
-              )}
+              {history.material_hist_money &&
+                parseMoney(
+                  history.material_hist_igv,
+                  history.material_hist_money
+                )}
             </td>
             <td className="p-1 text-center">
-              {history.material_hist_total_include_type_change ? parseMoney(
-                history.material_hist_total_type_change,
-                'PEN'
-              ) : 'No incluido'}
+              {history.material_hist_total_include_type_change
+                ? parseMoney(history.material_hist_total_type_change, "PEN")
+                : "No incluido"}
             </td>
             <td className="p-1 text-center">
-              {history.material_hist_total_include_type_change ? parseMoney(
-                history.material_hist_total_buy_pen,
-                'PEN'
-              ) : parseMoney(0,'PEN')}
+              {history.material_hist_total_include_type_change
+                ? parseMoney(history.material_hist_total_buy_pen, "PEN")
+                : parseMoney(0, "PEN")}
             </td>
             <td className="p-1 text-center">
-              {history.material_hist_money === 'USD' ? parseMoney(
-                history.material_hist_total_buy_usd,
-                'USD'
-              ) : parseMoney(0,'USD')}
+              {history.material_hist_money === "USD"
+                ? parseMoney(history.material_hist_total_buy_usd, "USD")
+                : parseMoney(0, "USD")}
             </td>
             <td className="p-1 text-center">{history.user_name}</td>
             <td className="p-1">
-              <div className="flex gap-1 flex-wrap justify-center">
-                <ButtonPrimarySm
-                  onClick={(e) => viewHistory(history.id)}
-                  icon={<PencilIcon className="w-4 h-4" />}
-                  title='Editar historial'
-                />
-                <ButtonDangerSm
-                  onClick={(e) => deleteHistory(history.id)}
-                  title='Eliminar historial'
-                  icon={<TrashIcon className="w-4 h-4" />}
-                />
-              </div>
+              {history.product_final_assem_id ||
+              history.quotation_detail_id ||
+              history.product_progres_hist_id ? (
+                "Sin acciones"
+              ) : (
+                <div className="flex gap-1 flex-wrap justify-center">
+                  <ButtonPrimarySm
+                    onClick={(e) => viewHistory(history.id)}
+                    icon={<PencilIcon className="w-4 h-4" />}
+                    title="Editar historial"
+                  />
+                  <ButtonDangerSm
+                    onClick={(e) => deleteHistory(history.id)}
+                    title="Eliminar historial"
+                    icon={<TrashIcon className="w-4 h-4" />}
+                  />
+                </div>
+              )}
             </td>
           </tr>
         ))
