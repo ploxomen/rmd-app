@@ -15,24 +15,23 @@ import { ArrowUturnLeftIcon, PlusIcon } from "@heroicons/react/24/solid";
 import { ButtonPrimarySm } from "@/components/Buttons";
 import axios from "axios";
 export async function getServerSideProps(context) {
-  const { query, req } = context;
-  const userCookie = req.cookies;
-  const valid = await verifUser(userCookie, "/raw-material");
-  const contentCookieUser = JSON.parse(userCookie.authenticate);
-  const headers = {
-    Authorization: "Bearer " + contentCookieUser.access_token,
-  };
+  const { query } = context;
+  const valid = await verifUser(context, "/raw-material");
   let infoProduct = {
     nameProduct: null,
     idRawMaterial: null,
     measurementProduct: null,
     idProduct: null
   };
+  const headers = {
+    Cookie: context.req.headers.cookie,
+    Origin: process.env.APP_URL,
+  };
   try {
     const response = await apiAxios.get(
       "/raw-material/history/" + query.raw_material,
       {
-        headers,
+        headers
       }
     );
     infoProduct.idRawMaterial = response.data.data.idMaterial;

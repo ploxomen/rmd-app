@@ -4,8 +4,7 @@ import CartProductProgress from "@/components/stores/CartProductProgress";
 import { verifUser } from "@/helpers/verifUser";
 import React, { memo } from "react";
 export async function getServerSideProps(context) {
-  const userCookie = context.req.cookies;
-  return await verifUser(userCookie, "/store/product-progress");
+  return await verifUser(context, "/store/product-progress");
 }
 const ProductProgress = ({ dataModules, dataUser, dataRoles }) => {
   return (

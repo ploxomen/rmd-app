@@ -17,8 +17,7 @@ import { getCookie } from '@/helpers/getCookie';
 import { sweetAlert } from '@/helpers/getAlert';
 
 export async function getServerSideProps(context) {
-    const userCookie = context.req.cookies;
-    return await verifUser(userCookie,'/categories');
+    return await verifUser(context,'/categories');
 }
 const quantityRowData = 25;
 function categories({dataModules,dataUser,dataRoles}) {

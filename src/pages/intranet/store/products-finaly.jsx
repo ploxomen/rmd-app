@@ -22,8 +22,7 @@ import { PencilIcon } from "@heroicons/react/24/solid";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 export async function getServerSideProps(context) {
-  const userCookie = context.req.cookies;
-  return await verifUser(userCookie, "/store/products-finaly");
+  return await verifUser(context, "/store/products-finaly");
 }
 export default function ProductFinalyGeneral({
   dataModules,

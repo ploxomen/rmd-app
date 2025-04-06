@@ -14,8 +14,7 @@ import { PlusCircleIcon } from "@heroicons/react/24/solid";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 export async function getServerSideProps(context) {
-  const userCookie = context.req.cookies;
-  return await verifUser(userCookie, "/store");
+  return await verifUser(context, "/store");
 }
 const quantityRowData = 25;
 function Store({ dataModules, dataUser, dataRoles }) {

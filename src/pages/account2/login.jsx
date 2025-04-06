@@ -8,15 +8,15 @@ import { ExclamationTriangleIcon } from '@heroicons/react/24/solid';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation'
 export async function getServerSideProps(context) {
-    const userCookie = context.req.cookies;
-    if(userCookie.authenticate){
-        return {
-            redirect : {
-                destination: '/intranet/home',
-                permanent:false
-            }
-        }
-    }
+    // const userCookie = context.req.cookies;
+    // if(userCookie.authenticate){
+    //     return {
+    //         redirect : {
+    //             destination: '/intranet/home',
+    //             permanent:false
+    //         }
+    //     }
+    // }
     return {
         props:{}
     }

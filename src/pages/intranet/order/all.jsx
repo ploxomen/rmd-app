@@ -34,8 +34,7 @@ const initialStateValueFilters = {
 }
 const quantityRowData = 20;
 export async function getServerSideProps(context) {
-    const userCookie = context.req.cookies;
-    return await verifUser(userCookie,'/order/all');
+    return await verifUser(context,'/order/all');
 }
 const amountsInitial = {
     total: 0,

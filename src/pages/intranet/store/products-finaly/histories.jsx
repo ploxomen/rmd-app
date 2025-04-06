@@ -18,12 +18,11 @@ import axios from "axios";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 export async function getServerSideProps(context) {
-  const { query, req } = context;
-  const userCookie = req.cookies;
-  const valid = await verifUser(userCookie, "/store/products-finaly");
-  const contentCookieUser = JSON.parse(userCookie.authenticate);
+  const { query } = context;
+  const valid = await verifUser(context, "/store/products-finaly");
   const headers = {
-    Authorization: "Bearer " + contentCookieUser.access_token,
+    Cookie: context.req.headers.cookie,
+    Origin: process.env.APP_URL,
   };
   let infoProduct = {
     nameProduct: null,

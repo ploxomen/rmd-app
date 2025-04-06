@@ -20,8 +20,7 @@ import { getDistrics } from '@/helpers/getDistrics';
 import { optionsConditionsPayOrder } from '@/helpers/optionsConditionsPayOrder';
 import Label from '@/components/Label';
 export async function getServerSideProps(context) {
-  const userCookie = context.req.cookies;
-  return await verifUser(userCookie, '/order/new');
+  return await verifUser(context, '/order/new');
 }
 const initialFilter = {
   money: "PEN",

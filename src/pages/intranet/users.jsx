@@ -20,8 +20,7 @@ import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useReducer, useState } from 'react'
 export async function getServerSideProps(context) {
-    const userCookie = context.req.cookies;
-    return await verifUser(userCookie,'/users');
+    return await verifUser(context,'/users');
 }
 const initialFilter = {
     role:"all"

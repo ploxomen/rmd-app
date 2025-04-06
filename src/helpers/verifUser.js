@@ -1,54 +1,52 @@
-import apiAxios from "@/axios";
-import Cookies from "js-cookie";
-
-export const verifUser = async (userCookie,currentRoute) => {
-    if(!userCookie.authenticate){
-        return {
-            redirect : {
-                destination: '/login',
-                permanent:false
-            }
-        }
-    }
-    const contentCookieUser = JSON.parse(userCookie.authenticate);
-
-    const headers = {
-        'Authorization':'Bearer ' + contentCookieUser.access_token
-    }
-    let dataModules = [];
-    let dataRoles = [];
-    let dataUser = {
-        user_name:"",
-        user_last_name:"",
-        user_avatar:null
-    };
-    try {
-      const req = await apiAxios.get('/user/modules-roles',{headers,params:{url:currentRoute}});
-      if(req.data && req.data.redirect !== null){
-        return {
-            redirect : {
-                destination: req.data.redirect,
-                permanent:false
-            }
-        }
-      }
-      dataModules = req.data.modules;
-      dataRoles = req.data.roles;
-      dataUser = req.data.user;
+import apiAxios from '@/axios';
+export const verifUser = async (context, currentRoute) => {
+  const headers = {
+    Cookie: context.req.headers.cookie,
+    Origin: process.env.APP_URL,
+  };
+  let dataModules = [];
+  let dataRoles = [];
+  let dataUser = {
+    user_name: '',
+    user_last_name: '',
+    user_avatar: null,
+  };
+  try {
+    const req = await apiAxios.get('/user/modules-roles', {
+      headers,
+      params: { url: currentRoute },
+    });
+    if (req.data && req.data.redirect !== null) {
       return {
-            props:{
-                dataModules,
-                dataRoles,
-                dataUser            
-            }
-        }
-    } catch {
-        return {
-            props:{
-              dataModules,
-              dataRoles,
-              dataUser            
-          }
-        }
+        redirect: {
+          destination: req.data.redirect,
+          permanent: false,
+        },
+      };
     }
-}
+    dataModules = req.data.modules;
+    dataRoles = req.data.roles;
+    dataUser = req.data.user;
+    return {
+      props: {
+        dataModules,
+        dataRoles,
+        dataUser,
+      },
+    };
+  } catch {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+    // return {
+    //   props: {
+    //     dataModules,
+    //     dataRoles,
+    //     dataUser,
+    //   },
+    // };
+  }
+};
