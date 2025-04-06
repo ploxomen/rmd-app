@@ -13,8 +13,7 @@ import { PaperAirplaneIcon } from '@heroicons/react/24/solid';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useRef, useState } from 'react'
 export async function getServerSideProps(context) {
-    const userCookie = context.req.cookies;
-    return await verifUser(userCookie,'/configurations');
+    return await verifUser(context,'/configurations');
 }
 const initialForm = {
     business_name:"",

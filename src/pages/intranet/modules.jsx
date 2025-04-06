@@ -14,8 +14,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useReducer } from 'react';
 
 export async function getServerSideProps(context) {
-    const userCookie = context.req.cookies;
-    return await verifUser(userCookie,'/modules');
+    return await verifUser(context,'/modules');
 }
 export default function Roles({dataModules,dataRoles,dataUser}){
     const headers = getCookie();

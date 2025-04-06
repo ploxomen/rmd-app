@@ -15,8 +15,7 @@ import { ArrowUturnLeftIcon, PlusCircleIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 export async function getServerSideProps(context) {
-  const userCookie = context.req.cookies;
-  return await verifUser(userCookie, "/store/product-progress");
+  return await verifUser(context, "/store/product-progress");
 }
 const quantityRowData = 25;
 export default function ProductProgressCreate({

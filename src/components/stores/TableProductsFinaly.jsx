@@ -30,7 +30,7 @@ export default function TableProductsFinaly({
         ? addHistoryAssembled({
           product_name: item.product_name,
           product_id: item.id,
-          product_price_client:  item.product_public_customer
+          product_price_client: item.product_public_customer
         })
         : addHistoryImport({
             product_name: item.product_name,

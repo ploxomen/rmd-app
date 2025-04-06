@@ -25,8 +25,7 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useReducer, useState } from "react";
 const quantityRowData = 25;
 export async function getServerSideProps(context) {
-  const userCookie = context.req.cookies;
-  return await verifUser(userCookie, "/products");
+  return await verifUser(context, "/products");
 }
 function products({ dataModules, dataUser, dataRoles }) {
   const [state, dispatch] = useReducer(reducerProducts, initialStateProduct);

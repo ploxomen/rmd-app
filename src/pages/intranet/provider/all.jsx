@@ -18,8 +18,7 @@ import FormProvider from '@/components/providers/FormProvider';
 import TableProvider from '@/components/providers/TableProvider';
 
 export async function getServerSideProps(context) {
-  const userCookie = context.req.cookies;
-  return await verifUser(userCookie,'/customers');
+  return await verifUser(context,'/customers');
 }
 const quantityRowData = 25;
 function customers({dataModules,dataUser,dataRoles}) {

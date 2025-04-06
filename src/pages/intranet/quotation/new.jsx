@@ -19,8 +19,7 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect, useRef, useState } from 'react'
 import Select from 'react-select';
 export async function getServerSideProps(context) {
-    const userCookie = context.req.cookies;
-    return await verifUser(userCookie, '/quotation/new');
+    return await verifUser(context, '/quotation/new');
 }
 const initalForm = {
     quotation_date_issue: new Date().toISOString().split('T')[0],

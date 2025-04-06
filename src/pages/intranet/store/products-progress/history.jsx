@@ -16,12 +16,11 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export async function getServerSideProps(context) {
-  const { query, req } = context;
-  const userCookie = req.cookies;
-  const valid = await verifUser(userCookie, "/store/product-progress");
-  const contentCookieUser = JSON.parse(userCookie.authenticate);
+  const { query } = context;
+  const valid = await verifUser(context, "/store/product-progress");
   const headers = {
-    Authorization: "Bearer " + contentCookieUser.access_token,
+    Cookie: context.req.headers.cookie,
+    Origin: process.env.APP_URL,
   };
   let infoProduct = {
     nameProduct: null,

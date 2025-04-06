@@ -18,8 +18,7 @@ import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useReducer, useRef, useState } from 'react'
 export async function getServerSideProps(context){
-  const userCookie = context.req.cookies;
-  return await verifUser(userCookie,'/quotation/all');
+  return await verifUser(context,'/quotation/all');
 }
 const initialStateFilters = {
   products:[],

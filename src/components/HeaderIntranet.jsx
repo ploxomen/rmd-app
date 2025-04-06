@@ -1,10 +1,9 @@
 import { ArrowLeftEndOnRectangleIcon, Bars3Icon, ChevronDownIcon, UserCircleIcon } from '@heroicons/react/24/solid'
 import React, { useEffect, useRef } from 'react'
 import Link from 'next/link';
-import { getCookie } from '@/helpers/getCookie2';
-import apiAxios from '@/axios';
 import { useRouter } from 'next/navigation';
 import { sweetAlert } from '@/helpers/getAlert';
+import api from '@/libs/axios';
 function HeaderIntranet({dataRoles,user,handleMenu}) {
   const route = useRouter();
   const handleClickRoles = (e) => {
@@ -29,21 +28,13 @@ function HeaderIntranet({dataRoles,user,handleMenu}) {
     if(!question.isConfirmed){
       return
     }
-    const cookie = getCookie('authenticate');
-    if(cookie){
-      try {
-        const headers = {
-          'Authorization':'Bearer ' + JSON.parse(cookie).access_token
-        }
-        const resp = await apiAxios.delete('/user/logout',{headers});
-        if(!resp.error){
-          document.cookie = 'authenticate=;Max-Age=0;path=/';  
-        }
-        return route.replace('/login');
-      } catch (error) {
-        console.error(error);
-      }
+    try {
+      await api.post('/user/logout');
+      return route.replace('/login');
+    } catch (error) {
+      console.error(error);
     }
+    
   }
   return (
     <header className='px-6 mb-2'>

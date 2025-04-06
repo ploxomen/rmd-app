@@ -95,7 +95,7 @@ export const useFormData = ({
     }
   };
   useEffect(() => {
-    setFormObject(data)
+    setFormObject({...data})
   },[data])
   return {
     handleSubmit,

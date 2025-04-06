@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Modal from "../Modal";
 import { useFormData } from "@/hooks/useFormData";
 import { InputPrimary, SubmitForm, TextareaPrimary } from "../Inputs";
@@ -17,7 +17,8 @@ export default function FormProductFinalyAssem({
   products = [],
   handleChangeMaterial = () => {},
 }) {
-  const { form, setFormulario, handleClickSubmit, handleSubmitParam } = useFormData({
+  
+  const { form, setFormulario, handleClickSubmit, handleSubmitParam , setFormObject} = useFormData({
     data: formData,
     idSubmit: "form-product-assembled-submit",
     method: formData.hasOwnProperty("id") ? "put" : "post",

@@ -28,14 +28,15 @@ export function ButtonDanger({ type = "button", text, onClick, icon }) {
     </button>
   );
 }
-export function ButtonLogin({ type, text }) {
+export function ButtonLogin({ type, text, loading = false , ...props }) {
   return (
     <button
       className="rounded overflow-hidden relative w-full inline-flex group items-center justify-center px-3.5 py-2 m-1 cursor-pointer border-b-4 border-l-2 hover:bg-green-600 transition-all ease-in-out shadow-lg bg-gradient-to-tr bg-green-500 text-white"
       type={type}
+      {...props}
     >
       <span className="absolute w-0 h-0 transition-all duration-300 ease-out bg-white rounded-full group-focus:w-full group-hover:h-32 opacity-10"></span>
-      <span className="relative">{text}</span>
+      <span className="relative">{loading ? "Cargando" : text}</span>
     </button>
   );
 }
