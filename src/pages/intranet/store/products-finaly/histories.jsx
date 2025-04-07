@@ -153,7 +153,7 @@ export default function ProductFinalyHistories({
                 />
               </div>
             </div>
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto mb-2">
               {typeProductFinaly == "IMPORTADO" ? (
                 <TableHistoriesProductFinaly
                   histories={data}

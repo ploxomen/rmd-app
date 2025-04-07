@@ -33,7 +33,7 @@ export default function TableDetailAssembled({
       ) : (
         newDetails.map(detail => (
           <tr className="bg-white dark:bg-gray-800 text-xs" key={detail.detail_id}>
-            <td className="p-1 text-center">
+            <td className="p-1 text-center min-w-40">
               <SelectSimple
                 name={`material-${detail.detail_id}`}
                 isRequired
@@ -46,7 +46,7 @@ export default function TableDetailAssembled({
                 <option value="PRODUCTO CURSO">PRODUCTO CURSO</option>
               </SelectSimple>
             </td>
-            <td className="p-1 text-center">
+            <td className="p-1 text-center min-w-64">
               <SelectSimple
                 name={`products-${detail.detail_id}`}
                 value={detail.detail_product_id}
@@ -70,7 +70,7 @@ export default function TableDetailAssembled({
                   ))}
               </SelectSimple>
             </td>
-            <td className="p-1 text-center">
+            <td className="p-1 text-center w-[4px]">
               <InputDetailsSm
                 type="number"
                 required

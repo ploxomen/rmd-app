@@ -21,6 +21,7 @@ const dataForm = {
   sub_categorie: null,
   product_store: "",
   product_label: "",
+  product_label_2: "",
   product_img: null,
   product_unit_measurement: "TU",
   product_code: null,
@@ -35,7 +36,7 @@ function FormProduct({
   const [form, setForm] = useState(dataForm);
   const [deleteImg, setDeleteImg] = useState(false);
   const editorDescription = useRef(null);
-  const [labels,setLabels] = useState([]);
+  const [labels, setLabels] = useState([]);
   const edit = Object.keys(productEdit).length;
   useEffect(() => {
     setForm(edit ? productEdit : dataForm);
@@ -105,16 +106,16 @@ function FormProduct({
       reader.readAsDataURL(file);
     }
   };
-  const handleStore = (value) =>{
-    if(!value){
+  const handleStore = (value) => {
+    if (!value) {
       return setLabels([]);
     }
-    listStores.forEach(store => {
-      if(store.value === value){
-        return setLabels(store.options)
+    listStores.forEach((store) => {
+      if (store.value === value) {
+        return setLabels(store.options);
       }
     });
-  }
+  };
   const handleDeleteImg = () => {
     setForm({
       ...form,
@@ -185,7 +186,7 @@ function FormProduct({
         </div>
         {!form.product_service && (
           <>
-            <div className="col-span-6 lg:col-span-4">
+            <div className="col-span-6 md:col-span-4">
               <InputPrimary
                 label="P. Producción"
                 step="0.01"
@@ -196,7 +197,7 @@ function FormProduct({
                 onChange={handleChangeForm}
               />
             </div>
-            <div className="col-span-6 lg:col-span-4">
+            <div className="col-span-6 md:col-span-4">
               <InputPrimary
                 label="P. Público Cliente"
                 step="0.01"
@@ -208,7 +209,7 @@ function FormProduct({
                 onChange={handleChangeForm}
               />
             </div>
-            <div className="col-span-6 lg:col-span-4">
+            <div className="col-span-6 md:col-span-4">
               <InputPrimary
                 label="P. Distribuidor"
                 step="0.01"
@@ -221,13 +222,13 @@ function FormProduct({
             </div>
           </>
         )}
-        <div className="col-span-6">
+        <div className="col-span-6 md:col-span-4">
           <SelectPrimary
             label="Tipos de almacén"
             inputRequired="required"
             name="product_store"
             value={form.product_store || ""}
-            onChange={ e => {
+            onChange={(e) => {
               handleStore(e.target.value);
               handleChangeForm(e);
             }}
@@ -240,22 +241,47 @@ function FormProduct({
             ))}
           </SelectPrimary>
         </div>
-        <div className="col-span-6">
+        <div className="col-span-6 md:col-span-4">
           <SelectPrimary
-            label="Etiqueta"
+            label="Etiqueta 1"
             name="product_label"
             value={form.product_label || ""}
+            onChange={handleChangeForm}
+            inputRequired={
+              listStores.find((list) => list.value === form.product_store)
+                ? true
+                : false
+            }
+          >
+            <option value="">Seleccione una opción</option>
+            {listStores
+              .find((list) => list.value === form.product_store)
+              ?.options.map((label, keyLabel) => (
+                <option value={label.value} key={keyLabel}>
+                  {label.label}
+                </option>
+              ))}
+          </SelectPrimary>
+        </div>
+        <div className="col-span-6 md:col-span-4">
+          <SelectPrimary
+            label="Etiqueta 2"
+            name="product_label_2"
+            value={form.product_label_2 || ""}
             onChange={handleChangeForm}
             inputRequired={labels.length ? true : false}
           >
             <option value="">Seleccione una opción</option>
-            {labels.map((label, keyLabel) => (
-              <option value={label.value} key={keyLabel}>
-                {label.label}
-              </option>
-            ))}
+            {listStores
+              .find((list) => list.value === form.product_store)
+              ?.options_2.map((label, keyLabel) => (
+                <option value={label.value} key={keyLabel}>
+                  {label.label}
+                </option>
+              ))}
           </SelectPrimary>
         </div>
+
         <div className="col-span-6 mb-2">
           <Label text="Categoria" htmlFor="product_categorie_id" required />
           <Select

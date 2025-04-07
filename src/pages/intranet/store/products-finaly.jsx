@@ -39,7 +39,7 @@ export default function ProductFinalyGeneral({
     handleCloseModal: closeModalMoney,
     handleOpenModal: openModalMoney,
   } = useMoney();
-  const { filters, dataTotal, data, serchInfomation, changeFilter } =
+  const { filters, dataTotal, data, serchInfomation, changeFilter,reloadPage } =
     useDataList({
       url: "/products-finaly",
       params: { tipo: "" },
@@ -50,7 +50,7 @@ export default function ProductFinalyGeneral({
     responseRequest: reponseRequestImport,
     modal: modalFinalyData,
     handleCloseModal: handleCloseModalFinaly,
-  } = useFormFinaly();
+  } = useFormFinaly(reloadPage);
   const {
     details: assembleDetails,
     responseRequest: reponseRequestAssem,
@@ -61,7 +61,7 @@ export default function ProductFinalyGeneral({
     handleAddDetail,
     handleChangeMaterial,
     handleCloseModal: handleCloseModalAssem,
-  } = useFormAssambled();
+  } = useFormAssambled(reloadPage);
 
   useEffect(() => {
     const getData = async () => {
@@ -96,7 +96,7 @@ export default function ProductFinalyGeneral({
           imageBanner="/baners/Group 17.jpg"
           title="Almacén Productos Terminados"
         />
-        <div className="w-full p-6 bg-white rounded-md shadow overflow-x-auto">
+        <div className="w-full p-6 bg-white rounded-md shadow">
           <div className="flex items-center justify-between gap-2 flex-wrap mb-2">
             <div className="flex items-center gap-x-4 flex-wrap mb-2">
               <div style={{ width: "350px" }}>
@@ -147,13 +147,15 @@ export default function ProductFinalyGeneral({
               />
             </div>
           </div>
+          <div className="overflow-x-auto mb-2">
+            <TableProductsFinaly
+              products={data}
+              money={moneyChange.money}
+              addHistoryImport={handleNewProductFinaly}
+              addHistoryAssembled={handleAssetNewForm}
+            />
+          </div>
 
-          <TableProductsFinaly
-            products={data}
-            money={moneyChange.money}
-            addHistoryImport={handleNewProductFinaly}
-            addHistoryAssembled={handleAssetNewForm}
-          />
           <PaginationTable
             currentPage={filters.page}
             quantityRow={filters.show}

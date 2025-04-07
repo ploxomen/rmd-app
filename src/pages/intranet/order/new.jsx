@@ -177,6 +177,9 @@ function OrderNew({ dataUser, dataModules, dataRoles }) {
       if (resp.data.redirect !== null) {
         return route.replace(resp.data.redirect);
       }
+      if(resp.data.error){
+        throw new Error(resp.data.message)
+      }
       sweetAlert({
         title: "Exitoso", text: "Pedido generado correctamente", icon: "success"
       }).then(result => {

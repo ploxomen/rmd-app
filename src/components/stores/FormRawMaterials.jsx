@@ -10,6 +10,7 @@ const initialDataForm = {
   product_id: null,
   history_id: null,
   raw_provider: null,
+  material_hist_date: new Date().toISOString().split("T")[0],
   material_hist_bill: "",
   material_hist_total_type_change: null,
   material_hist_total_buy: "",
@@ -20,7 +21,6 @@ const initialDataForm = {
   material_hist_igv: true,
   material_hist_money: "PEN",
   material_hist_unit_measurement: "",
-  material_hist_total_include_type_change: true,
 };
 
 function FormRawMaterials({
@@ -62,6 +62,26 @@ function FormRawMaterials({
         : initialDataForm
     );
   }, [productEdit]);
+  useEffect(() => {
+    const typeChange = valueMoney.money || form.material_hist_total_type_change;
+    const priceBuy =
+      form.material_hist_money !== "PEN"
+        ? typeChange * form.material_hist_price_buy
+        : form.material_hist_price_buy;
+    const total = priceBuy * form.material_hist_amount;
+    setForm((val) => ({
+      ...val,
+      material_hist_total_buy: form.material_hist_igv
+        ? (total * 1.18).toFixed(2)
+        : total.toFixed(2),
+    }));
+  }, [
+    form.material_hist_money,
+    form.material_hist_igv,
+    form.material_hist_amount,
+    form.material_hist_total_type_change,
+    form.material_hist_price_buy,
+  ]);
   const hanbleSendModal = () => {
     const formProduct = document.querySelector("#form-product-submit");
     formProduct.click();
@@ -82,7 +102,17 @@ function FormRawMaterials({
         className="grid grid-cols-12 gap-x-3 gap-y-0"
         onSubmit={handleSubmit}
       >
-        <div className="col-span-6">
+        <div className="col-span-6 md:col-span-4">
+          <InputPrimary
+            label="Fecha"
+            type="date"
+            inputRequired="required"
+            name="material_hist_date"
+            value={form.material_hist_date}
+            onChange={handleChangeForm}
+          />
+        </div>
+        <div className="col-span-6 md:col-span-4">
           <InputPrimary
             label="N° Factura"
             type="text"
@@ -107,7 +137,7 @@ function FormRawMaterials({
             onBlur={(e) => handleValidProduct(e.target.value)}
           />
         </div>
-        <div className="col-span-6">
+        <div className="col-span-6 md:col-span-4">
           <InputPrimary
             label="Guía"
             type="text"
@@ -134,7 +164,6 @@ function FormRawMaterials({
                       e.product_unit_measurement || "",
                   });
                 }}
-                
                 menuPosition="fixed"
                 value={listProduct.filter(
                   (product) => product.value === form.product_id
@@ -220,46 +249,24 @@ function FormRawMaterials({
             inputRequired="required"
             name="material_hist_amount"
             value={form.material_hist_amount}
-            onChange={(e) => {
-              setForm({
-                ...form,
-                material_hist_amount: e.target.value,
-                material_hist_total_buy: form.material_hist_igv
-                  ? (
-                      e.target.value *
-                      1.18 *
-                      form.material_hist_price_buy
-                    ).toFixed(2)
-                  : e.target.value * form.material_hist_price_buy,
-              });
-            }}
+            onChange={handleChangeForm}
           />
         </div>
         <div className="col-span-6 lg:col-span-4">
           <InputPrimary
             label="Precio compra"
             type="number"
-            min="1"
+            min="0.01"
             step="0.01"
             inputRequired="required"
             name="material_hist_price_buy"
             value={form.material_hist_price_buy}
-            onChange={(e) => {
-              setForm({
-                ...form,
-                material_hist_price_buy: e.target.value,
-                material_hist_total_buy: form.material_hist_igv
-                  ? (e.target.value * 1.18 * form.material_hist_amount).toFixed(
-                      2
-                    )
-                  : e.target.value * form.material_hist_amount,
-              });
-            }}
+            onChange={handleChangeForm}
           />
         </div>
         <div className="col-span-6 lg:col-span-4">
           <InputPrimary
-            label="Total compra"
+            label="Total S/"
             type="number"
             min="1"
             disabled={true}
@@ -276,29 +283,11 @@ function FormRawMaterials({
               onChange={(e) =>
                 setForm({
                   ...form,
-                  material_hist_igv: e.target.checked,
-                  material_hist_total_buy: e.target.checked
-                    ? (
-                        form.material_hist_price_buy *
-                        1.18 *
-                        form.material_hist_amount
-                      ).toFixed(2)
-                    : form.material_hist_price_buy * form.material_hist_amount,
+                  material_hist_igv: e.target.checked
                 })
               }
               checked={form.material_hist_igv}
               name="material_hist_igv"
-            />
-            <Toogle
-              text="Incluir Cambio"
-              onChange={(e) =>
-                setForm({
-                  ...form,
-                  material_hist_total_include_type_change: e.target.checked,
-                })
-              }
-              checked={form.material_hist_total_include_type_change}
-              name="material_hist_total_include_type_change"
             />
           </div>
         </div>

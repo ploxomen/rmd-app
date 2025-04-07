@@ -48,18 +48,20 @@ export default function TableHistoriesProductFinaly({
               }
             </td>
             <td className="p-1">
-              <div className="flex gap-1 flex-wrap justify-center">
-                <ButtonPrimarySm
-                  onClick={e => getHistory(history.id)}
-                  icon={<PencilIcon className="size-4" />}
-                  title="Editar historial"
-                />
-                <ButtonDangerSm
-                  onClick={e => deleteHistory(history.id)}
-                  icon={<TrashIcon className="size-4" />}
-                  title="Eliminar historial"
-                />
-              </div>
+              {!history.quotation_detail_id && (
+                <div className="flex gap-1 flex-wrap justify-center">
+                  <ButtonPrimarySm
+                    onClick={(e) => getHistory(history.id)}
+                    icon={<PencilIcon className="size-4" />}
+                    title="Editar historial"
+                  />
+                  <ButtonDangerSm
+                    onClick={(e) => deleteHistory(history.id)}
+                    icon={<TrashIcon className="size-4" />}
+                    title="Eliminar historial"
+                  />
+                </div>
+              )}
             </td>
           </tr>
         ))

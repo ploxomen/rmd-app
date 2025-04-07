@@ -280,7 +280,7 @@ function RawMaterial({ dataModules, dataUser, dataRoles }) {
           imageBanner="/baners/Group 17.jpg"
           title="Almacén Materia Prima"
         />
-        <div className="w-full p-6 bg-white rounded-md shadow overflow-x-auto">
+        <div className="w-full p-6 bg-white rounded-md shadow">
           <div className="flex items-center justify-between gap-2 flex-wrap mb-2">
             <div className="flex items-center gap-x-4 flex-wrap mb-2">
               <div style={{ width: "350px" }}>
@@ -327,13 +327,15 @@ function RawMaterial({ dataModules, dataUser, dataRoles }) {
               />
             </div>
           </div>
-
+          <div className="overflow-x-auto mb-2">
           <TableRawMaterial
             money={moneyChange.money}
             products={products}
             addHistory={addHistory}
             deleteHistory={deleteHistory}
           />
+          </div>
+          
           <PaginationTable
             currentPage={dataChange.current}
             quantityRow={pagination.quantityRowData}

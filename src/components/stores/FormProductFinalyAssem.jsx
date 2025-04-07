@@ -18,7 +18,7 @@ export default function FormProductFinalyAssem({
   handleChangeMaterial = () => {},
 }) {
   
-  const { form, setFormulario, handleClickSubmit, handleSubmitParam , setFormObject} = useFormData({
+  const { form, setFormulario, handleClickSubmit, handleSubmitParam} = useFormData({
     data: formData,
     idSubmit: "form-product-assembled-submit",
     method: formData.hasOwnProperty("id") ? "put" : "post",
@@ -30,7 +30,7 @@ export default function FormProductFinalyAssem({
   return (
     <Modal
       status={viewModal}
-      maxWidth="max-w-[750px]"
+      maxWidth="max-w-[850px]"
       title={"Agregar"}
       onSave={(e) => handleClickSubmit()}
       handleCloseModal={handleClose}
@@ -84,6 +84,7 @@ export default function FormProductFinalyAssem({
         <div className="col-span-full">
           <TextareaPrimary
             label="Justificación"
+            inputRequired="required"
             name="product_finaly_description"
             value={form.product_finaly_description}
             onChange={(e) => setFormulario(e)}
@@ -97,7 +98,7 @@ export default function FormProductFinalyAssem({
             icon={<PlusIcon className="size-5" />}
           />
         </div>
-        <div className="col-span-full">
+        <div className="col-span-full overflow-x-auto">
           <TableDetailAssembled
             products={products}
             details={detailsProducts}

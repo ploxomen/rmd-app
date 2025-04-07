@@ -50,19 +50,13 @@ function TableHistoryMaterial({ histories, deleteHistory, viewHistory }) {
                 )}
             </td>
             <td className="p-1 text-center">
-              {history.material_hist_total_include_type_change
-                ? parseMoney(history.material_hist_total_type_change, "PEN")
-                : "No incluido"}
+              {parseMoney(history.material_hist_total_type_change, "PEN")}
             </td>
             <td className="p-1 text-center">
-              {history.material_hist_total_include_type_change
-                ? parseMoney(history.material_hist_total_buy_pen, "PEN")
-                : parseMoney(0, "PEN")}
+              {parseMoney(history.material_hist_total_buy_pen, "PEN")}
             </td>
             <td className="p-1 text-center">
-              {history.material_hist_money === "USD"
-                ? parseMoney(history.material_hist_total_buy_usd, "USD")
-                : parseMoney(0, "USD")}
+              {parseMoney(history.material_hist_total_buy_usd, "USD")}
             </td>
             <td className="p-1 text-center">{history.user_name}</td>
             <td className="p-1">
