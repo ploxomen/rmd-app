@@ -48,14 +48,15 @@ export default function TableProductProgress({
             )}
             <td className="p-1">
               <div className="flex gap-1 flex-wrap justify-center">
-                {type === "all" && (
+                {product.product_final_assem_id && <span>Sin acciones</span>}
+                {type === "all" && !product.product_final_assem_id && (
                   <ButtonPrimarySm
                     onClick={(e) => viewHistory(product.id)}
                     icon={<PencilIcon className="w-4 h-4" />}
                     title="Editar historial"
                   />
                 )}
-                {type !== "all" && (
+                {type !== "all" && !product.product_final_assem_id && (
                   <Link
                     className="rounded-md relative overflow-hidden inline-flex group items-center justify-center px-2 py-1.5 cursor-pointer border-b-4 border-l-2 hover:bg-blue-600 font-semibold transition-all ease-in-out text-xs shadow-lg bg-gradient-to-tr bg-blue-500 text-white"
                     href={{
@@ -69,12 +70,12 @@ export default function TableProductProgress({
                     <EyeIcon className="w-4 h-4" />
                   </Link>
                 )}
-                {type === "all" && (
-                <ButtonDangerSm
-                  onClick={(e) => deleteHistory(product.id)}
-                  icon={<TrashIcon className="w-4 h-4" />}
-                  title="Eliminar historial"
-                />
+                {type === "all" && !product.product_final_assem_id && (
+                  <ButtonDangerSm
+                    onClick={(e) => deleteHistory(product.id)}
+                    icon={<TrashIcon className="w-4 h-4" />}
+                    title="Eliminar historial"
+                  />
                 )}
               </div>
             </td>
