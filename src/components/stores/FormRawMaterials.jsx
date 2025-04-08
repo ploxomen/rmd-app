@@ -48,7 +48,7 @@ function FormRawMaterials({
   useEffect(() => {
     if (elemetHistory) {
       return setForm(
-        Object.keys(productEdit).length ? productEdit : initialDataForm
+        Object.keys(productEdit).length ? {...productEdit,material_hist_date: initialDataForm.material_hist_date} : initialDataForm
       );
     }
     setForm(
@@ -108,7 +108,7 @@ function FormRawMaterials({
             type="date"
             inputRequired="required"
             name="material_hist_date"
-            value={form.material_hist_date}
+            value={form.material_hist_date || ""}
             onChange={handleChangeForm}
           />
         </div>

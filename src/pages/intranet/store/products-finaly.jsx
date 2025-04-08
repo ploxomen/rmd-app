@@ -10,7 +10,6 @@ import FormProductFinalyAssem from "@/components/stores/FormProductFinalyAssem";
 import FormProductFinalyImport from "@/components/stores/FormProductFinalyImport";
 import TableProductsFinaly from "@/components/stores/TableProductsFinaly";
 import { sweetAlert } from "@/helpers/getAlert";
-import { getCookie } from "@/helpers/getCookie";
 import { listStores } from "@/helpers/listStores";
 import { parseMoney } from "@/helpers/utilities";
 import { verifUser } from "@/helpers/verifUser";
@@ -29,7 +28,6 @@ export default function ProductFinalyGeneral({
   dataRoles,
   dataUser,
 }) {
-  const headers = getCookie();
   const [providers, setProviders] = useState([]);
   const [products, setProducts] = useState([]);
   const {
@@ -50,6 +48,7 @@ export default function ProductFinalyGeneral({
     responseRequest: reponseRequestImport,
     modal: modalFinalyData,
     handleCloseModal: handleCloseModalFinaly,
+    handleDeleteAllHistory
   } = useFormFinaly(reloadPage);
   const {
     details: assembleDetails,
@@ -62,13 +61,13 @@ export default function ProductFinalyGeneral({
     handleChangeMaterial,
     handleCloseModal: handleCloseModalAssem,
   } = useFormAssambled(reloadPage);
-
+  
   useEffect(() => {
     const getData = async () => {
       try {
         const all = await axios.all([
-          apiAxios.get("/product-extra/raw-process", { headers }),
-          apiAxios.get("/raw-material/providers/list", { headers }),
+          apiAxios.get("/product-extra/raw-process"),
+          apiAxios.get("/raw-material/providers/list"),
         ]);
         setProducts(all[0].data.products);
         setProviders(all[1].data.providers);
@@ -153,9 +152,9 @@ export default function ProductFinalyGeneral({
               money={moneyChange.money}
               addHistoryImport={handleNewProductFinaly}
               addHistoryAssembled={handleAssetNewForm}
+              deleteHistory={handleDeleteAllHistory}
             />
           </div>
-
           <PaginationTable
             currentPage={filters.page}
             quantityRow={filters.show}

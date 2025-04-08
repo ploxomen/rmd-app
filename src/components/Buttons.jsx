@@ -1,3 +1,5 @@
+import { ArrowPathIcon } from "@heroicons/react/24/solid";
+
 export function ButtonPrimary({ type = "button", text, icon, onClick }) {
   return (
     <button
@@ -36,7 +38,10 @@ export function ButtonLogin({ type, text, loading = false , ...props }) {
       {...props}
     >
       <span className="absolute w-0 h-0 transition-all duration-300 ease-out bg-white rounded-full group-focus:w-full group-hover:h-32 opacity-10"></span>
-      <span className="relative">{loading ? "Cargando" : text}</span>
+      <span className="relative">
+        {loading && (<ArrowPathIcon className="size-6 mr-1 animate-spin inline-block"/>)}
+        {text}
+      </span>
     </button>
   );
 }

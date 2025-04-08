@@ -3,7 +3,7 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import React from "react";
 export const metadata = {
-  title: "Inicioar sesión",
+  title: "Iniciar sesión",
   description: "Login page",
 };
 export default async function LayoutAccount({ children }) {

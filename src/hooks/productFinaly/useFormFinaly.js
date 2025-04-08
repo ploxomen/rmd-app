@@ -92,6 +92,41 @@ export const useFormFinaly = (reloadPage = () => {}) => {
       setLoading(false);
     }
   };
+  const handleDeleteAllHistory = async (productFinaly) => {
+    const question = await sweetAlert({
+      title: 'Mensaje',
+      text: '¿Deseas eliminar todo el historial de este producto final?',
+      icon: 'question',
+      showCancelButton: true,
+    });
+    if (!question.isConfirmed) {
+      return;
+    }
+    setLoading(true);
+    try {
+      const { data } = await apiAxios.delete(
+        `/products-finaly/${productFinaly}`,
+        { headers }
+      );
+      if(!data.error){
+        sweetAlert({
+          title: 'Mensaje',
+          text: data.success,
+          icon: 'success',
+        });
+        reloadPage();
+      }
+    } catch (error) {
+      sweetAlert({
+        title: 'Error',
+        text: 'Error al eliminar los historiales',
+        icon: 'error',
+      });
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }
   const responseRequest = (response) => {
     if (!response.error) {
       handleCloseModal();
@@ -107,5 +142,6 @@ export const useFormFinaly = (reloadPage = () => {}) => {
     handleCloseModal,
     responseRequest,
     handleDeleteHistory,
+    handleDeleteAllHistory
   };
 };
