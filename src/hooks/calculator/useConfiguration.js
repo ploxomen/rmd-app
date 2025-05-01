@@ -7,19 +7,19 @@ export const useConfiguration = () => {
   const [data, setData] = useState({});
   const {modal,handleOpenModal,handleCloseModal} = useModal("hidden");
   const [formData, setFormData] = useState({
-    calculator_price_num_workers: 5,
-    calculator_price_num_supervisor: 2,
-    calculator_price_num_day_building: 15,
-    calculator_included_hours_extra_worker: true,
-    calculator_included_hours_extra_supervition: true,
-    calculator_price_hours_extra_worker: 2,
-    calculator_price_hours_extra_supervition: 1,
-    calculator_included_visit_site: true,
-    calculator_num_visit_site: 5,
-    calculator_included_exam_medical: true,
-    calculator_included_food: true,
-    calculator_included_pernoctar: true,
-    calculator_km_desplacement: 80,
+    calculator_price_num_workers: "",
+    calculator_price_num_supervisor: "",
+    calculator_price_num_day_building: "",
+    calculator_included_hours_extra_worker: false,
+    calculator_included_hours_extra_supervition: false,
+    calculator_price_hours_extra_worker: "",
+    calculator_price_hours_extra_supervition: "",
+    calculator_included_visit_site: false,
+    calculator_num_visit_site: "",
+    calculator_included_exam_medical: false,
+    calculator_included_food: false,
+    calculator_included_pernoctar: false,
+    calculator_km_desplacement: "",
   });
   useEffect(() => {
     const getData = async () => {
