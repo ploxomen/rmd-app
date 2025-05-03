@@ -20,7 +20,7 @@ export function InputPrimary({
       </label>
       <input
         required={inputRequired}
-        className="disabled:cursor-not-allowed disabled:bg-[#F2F2F2] border border-gray-300 text-placeholder text-sm rounded-lg block w-full p-2.5 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-500"
+        className="disabled:cursor-not-allowed disabled:bg-[#F2F2F2] border border-gray-300 text-placeholder text-sm rounded-lg block w-full p-2.5 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-500 placeholder:text-slate-300"
         {...restProps}
         id={`id${name}`}
         type={type}
