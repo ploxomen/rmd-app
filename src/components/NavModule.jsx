@@ -11,10 +11,10 @@ function NavModule({ module_url, module_icon, module_title, currentRoute }) {
           currentRoute == "/intranet" + module_url
             ? "bg-green-200 text-green-600"
             : "bg-white text-information"
-        } transition-colors ease-in-out duration-300 hover:bg-gray-100 rounded-lg text-base mx-4 px-4 py-2 flex items-center gap-2`}
+        } transition-colors ease-in-out duration-300 hover:bg-gray-100 rounded-lg text-sm mx-2 px-4 py-2 flex items-center gap-2`}
       >
         {listIcons.find((icon) => icon.name == module_icon).Icon}
-        <span className="text-base font-normal tracking-[0.15px]">
+        <span className="text-sm font-normal tracking-[0.15px]">
           {module_title}
         </span>
       </Link>

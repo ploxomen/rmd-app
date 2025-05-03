@@ -63,9 +63,10 @@ export default function FormReferralGuide({
           <InputPrimary
             label="N° de guía"
             type="text"
-            pattern="[0-9]"
-            maxLength={3}
+            pattern="[A-Za-z]{2}[0-9]{2}-[0-9]{1,5}"
             name="guide_issue_number"
+            inputRequired="required"
+            placeholder="XX00-00000"
             value={form.guide_issue_number}
             onChange={(e) => setFormulario(e)}
           />

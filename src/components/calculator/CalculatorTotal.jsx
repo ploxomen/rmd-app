@@ -41,12 +41,15 @@ export default function CalculatorTotal({
   const visitTotal = !formData.calculator_included_visit_site
     ? 0
     : data.calculator_price_site_visit * formData.calculator_num_visit_site;
-  const pernoctarTotal = data.calculator_price_overnight_voucher *
-      formData.calculator_price_num_day_building *
-      totalPeople;
+  const pernoctarTotal =
+    data.calculator_price_overnight_voucher *
+    formData.calculator_price_num_day_building *
+    totalPeople;
   const medicalExamTotal = !formData.calculator_included_exam_medical
     ? 0
     : data.calculator_price_medical_exam * totalPeople;
+  const payHouse = !formData.calculator_included_pernoctar
+    ? 0 : data.calculator_price_pay_pernoctar * formData.calculator_price_num_day_building * formData.calculator_price_num_workers;
   const desplazamientoTotal = !formData.calculator_included_pernoctar
     ? formData.calculator_km_desplacement *
       formData.calculator_price_num_day_building *
@@ -119,6 +122,21 @@ export default function CalculatorTotal({
             {parseMoney(pernoctarTotal, "PEN")}
           </span>
         </div>
+        {formData.calculator_included_pernoctar && (
+          <>
+            <div className="col-span-8">
+              <span className="text-base font-medium text-gray-700 mb-2">
+                Gastos de hospedaje
+              </span>
+            </div>
+            <div className="col-span-4">
+              <span className="text-gray-600">
+                {parseMoney(payHouse, "PEN")}
+              </span>
+            </div>
+          </>
+        )}
+
         <div className="col-span-8">
           <span className="text-base font-medium text-gray-700 mb-2">
             Exámenes médicos

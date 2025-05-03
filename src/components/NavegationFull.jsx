@@ -1,7 +1,7 @@
 import { listIcons } from "@/helpers/listIcons";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { forwardRef } from "react";
+import { forwardRef, memo } from "react";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import NavModule from "./NavModule";
 const NavegationFull = forwardRef(({ listModules, user, closeMenu }, ref) => {
@@ -61,8 +61,8 @@ const NavegationFull = forwardRef(({ listModules, user, closeMenu }, ref) => {
                 const openSubmodal = module.module_list.some(sub => "/intranet" + sub.module_url == currentRoute);
                 return (
                 <li className="relative flex flex-col gap-1" key={key}>
-                  <div className={`cursor-pointer text-submenu transition-colors ease-in-out duration-300 ${openSubmodal ? "text-green-500 bg-green-100" : "bg-white text-information"} items-center hover:bg-gray-100 rounded-lg text-base mx-4 px-4 py-2 flex justify-between gap-1`} onClick={handleSubmenus}>
-                    <div className="flex gap-1 text-base font-normal tracking-[0.15px]">
+                  <div className={`cursor-pointer text-submenu transition-colors ease-in-out text-sm duration-300 ${openSubmodal ? "text-green-500 bg-green-100" : "bg-white text-information"} items-center hover:bg-gray-100 rounded-lg mx-2 px-4 py-2 flex justify-between gap-1`} onClick={handleSubmenus}>
+                    <div className="flex gap-1 font-normal tracking-[0.15px]">
                       {
                         listIcons.find(
                           (icon) => icon.name == module.module_group_icon
@@ -91,4 +91,4 @@ const NavegationFull = forwardRef(({ listModules, user, closeMenu }, ref) => {
     </aside>
   );
 });
-export default NavegationFull;
+export default memo(NavegationFull);

@@ -12,7 +12,7 @@ export default function ConfigurationPay({ dataRoles, dataUser, dataModules }) {
   const { data, handleChangeData, handleSubmit } = useConfiguration();
   return (
     <LoyoutIntranet
-      title="Calculo - configuración"
+      title="Calculo instalaciones - configuración"
       description="Configuración de los calculos"
       user={dataUser}
       modules={dataModules}
@@ -20,7 +20,7 @@ export default function ConfigurationPay({ dataRoles, dataUser, dataModules }) {
     >
       <BanerModule
         imageBanner="/baners/Group 11.jpg"
-        title="Calculo - configuración"
+        title="Calculo instalaciones - configuración"
       />
       <form
         id="form-quotation"
@@ -163,6 +163,17 @@ export default function ConfigurationPay({ dataRoles, dataUser, dataModules }) {
                 value={data.calculator_price_medical_exam}
                 name="calculator_price_medical_exam"
                 label="Gasto examen médico"
+                inputRequired="required"
+              />
+            </div>
+            <div className="col-span-6 lg:col-span-3">
+              <InputPrimary
+                type="number"
+                onChange={handleChangeData}
+                step="0.01"
+                value={data.calculator_price_pay_pernoctar}
+                name="calculator_price_pay_pernoctar"
+                label="Gasto por pernocta"
                 inputRequired="required"
               />
             </div>

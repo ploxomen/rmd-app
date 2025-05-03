@@ -68,5 +68,9 @@ export const listIcons = [
     {
         name:"box-storage",
         Icon: <ArchiveBoxIcon className={classSizeIcon}/> 
+    },
+    {
+        name:"arrow-path-rounded-square",
+        Icon: <ArrowPathRoundedSquareIcon className={classSizeIcon}/>
     }
 ]
