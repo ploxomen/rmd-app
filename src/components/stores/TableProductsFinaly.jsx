@@ -26,7 +26,7 @@ export default function TableProductsFinaly({
   const customProducts = products.map((item) => ({
     ...item,
     addHistory: () =>
-      item.product_label == "ENSAMBLADO"
+      item.product_label_2 == "ENSAMBLADO"
         ? addHistoryAssembled({
           product_name: item.product_name,
           product_id: item.id,
@@ -55,7 +55,7 @@ export default function TableProductsFinaly({
               {product.product_code.toString().padStart(3, "0")}
             </td>
             <td className="p-1 text-center">{product.product_name}</td>
-            <td className="p-1 text-center">{product.product_label}</td>
+            <td className="p-1 text-center">{product.product_label_2}</td>
             <td className="p-1 text-center">{product.product_finaly_stock}</td>
             <td className="p-1 text-center">
               {

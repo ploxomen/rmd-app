@@ -109,7 +109,7 @@ export default function ProductFinalyGeneral({
                   <option value="">TODOS</option>
                   {listStores
                     .find((store) => store.label === "PRODUCTO TERMINADO")
-                    .options.map((store) => (
+                    .options_2.map((store) => (
                       <option value={store.value} key={store.value}>
                         {store.label}
                       </option>

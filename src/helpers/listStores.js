@@ -32,18 +32,22 @@ export const listStores = [
     label: 'PRODUCTO TERMINADO',
     options: [
       {
-        value: 'ENSAMBLADO',
-        label: 'ENSAMBLADO',
+        value: 'CAUCHO',
+        label: 'CAUCHO',
       },
       {
-        value: 'IMPORTADO',
-        label: 'IMPORTADO',
+        value: 'CARPINTERIA',
+        label: 'CARPINTERIA',
+      },
+      {
+        value: 'SOLDADURA',
+        label: 'SOLDADURA',
       },
     ],
     options_2: [
       {
-        value: 'NACIONAL',
-        label: 'NACIONAL',
+        value: 'ENSAMBLADO',
+        label: 'ENSAMBLADO',
       },
       {
         value: 'IMPORTADO',
