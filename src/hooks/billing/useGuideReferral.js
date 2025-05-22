@@ -1,6 +1,5 @@
 import apiAxios from '@/axios';
 import { sweetAlert } from '@/helpers/getAlert';
-import { getCookie } from '@/helpers/getCookie';
 import { useEffect, useState } from 'react';
 import { useModal } from '../useModal';
 import axios from 'axios';
@@ -11,7 +10,6 @@ const defaultValues = {
   guide_address_destination: '',
   guide_justification: '',
 };
-const headers = getCookie();
 export const useGuideReferral = (reloadPage = () => {}) => {
   const [customers, setCustomers] = useState([]);
   const [products, setProducts] = useState([]);
@@ -59,7 +57,7 @@ export const useGuideReferral = (reloadPage = () => {}) => {
   };
   const responseRequest = (response) => {
     if (!response.error) {
-      handleCloseModal();
+      closeModal();
       reloadPage();
     }
   };
@@ -98,7 +96,7 @@ export const useGuideReferral = (reloadPage = () => {}) => {
     }
   };
   const closeModal = () => {
-    setFormData(defaultValues);
+    setFormData({...defaultValues});
     setDetails([]);
     handleCloseModal();
   };

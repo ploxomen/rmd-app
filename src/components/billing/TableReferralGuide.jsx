@@ -30,7 +30,7 @@ export default function TableReferralGuide({
         <td className="p-1 text-center">
           {guide.guide_issue_date}
         </td>
-        <td className="p-1 text-center">GR{guide.guide_issue_year}-{guide.guide_issue_number.toString().padStart(3,"0")}</td>
+        <td className="p-1 text-center">{guide.guide_issue_number}</td>
         <td className="p-1 text-center">{guide.customer_name}</td>
         <td className="p-1 text-center">{guide.guide_address_destination}</td>
         <td className="p-1 text-center">{guide.guide_justification}</td>

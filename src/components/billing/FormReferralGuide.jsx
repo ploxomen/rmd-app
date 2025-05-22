@@ -71,7 +71,7 @@ export default function FormReferralGuide({
             onChange={(e) => setFormulario(e)}
           />
         </div>
-        <div className="col-span-6">
+        <div className="col-span-12 lg:col-span-6 mb-1">
           <Label text="Clientes" htmlFor="guide_customer_id" required />
           <Select
             instanceId="guide_customer_id"
