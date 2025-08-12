@@ -6,6 +6,7 @@ import Select from "react-select";
 import { ButtonPrimarySm } from "../Buttons";
 import { PlusIcon } from "@heroicons/react/24/solid";
 import TableDetailsReferGuide from "./TableDetailsReferGuide";
+import { SelectPrimary } from "../Selects";
 
 export default function FormReferralGuide({
   formData = {},
@@ -17,14 +18,14 @@ export default function FormReferralGuide({
   callbackResponse = () => {},
   handleChangeMaterial = () => {},
   handleDeleteDetail = () => {},
-  products = []
+  products = [],
 }) {
   const {
     form,
     setFormulario,
     setFormManual,
     handleClickSubmit,
-    handleSubmitParam
+    handleSubmitParam,
   } = useFormData({
     data: formData,
     idSubmit: "form-referral-guide-submit",
@@ -38,18 +39,22 @@ export default function FormReferralGuide({
     <Modal
       status={viewModal}
       maxWidth="max-w-[750px]"
-      title={formData.hasOwnProperty("id") ? "Editar guía de remisión" : "Nueva guía de remisión"}
+      title={
+        formData.hasOwnProperty("id")
+          ? "Editar guía de remisión"
+          : "Nueva guía de remisión"
+      }
       onSave={(e) => handleClickSubmit()}
       handleCloseModal={handleClose}
     >
       <form
         className="grid grid-cols-12 gap-x-3 gap-y-0"
-        onSubmit={ e => {
-            e.preventDefault();
-            handleSubmitParam({...form, details : detailsProducts});
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSubmitParam({ ...form, details: detailsProducts });
         }}
       >
-        <div className="col-span-6 lg:col-span-3">
+        <div className="col-span-6 lg:col-span-4">
           <InputPrimary
             label="Fecha emisión"
             type="date"
@@ -59,7 +64,17 @@ export default function FormReferralGuide({
             onChange={(e) => setFormulario(e)}
           />
         </div>
-        <div className="col-span-6 lg:col-span-3">
+        <div className="col-span-6 lg:col-span-4">
+          <InputPrimary
+            label="Fecha traslado"
+            type="date"
+            inputRequired="required"
+            name="guide_transfer_date"
+            value={form.guide_transfer_date}
+            onChange={(e) => setFormulario(e)}
+          />
+        </div>
+        <div className="col-span-6 lg:col-span-4">
           <InputPrimary
             label="N° de guía"
             type="text"
@@ -71,7 +86,29 @@ export default function FormReferralGuide({
             onChange={(e) => setFormulario(e)}
           />
         </div>
-        <div className="col-span-12 lg:col-span-6 mb-1">
+        <div className="col-span-6 lg:col-span-3">
+          <InputPrimary
+            label="N° de Factura"
+            type="text"
+            name="guide_bill_number"
+            value={form.guide_bill_number}
+            onChange={(e) => setFormulario(e)}
+          />
+        </div>
+        <div className="col-span-6 lg:col-span-3">
+          <SelectPrimary
+            label="Tipos de movimiento"
+            inputRequired="required"
+            name="guide_type_motion"
+            value={form.guide_type_motion}
+            onChange={(e) => setFormulario(e)}
+          >
+            <option value="VENTA">VENTA</option>
+            <option value="GARANTIA">GARANTIA</option>
+            <option value="MUESTRA">MUESTRA</option>
+          </SelectPrimary>
+        </div>
+        <div className="col-span-6 lg:col-span-6">
           <Label text="Clientes" htmlFor="guide_customer_id" required />
           <Select
             instanceId="guide_customer_id"
@@ -85,7 +122,7 @@ export default function FormReferralGuide({
             )}
           />
         </div>
-        <div className="col-span-full">
+        <div className="col-span-full lg:col-span-6">
           <TextareaPrimary
             label="Dirección destino"
             name="guide_address_destination"
@@ -94,7 +131,7 @@ export default function FormReferralGuide({
             onChange={(e) => setFormulario(e)}
           />
         </div>
-        <div className="col-span-full">
+        <div className="col-span-full lg:col-span-6">
           <TextareaPrimary
             label="Justificación"
             name="guide_justification"
@@ -103,11 +140,17 @@ export default function FormReferralGuide({
             onChange={(e) => setFormulario(e)}
           />
         </div>
+        <div className="col-span-full">
+          <TextareaPrimary
+            label="Observación"
+            name="guide_observations"
+            value={form.observations}
+            onChange={(e) => setFormulario(e)}
+          />
+        </div>
         <div className="col-span-full mb-2 text-right">
           <ButtonPrimarySm
-            onClick={(e) =>
-              handleAddDetail()
-            }
+            onClick={(e) => handleAddDetail()}
             icon={<PlusIcon className="size-5" />}
           />
         </div>

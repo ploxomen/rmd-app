@@ -9,6 +9,10 @@ const defaultValues = {
   guide_issue_number: '',
   guide_address_destination: '',
   guide_justification: '',
+  guide_transfer_date: '',
+  guide_bill_number: '',
+  guide_observations: '',
+  guide_type_motion: 'VENTA'
 };
 export const useGuideReferral = (reloadPage = () => {}) => {
   const [customers, setCustomers] = useState([]);
