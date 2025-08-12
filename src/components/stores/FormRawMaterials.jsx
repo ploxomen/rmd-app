@@ -18,7 +18,6 @@ const initialDataForm = {
   material_hist_amount: "",
   material_hist_price_buy: "",
   material_hist_name_product: null,
-  material_hist_igv: true,
   material_hist_money: "PEN",
   material_hist_unit_measurement: "",
 };
@@ -71,13 +70,10 @@ function FormRawMaterials({
     const total = priceBuy * form.material_hist_amount;
     setForm((val) => ({
       ...val,
-      material_hist_total_buy: form.material_hist_igv
-        ? (total * 1.18).toFixed(2)
-        : total.toFixed(2),
+      material_hist_total_buy: total.toFixed(2),
     }));
   }, [
     form.material_hist_money,
-    form.material_hist_igv,
     form.material_hist_amount,
     form.material_hist_total_type_change,
     form.material_hist_price_buy,
@@ -254,7 +250,7 @@ function FormRawMaterials({
         </div>
         <div className="col-span-6 lg:col-span-4">
           <InputPrimary
-            label="Precio compra"
+            label="Precio unitario"
             type="number"
             min="0.01"
             step="0.01"
@@ -275,21 +271,6 @@ function FormRawMaterials({
             value={form.material_hist_total_buy}
             onChange={handleChangeForm}
           />
-        </div>
-        <div className="col-span-full">
-          <div className="flex gap-x-4 gap-y-2">
-            <Toogle
-              text="Incluir IGV"
-              onChange={(e) =>
-                setForm({
-                  ...form,
-                  material_hist_igv: e.target.checked
-                })
-              }
-              checked={form.material_hist_igv}
-              name="material_hist_igv"
-            />
-          </div>
         </div>
         <SubmitForm id="form-product-submit" />
       </form>

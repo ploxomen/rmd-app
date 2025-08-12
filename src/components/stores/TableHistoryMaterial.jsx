@@ -7,13 +7,15 @@ import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
 function TableHistoryMaterial({ histories, deleteHistory, viewHistory }) {
   const columns = [
     "Código",
+    "Tipo",
     "N° Factura",
     "N° Guia",
     "Cantidad",
-    "P. Compra",
-    "I.G.V",
-    "Tipo Cambio",
+    "P. Uni.",
     "Total S/",
+    "Saldo Cant.",
+    "Saldo Cost.",
+    "Promedio",
     "Total $",
     "Usuario",
     "Acciones",
@@ -32,28 +34,32 @@ function TableHistoryMaterial({ histories, deleteHistory, viewHistory }) {
             <td className="p-1 text-center">
               {history.id.toString().padStart(3, "0")}
             </td>
+            <td className="p-1 text-center">{history.raw_hist_type}</td>
             <td className="p-1 text-center">{history.material_hist_bill}</td>
             <td className="p-1 text-center">{history.material_hist_guide}</td>
             <td className="p-1 text-center">{history.material_hist_amount}</td>
             <td className="p-1 text-center">
-              {history.material_hist_money &&
+              {
                 parseMoney(
                   history.material_hist_price_buy,
-                  history.material_hist_money
+                  'PEN'
                 )}
             </td>
             <td className="p-1 text-center">
-              {history.material_hist_money &&
+              {
                 parseMoney(
-                  history.material_hist_igv,
-                  history.material_hist_money
+                  history.material_hist_total_buy_pen,
+                  'PEN'
                 )}
             </td>
             <td className="p-1 text-center">
-              {parseMoney(history.material_hist_total_type_change, "PEN")}
+              {history.raw_hist_bala_amou}
             </td>
             <td className="p-1 text-center">
-              {parseMoney(history.material_hist_total_buy_pen, "PEN")}
+              {parseMoney(history.raw_hist_bala_cost,'PEN')}
+            </td>
+            <td className="p-1 text-center">
+              {history.raw_hist_prom_weig}
             </td>
             <td className="p-1 text-center">
               {parseMoney(history.material_hist_total_buy_usd, "USD")}
