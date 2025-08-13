@@ -1,6 +1,5 @@
 import apiAxios from "@/axios";
 import BanerModule from "@/components/BanerModule";
-import { ButtonPrimarySm } from "@/components/Buttons";
 import { InputSearch } from "@/components/Inputs";
 import LoyoutIntranet from "@/components/LoyoutIntranet";
 import PaginationTable from "@/components/PaginationTable";
@@ -8,10 +7,9 @@ import FormProductProgress from "@/components/stores/FormProductProgress";
 import TableHistoryProgress from "@/components/stores/TableHistoryProgress";
 import { sweetAlert } from "@/helpers/getAlert";
 import { getCookie } from "@/helpers/getCookie";
-import { formProductProgress } from "@/helpers/valueFormProductProgress";
 import { verifUser } from "@/helpers/verifUser";
 import { useModal } from "@/hooks/useModal";
-import { ArrowUturnLeftIcon, PlusIcon } from "@heroicons/react/24/solid";
+import { ArrowUturnLeftIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 

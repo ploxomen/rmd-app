@@ -6,6 +6,7 @@ import Label from "../Label";
 import { formProductProgress } from "@/helpers/valueFormProductProgress";
 import { optionsUnitsMeasurements } from "@/helpers/listUnitsMeasurements";
 import { SelectPrimary } from "../Selects";
+
 export default function FormProductProgress({
   products = [],
   statusModal,
@@ -29,6 +30,9 @@ export default function FormProductProgress({
     e.preventDefault();
     handleSaveHistory(form);
   };
+  useEffect(() => {
+    setForm((value) => ({...value,total: (form.price_unit * form.stock).toFixed(2)}))
+  },[form.price_unit,form.stock])
   useEffect(() => {
     setForm(
       editProductRaw.product_id !== null ? editProductRaw : formProductProgress
@@ -75,7 +79,7 @@ export default function FormProductProgress({
               }))}
           />
         </div>
-        <div className="col-span-6 md:col-span-4">
+        <div className="col-span-6">
           <InputPrimary
             label="Fecha"
             type="date"
@@ -85,17 +89,7 @@ export default function FormProductProgress({
             onChange={handleChangeForm}
           />
         </div>
-        <div className="col-span-6 md:col-span-4">
-          <InputPrimary
-            label="Cantidad"
-            type="number"
-            name="stock"
-            inputRequired={true}
-            value={form.stock || ""}
-            onChange={handleChangeForm}
-          />
-        </div>
-        <div className="col-span-6 md:col-span-4">
+        <div className="col-span-6">
           <SelectPrimary
             label="Unidad medida"
             inputRequired="required"
@@ -110,6 +104,40 @@ export default function FormProductProgress({
             ))}
           </SelectPrimary>
         </div>
+        <div className="col-span-6 md:col-span-4">
+          <InputPrimary
+            label="Cantidad"
+            type="number"
+            name="stock"
+            inputRequired={true}
+            value={form.stock || ""}
+            onChange={handleChangeForm}
+          />
+        </div>
+        <div className="col-span-6 md:col-span-4">
+          <InputPrimary
+            label="P. Unitario"
+            type="number"
+            slep="0.01"
+            name="price_unit"
+            inputRequired={true}
+            value={form.price_unit || ""}
+            onChange={handleChangeForm}
+          />
+        </div>
+        <div className="col-span-6 md:col-span-4">
+          <InputPrimary
+            label="Total S/"
+            type="number"
+            disabled
+            slep="0.01"
+            name="total"
+            inputRequired={true}
+            value={form.total || ""}
+            onChange={handleChangeForm}
+          />
+        </div>
+        
         <div className="col-span-full">
           <TextareaPrimary
             label="Detalles"

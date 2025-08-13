@@ -288,7 +288,7 @@ export default function ProductProgressCreate({
           </div>
           <div className="overflow-x-auto mb-2">
           <TableProductProgress
-            columns={[ "codigo", "producto","fecha", "unidad de medida" , "cantidad","justificacion" , "acciones"]}
+            columns={[ "codigo", "tipo","producto","fecha", "u. Medida" , "cantidad", "p. unitario" , "total", "Sal. Cant.", "Sal. Costo", "Prom.","justificacion" , "acciones"]}
             products={products}
             viewHistory={viewHistory}
             deleteHistory={deleteHistory}

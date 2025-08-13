@@ -4,6 +4,7 @@ import { ButtonDangerSm, ButtonPrimarySm } from "../Buttons";
 import { EyeIcon, PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { optionsUnitsMeasurements } from "@/helpers/listUnitsMeasurements";
+import { parseMoney } from "@/helpers/utilities";
 
 export default function TableProductProgress({
   columns = [],
@@ -24,6 +25,11 @@ export default function TableProductProgress({
         products.map((product) => (
           <tr className="bg-white dark:bg-gray-800 text-xs" key={product.id}>
             <td className="p-1 text-center">{product.product_code}</td>
+            {type === "all" && (
+              <td className="p-1 text-center">
+                {product.prod_prog_hist_type}
+              </td>
+            )}
             <td className="p-1 text-center">{product.product_name}</td>
             {type === "all" && (
               <td className="p-1 text-center">
@@ -41,6 +47,26 @@ export default function TableProductProgress({
             <td className="p-1 text-center">
               {product.product_progress_stock}
             </td>
+            {type === "all" && (
+              <>
+              <td className="p-1 text-center">
+                {parseMoney(product.product_progress_history_pu,'PEN')}
+              </td>
+              <td className="p-1 text-center">
+                {parseMoney(product.product_progress_history_total,'PEN')}
+              </td>
+              <td className="p-1 text-center">
+              {product.prod_prog_hist_bala_amou}
+            </td>
+            <td className="p-1 text-center">
+              {parseMoney(product.prod_prog_hist_bala_cost,'PEN')}
+            </td>
+            <td className="p-1 text-center">
+              {product.prod_prog_hist_prom_weig}
+            </td>
+              </>
+            )}
+            
             {type === "all" && (
               <td className="p-1 text-center">
                 {product.product_progress_history_description}

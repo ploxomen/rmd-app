@@ -48,6 +48,30 @@ export const listStores = [
       {
         value: 'ENSAMBLADO',
         label: 'ENSAMBLADO',
+      }
+    ],
+  },
+  {
+    value: 'ALMACEN MERCADERIA',
+    label: 'ALMACEN MERCADERIA',
+    options: [
+      {
+        value: 'CAUCHO',
+        label: 'CAUCHO',
+      },
+      {
+        value: 'CARPINTERIA',
+        label: 'CARPINTERIA',
+      },
+      {
+        value: 'SOLDADURA',
+        label: 'SOLDADURA',
+      },
+    ],
+    options_2: [
+      {
+        value: 'NACIONAL',
+        label: 'NACIONAL',
       },
       {
         value: 'IMPORTADO',
