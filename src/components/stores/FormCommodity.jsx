@@ -11,7 +11,9 @@ export default function FormCommodity({
   modal = true,
   data = {},
   listProviders = [],
+  callbackResponse = () => {},
   moneyChange = {},
+  handleCloseModal = {},
 }) {
   const {
     form,
@@ -22,43 +24,38 @@ export default function FormCommodity({
   } = useFormData({
     data,
     idSubmit: "form-commodity",
-    method: data?.id ? "PUT" : "POST",
-    url: "commodity",
+    method: data?.id ? "put" : "post",
+    url: "/store-commodity",
+    callbackResponse,
   });
   useEffect(() => {
-    setFormManual("commodi_hist_type_change", moneyChange.money);
-  }, [moneyChange]);
+    setFormManual('commodi_hist_type_change',moneyChange.money);
+  },[data])
   useEffect(() => {
-    const total =
-      form.commodi_hist_money === "PEN"
-        ? form.commodi_hist_price_buy * form.commodi_hist_amount
-        : form.commodi_hist_price_buy *
-          form.commodi_hist_type_change *
-          form.commodi_hist_amount;
+    let total = form.commodi_hist_price_buy * form.commodi_hist_amount;
+    if (form.commodi_hist_money === "USD") {
+      total = total * form.commodi_hist_type_change;
+    }
     setFormManual("commodi_hist_total_buy", total.toFixed());
-  }, [
-    form.commodi_hist_price_buy,
-    form.commodi_hist_amount,
-    form.commodi_hist_money,
-  ]);
+  }, [form.commodi_hist_price_buy,form.commodi_hist_amount,form.commodi_hist_money]);
   return (
     <Modal
       status={modal}
-      onSave={(e) => handleClickSubmit}
+      onSave={(e) => handleClickSubmit()}
       title={data?.id ? "Editar mercadería" : "Agregar mercadería"}
+      handleCloseModal={handleCloseModal}
     >
       <form
         className="grid grid-cols-12 gap-x-3 gap-y-0"
         onSubmit={handleSubmit}
-        id="form-commodity"
       >
         <div className="col-span-6 md:col-span-4">
           <InputPrimary
             label="Fecha"
             type="date"
             inputRequired="required"
-            name="material_hist_date"
-            value={form.commod_hist_date}
+            name="commodi_hist_date"
+            value={form.commodi_hist_date}
             onChange={setFormulario}
           />
         </div>

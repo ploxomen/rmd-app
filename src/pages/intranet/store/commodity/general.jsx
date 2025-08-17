@@ -1,4 +1,3 @@
-import apiAxios from "@/axios";
 import BanerModule from "@/components/BanerModule";
 import TableGeneral from "@/components/commodity/TableGeneral";
 import { InputSearch } from "@/components/Inputs";
@@ -7,15 +6,12 @@ import PaginationTable from "@/components/PaginationTable";
 import { SelectPrimary } from "@/components/Selects";
 import FormCommodity from "@/components/stores/FormCommodity";
 import FormMoney from "@/components/stores/FormMoney";
-import { sweetAlert } from "@/helpers/getAlert";
 import { listStores } from "@/helpers/listStores";
 import { verifUser } from "@/helpers/verifUser";
 import { useCommodity } from "@/hooks/commodity/useCommodity";
 import { useApi } from "@/hooks/useApi";
 import { useDataList } from "@/hooks/useDataList";
 import { useMoney } from "@/hooks/useMoney";
-import axios from "axios";
-import React, { useEffect, useState } from "react";
 export async function getServerSideProps(context) {
   return await verifUser(context, "/store/commodity/general");
 }
@@ -37,13 +33,16 @@ export default function CommodityHome({ dataModules, dataUser, dataRoles }) {
     moneyChange,
     handleCloseModal: closeModalMoney,
   } = useMoney();
-  const {data : providers} = useApi("raw-material/providers/list");
+  const { data: providers } = useApi("raw-material/providers/list");
   const {
     data: form,
     handleDeleteAllHistory,
     handleAddHistory,
+    callbackResponse,
     modal,
-  } = useCommodity();
+    handleCloseModal: modalCloseCommodity,
+  } = useCommodity(reloadPage);
+
   return (
     <>
       <LoyoutIntranet
@@ -99,7 +98,14 @@ export default function CommodityHome({ dataModules, dataUser, dataRoles }) {
           />
         </div>
       </LoyoutIntranet>
-      <FormCommodity modal={modal} data={form} listProviders={providers.providers} moneyChange={moneyChange}/>
+      <FormCommodity
+        handleCloseModal={modalCloseCommodity}
+        callbackResponse={callbackResponse}
+        modal={modal}
+        data={form}
+        listProviders={providers.providers}
+        moneyChange={moneyChange}
+      />
       <FormMoney
         status={modalMoney}
         valueMoney={moneyChange}

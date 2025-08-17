@@ -77,6 +77,7 @@ export const useFormData = ({
       });
       callbackResponse(resp.data);
     } catch (error) {
+      console.error(error)
         if(error?.response?.status === 422){
             for (const key in error.response.data.errors) {
                 if (Object.prototype.hasOwnProperty.call(error.response.data.errors, key)) {

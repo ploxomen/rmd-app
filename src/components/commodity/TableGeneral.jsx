@@ -50,7 +50,7 @@ export default function TableGeneral({
             <td className="p-1">
               <div className="flex gap-1 flex-wrap justify-center">
                 <ButtonPrimarySm
-                  onClick={(e) => addHistory(product.id,product.product_name)}
+                  onClick={(e) => addHistory(product.product_id,product.product_name,product.product_unit_measurement)}
                   icon={<PlusIcon className="w-4 h-4" />}
                   title="Agregar historial"
                 />
