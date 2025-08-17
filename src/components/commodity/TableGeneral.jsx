@@ -59,7 +59,7 @@ export default function TableGeneral({
                   href={{
                     pathname: `/intranet/store/commodity/histories`,
                     query: {
-                      product_finaly: product.product_finaly_id,
+                      product: product.product_id,
                     },
                   }}
                   title="Ver historial"

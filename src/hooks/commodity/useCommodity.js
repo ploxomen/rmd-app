@@ -5,7 +5,7 @@ const form = {
   name_product: '',
   product_id: '',
   commodi_hist_price_buy: '',
-  commodi_hist_guide: '2',
+  commodi_hist_guide: '',
   commodi_hist_total_buy: '',
   commodi_hist_type_change: '',
   commodity_provider: '',
