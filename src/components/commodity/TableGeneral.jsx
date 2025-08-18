@@ -67,7 +67,7 @@ export default function TableGeneral({
                   <EyeIcon className="w-4 h-4" />
                 </Link>
                 <ButtonDangerSm
-                  onClick={(e) => deleteHistory(product.product_finaly_id)}
+                  onClick={(e) => deleteHistory(product.id)}
                   icon={<TrashIcon className="w-4 h-4" />}
                   title="Eliminar producto del almacen"
                 />

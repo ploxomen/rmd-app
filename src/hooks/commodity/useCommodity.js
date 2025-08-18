@@ -23,8 +23,80 @@ export const useCommodity = (reloadData = () => {}) => {
     handleCloseModal();
     reloadData();
   };
-  const handleDeleteAllHistory = () => {};
-  const handleDeleteHistory = () => {};
+  const handleDeleteAllHistory = async (idCommmodity) => {
+    const question = await sweetAlert({
+      title: "Mensaje",
+      text:
+        "¿Deseas eliminar todo el historial de este producto?",
+      icon: "question",
+      showCancelButton: true,
+    });
+    if (!question.isConfirmed) {
+      return;
+    }
+    try {
+      const resp = await apiAxios.delete(`/store-commodity/${idCommmodity}`);
+      if (resp.data.redirect !== null) {
+        return route.replace(resp.data.redirect);
+      }
+      if (resp.data.error) {
+        return sweetAlert({
+          title: "Alerta",
+          text: resp.data.message,
+          icon: "warning",
+        });
+      }
+      reloadData();
+      sweetAlert({
+        title: "Exitoso",
+        text: resp.data.message,
+        icon: "success",
+      });
+    } catch (error) {
+      sweetAlert({
+        title: "Error",
+        text: "Error al eliminar los registros",
+        icon: "error",
+      });
+    }
+  };
+  const handleDeleteHistory = async (idHistory) => {
+    const question = await sweetAlert({
+      title: "Mensaje",
+      text:
+        "¿Deseas eliminar este registro del historial?",
+      icon: "question",
+      showCancelButton: true,
+    });
+    if (!question.isConfirmed) {
+      return;
+    }
+    try {
+      const resp = await apiAxios.delete(`/store-commodity/history-one/${idHistory}`);
+      if (resp.data.redirect !== null) {
+        return route.replace(resp.data.redirect);
+      }
+      if (resp.data.error) {
+        return sweetAlert({
+          title: "Alerta",
+          text: resp.data.message,
+          icon: "warning",
+        });
+      }
+      reloadData();
+      sweetAlert({
+        title: "Exitoso",
+        text: resp.data.message,
+        icon: "success",
+      });
+    } catch (error) {
+      sweetAlert({
+        title: "Error",
+        text: "Error al eliminar el registro",
+        icon: "error",
+      });
+    }
+  };
   const handleShowHistory = async (idHistory) => {
     try {
       const resp = await apiAxios.get(
@@ -48,7 +120,6 @@ export const useCommodity = (reloadData = () => {}) => {
       console.error(error);
     }
   };
-  
   const handleAddHistory = (idProduct, nameProduct, unit) => {
     setData({
       ...form,
