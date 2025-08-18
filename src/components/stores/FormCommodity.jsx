@@ -25,7 +25,7 @@ export default function FormCommodity({
     data,
     idSubmit: "form-commodity",
     method: data?.id ? "put" : "post",
-    url: "/store-commodity",
+    url: data?.id ? `/store-commodity/${data.id}` : '/store-commodity',
     callbackResponse,
   });
   useEffect(() => {
