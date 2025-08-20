@@ -7,6 +7,7 @@ import { ButtonPrimarySm } from "../Buttons";
 import { PlusIcon } from "@heroicons/react/24/solid";
 import TableDetailsReferGuide from "./TableDetailsReferGuide";
 import { SelectPrimary } from "../Selects";
+import { sweetAlert } from "@/helpers/getAlert";
 
 export default function FormReferralGuide({
   formData = {},
@@ -51,6 +52,20 @@ export default function FormReferralGuide({
         className="grid grid-cols-12 gap-x-3 gap-y-0"
         onSubmit={(e) => {
           e.preventDefault();
+          if(!form.guide_customer_id){
+            return sweetAlert({
+              title : 'Alerta',
+              icon : 'warning',
+              text: 'Por favor debe seleccionar un cliente'
+            })
+          }
+          if(!detailsProducts.length){
+            return sweetAlert({
+              title : 'Alerta',
+              icon : 'warning',
+              text: 'Por favor registre los detalles de la guía'
+            })
+          }
           handleSubmitParam({ ...form, details: detailsProducts });
         }}
       >

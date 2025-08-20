@@ -44,7 +44,7 @@ export default function TableDetailsReferGuide({
                   >
                     <option value="MATERIA PRIMA">MATERIA PRIMA</option>
                     <option value="PRODUCTO TERMINADO">PRODUCTO TERMINADO</option>
-                    <option value="PRODUCTO MERCADERIA">PRODUCTO MERCADERIA</option>
+                    <option value="MERCADERIA">PRODUCTO MERCADERIA</option>
                   </SelectSimple>
                 </td>
                 <td className="p-1 text-center min-w-64">
