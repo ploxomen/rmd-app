@@ -5,6 +5,7 @@ import { InputDetailsSm } from "../Inputs";
 import { ButtonDangerSm } from "../Buttons";
 import { TrashIcon } from "@heroicons/react/24/solid";
 import { optionsUnitsMeasurements } from "@/helpers/listUnitsMeasurements";
+import { parseMoney } from "@/helpers/utilities";
 
 export default function TableDetailAssembled({
   details = [],
@@ -15,6 +16,9 @@ export default function TableDetailAssembled({
   const newDetails = details.map((detail) => {
     return {
       ...detail,
+      detail_cost_unit: products.find(
+        (p) => p.tipo == detail.detail_store && p.product_id == detail.detail_product_id
+      )?.cost_unit,
       detail_units_measurement: products.find(
         (p) => p.tipo == detail.detail_store && p.product_id == detail.detail_product_id
       )?.product_unit_measurement,
@@ -22,7 +26,7 @@ export default function TableDetailAssembled({
   });
   return (
     <TableIntranet
-      columns={["o. Material", "producto", "cantidad", "unidad", "acciones"]}
+      columns={["o. Material", "producto", "cantidad", "p. unitario", "subtotal", "unidad", "acciones"]}
     >
       {!newDetails.length ? (
         <tr className="bg-white dark:bg-gray-800">
@@ -81,6 +85,12 @@ export default function TableDetailAssembled({
                 step="0.01"
                 value={detail.detail_stock}
               />
+            </td>
+            <td className="p-1 text-center w-[4px]">
+              <span>{parseMoney(detail.detail_cost_unit,'PEN')}</span>
+            </td>
+            <td className="p-1 text-center w-[4px]">
+              <span>{parseMoney(parseFloat(detail.detail_cost_unit) * detail.detail_stock,'PEN')}</span>
             </td>
             <td className="p-1 text-center">
               {

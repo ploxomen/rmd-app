@@ -43,6 +43,11 @@ function FormProduct({
     setDeleteImg(false);
     handleStore(productEdit.product_store);
   }, [productEdit]);
+  useEffect(() => {
+    if(form.product_store === 'PRODUCTO TERMINADO') {
+      setForm((value) => ({...value, product_label_2: 'ENSAMBLADO'}));
+    }
+  },[form.product_store])
   const hanbleSendModal = () => {
     const formProduct = document.querySelector("#form-product-submit");
     formProduct.click();
