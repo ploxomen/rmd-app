@@ -23,11 +23,6 @@ export const useFormAssambled = (reloadPage = () => {}) => {
     product_price_client,
     product_id,
   }) => {
-    // console.log({
-    //   product_name,
-    //   product_price_client,
-    //   product_id,
-    // })
     setDetails([]);
     setData((val) => ({
       ...val,

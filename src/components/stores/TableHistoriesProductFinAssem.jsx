@@ -3,6 +3,7 @@ import TableIntranet from "../TableIntranet";
 import { optionsUnitsMeasurements } from "@/helpers/listUnitsMeasurements";
 import { ButtonDangerSm, ButtonPrimarySm } from "../Buttons";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
+import { parseMoney } from "@/helpers/utilities";
 
 export default function TableHistoriesProductFinAssem({
   histories = [],
@@ -14,6 +15,7 @@ export default function TableHistoriesProductFinAssem({
     "Fecha - Ingreso / Salida",
     "Cantidad",
     "Unidad",
+    "valor ensamblaje",
     "Justificacion",
     "Acciones",
   ];
@@ -42,6 +44,7 @@ export default function TableHistoriesProductFinAssem({
                 )?.label
               }
             </td>
+            <td className="p-1 text-center">{parseMoney(history.product_finaly_total,'PEN')}</td>
             <td className="p-1 text-center">
               {history.product_finaly_description}
             </td>

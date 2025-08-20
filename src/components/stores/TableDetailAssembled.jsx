@@ -14,19 +14,28 @@ export default function TableDetailAssembled({
   products = [],
 }) {
   const newDetails = details.map((detail) => {
+    const productFind = products.find(
+      (p) =>
+        p.tipo == detail.detail_store &&
+        p.product_id == detail.detail_product_id
+    );
     return {
       ...detail,
-      detail_cost_unit: products.find(
-        (p) => p.tipo == detail.detail_store && p.product_id == detail.detail_product_id
-      )?.cost_unit,
-      detail_units_measurement: products.find(
-        (p) => p.tipo == detail.detail_store && p.product_id == detail.detail_product_id
-      )?.product_unit_measurement,
+      detail_price_unit: detail.hasOwnProperty('detail_product_id_old') && detail.detail_product_id_old == productFind?.product_id ? detail.detail_price_unit : productFind?.cost_unit,
+      detail_units_measurement: productFind?.product_unit_measurement,
     };
   });
   return (
     <TableIntranet
-      columns={["o. Material", "producto", "cantidad", "p. unitario", "subtotal", "unidad", "acciones"]}
+      columns={[
+        "o. Material",
+        "producto",
+        "cantidad",
+        "p. unitario",
+        "subtotal",
+        "unidad",
+        "acciones",
+      ]}
     >
       {!newDetails.length ? (
         <tr className="bg-white dark:bg-gray-800">
@@ -35,14 +44,21 @@ export default function TableDetailAssembled({
           </td>
         </tr>
       ) : (
-        newDetails.map(detail => (
-          <tr className="bg-white dark:bg-gray-800 text-xs" key={detail.detail_id}>
+        newDetails.map((detail) => (
+          <tr
+            className="bg-white dark:bg-gray-800 text-xs"
+            key={detail.detail_id}
+          >
             <td className="p-1 text-center min-w-40">
               <SelectSimple
                 name={`material-${detail.detail_id}`}
                 isRequired
                 onChange={(e) =>
-                  handleChangeMaterial("detail_store", e.target.value, detail.detail_id)
+                  handleChangeMaterial(
+                    "detail_store",
+                    e.target.value,
+                    detail.detail_id
+                  )
                 }
                 value={detail.detail_store}
               >
@@ -56,7 +72,11 @@ export default function TableDetailAssembled({
                 value={detail.detail_product_id}
                 isRequired
                 onChange={(e) =>
-                  handleChangeMaterial("detail_product_id", e.target.value, detail.detail_id)
+                  handleChangeMaterial(
+                    "detail_product_id",
+                    e.target.value,
+                    detail.detail_id
+                  )
                 }
               >
                 <option value="" disabled hidden>
@@ -80,17 +100,26 @@ export default function TableDetailAssembled({
                 required
                 name={`stock-${detail.detail_id}`}
                 onChange={(e) =>
-                  handleChangeMaterial("detail_stock", e.target.value, detail.detail_id)
+                  handleChangeMaterial(
+                    "detail_stock",
+                    e.target.value,
+                    detail.detail_id
+                  )
                 }
                 step="0.01"
                 value={detail.detail_stock}
               />
             </td>
             <td className="p-1 text-center w-[4px]">
-              <span>{parseMoney(detail.detail_cost_unit,'PEN')}</span>
+              <span>{parseMoney(detail.detail_price_unit, "PEN")}</span>
             </td>
             <td className="p-1 text-center w-[4px]">
-              <span>{parseMoney(parseFloat(detail.detail_cost_unit) * detail.detail_stock,'PEN')}</span>
+              <span>
+                {parseMoney(
+                  parseFloat(detail.detail_price_unit) * detail.detail_stock,
+                  "PEN"
+                )}
+              </span>
             </td>
             <td className="p-1 text-center">
               {
