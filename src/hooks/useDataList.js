@@ -60,12 +60,6 @@ export const useDataList = ({
   const reloadPage = () => {
     setFilters(val => ({...val, reload : !filters.reload}))
   }
-  const responseRequest = (response) => {
-    if (!response.error) {
-      handleCloseModal();
-      reloadPage();
-    }
-  }
   return {
     loading,
     filters,
