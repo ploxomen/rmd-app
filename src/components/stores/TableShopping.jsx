@@ -6,8 +6,8 @@ import TableIntranet from "../TableIntranet";
 
 export default function TableShopping({
   shopping = [],
-  viewBuy = () => {},
-  deleteBuy = () => {},
+  handleViewBuy = () => {},
+  handleDeleteBuy = () => {},
 }) {
   const columns = [
     "fecha",
@@ -30,20 +30,20 @@ export default function TableShopping({
         shopping.map((buy) => (
           <tr className="bg-white dark:bg-gray-800 text-xs" key={buy.id}>
             <td className="p-1 text-center">{buy.buy_date}</td>
-            <td className="p-1 text-center">{buy.buy_provider}</td>
+            <td className="p-1 text-center">{buy.provider_name}</td>
             <td className="p-1 text-center">{buy.buy_number_invoice}</td>
             <td className="p-1 text-center">{buy.buy_number_guide}</td>
             <td className="p-1 text-center">{buy.buy_type}</td>
-            <td className="p-1">{parseMoney(buy.buy_total, "PEN")}</td>
+            <td className="p-1">{parseMoney(buy.buy_total, buy.buy_type_money)}</td>
             <td className="p-1">
               <div className="flex gap-1 flex-wrap justify-center">
                 <ButtonPrimarySm
-                  onClick={(e) => viewBuy(buy.id)}
+                  onClick={(e) => handleViewBuy(buy.id)}
                   icon={<PencilIcon className="size-4" />}
                   title="Editar comprado"
                 />
                 <ButtonDangerSm
-                  onClick={(e) => deleteBuy(buy.id)}
+                  onClick={(e) => handleDeleteBuy(buy.id)}
                   icon={<TrashIcon className="w-4 h-4" />}
                   title="Eliminar producto terminado"
                 />

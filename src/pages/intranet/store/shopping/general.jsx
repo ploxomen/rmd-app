@@ -3,21 +3,37 @@ import { ButtonDanger, ButtonPrimary } from "@/components/Buttons";
 import { InputSearch } from "@/components/Inputs";
 import LoyoutIntranet from "@/components/LoyoutIntranet";
 import PaginationTable from "@/components/PaginationTable";
+import FormShopping from "@/components/stores/FormShopping";
 import TableShopping from "@/components/stores/TableShopping";
 import { verifUser } from "@/helpers/verifUser";
+import { useShopping } from "@/hooks/shopping/useShopping";
 import { useDataList } from "@/hooks/useDataList";
 import {
   DocumentArrowDownIcon,
   PlusCircleIcon,
 } from "@heroicons/react/24/solid";
-import React from "react";
 export async function getServerSideProps(context) {
   return await verifUser(context, "/store/shopping/general");
 }
 export default function general({ dataUser, dataModules, dataRoles }) {
-  const { data, dataTotal, serchInfomation, filters, changeFilter } = useDataList({
-    url: "store/shopping",
-  });
+  const { data, dataTotal, serchInfomation, filters, changeFilter } =
+    useDataList({
+      url: "store-shopping",
+    });
+  const {
+    form,
+    modal,
+    products,
+    providers,
+    handleAddShopping,
+    handleDeleteDetail,
+    handleAddDetail,
+    handleCloseModal,
+    details,
+    handleChangeValueDetail,
+    handleDeleteBuy,
+    handleViewBuy
+  } = useShopping();
   return (
     <>
       <LoyoutIntranet
@@ -37,7 +53,7 @@ export default function general({ dataUser, dataModules, dataRoles }) {
               <ButtonDanger
                 text="Agregar"
                 icon={<PlusCircleIcon className="size-5" />}
-                onClick={(e) => {}}
+                onClick={(e) => handleAddShopping()}
               />
               <ButtonPrimary
                 text="Exportar"
@@ -53,12 +69,8 @@ export default function general({ dataUser, dataModules, dataRoles }) {
             </div>
           </div>
           <div className="overflow-x-auto mb-4">
-            <TableShopping 
-                shopping={data}
-
-            />
+            <TableShopping data={data} handleDeleteBuy={handleDeleteBuy} handleViewBuy={handleViewBuy}/>
           </div>
-
           <PaginationTable
             currentPage={filters.page}
             quantityRow={filters.show}
@@ -67,6 +79,17 @@ export default function general({ dataUser, dataModules, dataRoles }) {
           />
         </div>
       </LoyoutIntranet>
+      <FormShopping
+        data={form}
+        modal={modal}
+        providers={providers}
+        handleChangeValueDetail={handleChangeValueDetail}
+        products={products}
+        details={details}
+        handleCloseModal={handleCloseModal}
+        handleAddDetail={handleAddDetail}
+        handleDeleteDetail={handleDeleteDetail}
+      />
     </>
   );
 }
