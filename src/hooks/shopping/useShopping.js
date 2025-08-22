@@ -13,16 +13,20 @@ const INITIAL_FORM = {
   buy_type: "NACIONAL",
   buy_type_money: "PEN",
   buy_provider_number_document: "",
+  imported_nro_dam: "",
+  imported_expenses_cost: "",
+  imported_flete_cost: "",
+  imported_insurance_cost: "",
+  imported_destination_cost: "",
 };
 const INITIAL_DETAIL = {
-  detail_id: crypto.randomUUID(),
   detail_type: "new",
   detail_store: "MATERIA PRIMA",
   detail_product_id: "",
   detail_stock: "",
   datail_price_unit: "",
 };
-export const useShopping = () => {
+export const useShopping = (reloadPage = () => {}) => {
   const [form, setForm] = useState(INITIAL_FORM);
   const [details, setDetails] = useState([]);
   const [providers, setProviders] = useState([]);
@@ -55,10 +59,16 @@ export const useShopping = () => {
     handleOpenModal();
   };
   const handleAddDetail = () => {
-    setDetails((detail) => [...detail, { ...INITIAL_DETAIL }]);
+    setDetails((detail) => [...detail, { ...INITIAL_DETAIL, detail_id: crypto.randomUUID() }]);
   };
   const handleDeleteDetail = (id) => {
     setDetails(details.filter((detail) => detail.detail_id !== id));
+  };
+  const responseRequest = (response) => {
+    if (!response.error) {
+      handleCloseModal();
+      reloadPage();
+    }
   };
   const handleDeleteBuy = (id) => {};
   const handleViewBuy = (id) => {};
@@ -71,7 +81,6 @@ export const useShopping = () => {
     if (type === "detail_store") {
       newValue.detail_product_id = "";
     }
-    console.log(newValue)
     setDetails(
       details.map((value) =>
         value.detail_id === id ? { ...value, ...newValue } : value
@@ -91,5 +100,6 @@ export const useShopping = () => {
     handleCloseModal,
     handleDeleteBuy,
     handleViewBuy,
+    responseRequest
   };
 };

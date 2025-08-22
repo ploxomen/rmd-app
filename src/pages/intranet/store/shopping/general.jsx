@@ -16,7 +16,7 @@ export async function getServerSideProps(context) {
   return await verifUser(context, "/store/shopping/general");
 }
 export default function general({ dataUser, dataModules, dataRoles }) {
-  const { data, dataTotal, serchInfomation, filters, changeFilter } =
+  const { data, dataTotal, serchInfomation, filters, changeFilter, reloadPage } =
     useDataList({
       url: "store-shopping",
     });
@@ -29,11 +29,12 @@ export default function general({ dataUser, dataModules, dataRoles }) {
     handleDeleteDetail,
     handleAddDetail,
     handleCloseModal,
+    responseRequest,
     details,
     handleChangeValueDetail,
     handleDeleteBuy,
     handleViewBuy
-  } = useShopping();
+  } = useShopping(reloadPage);
   return (
     <>
       <LoyoutIntranet
@@ -85,6 +86,7 @@ export default function general({ dataUser, dataModules, dataRoles }) {
         providers={providers}
         handleChangeValueDetail={handleChangeValueDetail}
         products={products}
+        responseRequest={responseRequest}
         details={details}
         handleCloseModal={handleCloseModal}
         handleAddDetail={handleAddDetail}

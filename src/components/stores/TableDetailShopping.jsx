@@ -22,7 +22,6 @@ export default function TableDetailShopping({
     "total",
     "acciones",
   ];
-  console.log(products);
   return (
     <TableIntranet columns={columns}>
       {!details.length ? (

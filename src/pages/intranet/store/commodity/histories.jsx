@@ -31,7 +31,6 @@ export async function getServerSideProps(context) {
     const response = await apiAxios.get("/store-commodity/" + query.commodity, {
       headers,
     });
-    console.log(response.data);
     infoProduct.idCommodity = response.data.data.idCommodity;
     infoProduct.nameProduct = response.data.data.nameProduct;
     infoProduct.measurementProduct = response.data.data.measurementProduct;
