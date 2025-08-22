@@ -14,8 +14,8 @@ export default function TableShopping({
     "proveedor",
     "n° factura",
     "n° guía",
-    "total",
     "tipo",
+    "total",
     "acciones",
   ];
   return (
@@ -34,7 +34,7 @@ export default function TableShopping({
             <td className="p-1 text-center">{buy.buy_number_invoice}</td>
             <td className="p-1 text-center">{buy.buy_number_guide}</td>
             <td className="p-1 text-center">{buy.buy_type}</td>
-            <td className="p-1">{parseMoney(buy.buy_total, buy.buy_type_money)}</td>
+            <td className="p-1">{parseMoney(buy.buy_type_money === 'PEN' ? buy.buy_total : buy.buy_total_usd, buy.buy_type_money)}</td>
             <td className="p-1">
               <div className="flex gap-1 flex-wrap justify-center">
                 <ButtonPrimarySm

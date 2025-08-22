@@ -70,7 +70,7 @@ export default function general({ dataUser, dataModules, dataRoles }) {
             </div>
           </div>
           <div className="overflow-x-auto mb-4">
-            <TableShopping data={data} handleDeleteBuy={handleDeleteBuy} handleViewBuy={handleViewBuy}/>
+            <TableShopping shopping={data} handleDeleteBuy={handleDeleteBuy} handleViewBuy={handleViewBuy}/>
           </div>
           <PaginationTable
             currentPage={filters.page}

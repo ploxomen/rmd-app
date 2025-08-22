@@ -59,7 +59,10 @@ export const useShopping = (reloadPage = () => {}) => {
     handleOpenModal();
   };
   const handleAddDetail = () => {
-    setDetails((detail) => [...detail, { ...INITIAL_DETAIL, detail_id: crypto.randomUUID() }]);
+    setDetails((detail) => [
+      ...detail,
+      { ...INITIAL_DETAIL, detail_id: crypto.randomUUID() },
+    ]);
   };
   const handleDeleteDetail = (id) => {
     setDetails(details.filter((detail) => detail.detail_id !== id));
@@ -70,8 +73,52 @@ export const useShopping = (reloadPage = () => {}) => {
       reloadPage();
     }
   };
-  const handleDeleteBuy = (id) => {};
-  const handleViewBuy = (id) => {};
+  const handleDeleteBuy = async (id) => {
+    const question = await sweetAlert({
+      title: "Mensaje",
+      text: "¿Deseas eliminar esta compra?",
+      icon: "question",
+      showCancelButton: true,
+    });
+    if (!question.isConfirmed) {
+      return;
+    }
+    try {
+      const { data } = await apiAxios.delete(`/store-shopping/${id}`);
+      if (!data.error) {
+        sweetAlert({
+          title: "Mensaje",
+          text: data.message,
+          icon: "success",
+        });
+        reloadPage();
+      }
+    } catch (error) {
+      sweetAlert({
+        title: "Error",
+        text: "Error al eliminar la compra",
+        icon: "error",
+      });
+      console.error(error);
+    }
+  };
+  const handleViewBuy = async (id) => {
+    try {
+      const { data } = await apiAxios.get(`/store-shopping/${id}`);
+      if (!data.error) {
+        setForm(data.compra);
+        setDetails(data.compra_details);
+      }
+      handleOpenModal();
+    } catch (error) {
+      console.error(error);
+      sweetAlert({
+        title: "Error",
+        text: "Error al obtener el detalle de la guia de remisión",
+        icon: "error",
+      });
+    }
+  };
   const handleChangeValueDetail = (type, val, id) => {
     if (!details.length) {
       return false;
@@ -100,6 +147,6 @@ export const useShopping = (reloadPage = () => {}) => {
     handleCloseModal,
     handleDeleteBuy,
     handleViewBuy,
-    responseRequest
+    responseRequest,
   };
 };
