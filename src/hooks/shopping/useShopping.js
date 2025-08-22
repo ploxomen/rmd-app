@@ -3,6 +3,7 @@ import { useModal } from "../useModal";
 import axios from "axios";
 import apiAxios from "@/axios";
 import { sweetAlert } from "@/helpers/getAlert";
+import { downloadFiles } from "@/helpers/downloadFiles";
 
 const INITIAL_FORM = {
   buy_date: new Date().toISOString().split("T")[0],
@@ -64,6 +65,9 @@ export const useShopping = (reloadPage = () => {}) => {
       { ...INITIAL_DETAIL, detail_id: crypto.randomUUID() },
     ]);
   };
+  const handleExportShopping = () => {
+    downloadFiles("/shopping-export","compras");
+  }
   const handleDeleteDetail = (id) => {
     setDetails(details.filter((detail) => detail.detail_id !== id));
   };
@@ -148,5 +152,6 @@ export const useShopping = (reloadPage = () => {}) => {
     handleDeleteBuy,
     handleViewBuy,
     responseRequest,
+    handleExportShopping
   };
 };

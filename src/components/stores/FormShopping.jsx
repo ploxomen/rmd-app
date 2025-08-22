@@ -65,7 +65,7 @@ export default function FormShopping({
           <SelectPrimary
             label="Moneda de compra"
             inputRequired="required"
-            name="buy_type"
+            name="buy_type_money"
             value={form.buy_type_money}
             onChange={setFormulario}
           >

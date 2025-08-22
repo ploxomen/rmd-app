@@ -30,6 +30,7 @@ export default function general({ dataUser, dataModules, dataRoles }) {
     handleAddDetail,
     handleCloseModal,
     responseRequest,
+    handleExportShopping,
     details,
     handleChangeValueDetail,
     handleDeleteBuy,
@@ -59,7 +60,7 @@ export default function general({ dataUser, dataModules, dataRoles }) {
               <ButtonPrimary
                 text="Exportar"
                 icon={<DocumentArrowDownIcon className="size-5" />}
-                onClick={(e) => {}}
+                onClick={(e) => handleExportShopping()}
               />
             </div>
             <div style={{ width: "300px" }}>

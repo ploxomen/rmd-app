@@ -7,6 +7,7 @@ import LoyoutIntranet from "@/components/LoyoutIntranet";
 import PaginationTable from "@/components/PaginationTable";
 import FormProduct from "@/components/products/FormProduct";
 import TableProduct from "@/components/products/TableProduct";
+import { downloadFiles } from "@/helpers/downloadFiles";
 import { sweetAlert } from "@/helpers/getAlert";
 import { getCookie } from "@/helpers/getCookie";
 import { verifUser } from "@/helpers/verifUser";
@@ -29,8 +30,8 @@ export async function getServerSideProps(context) {
 }
 function products({ dataModules, dataUser, dataRoles }) {
   const [state, dispatch] = useReducer(reducerProducts, initialStateProduct);
-  const route = useRouter();
   const headers = getCookie();
+  const route = useRouter();
   const [dataChange, setDataChange] = useState({
     current: 1,
     search: "",
@@ -217,31 +218,7 @@ function products({ dataModules, dataUser, dataRoles }) {
     }
   };
   const exportProducts = async () => {
-    try {
-      const resp = await apiAxios.get("/product-export", {
-        headers,
-        responseType: "blob",
-      });
-      if (resp.status !== 200) {
-        return route.replace("/intranet/home");
-      }
-      const url = window.URL.createObjectURL(new Blob([resp.data]));
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", "productos.xlsx");
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    } catch (error) {
-      if (error.status !== 200) {
-        return route.replace("/intranet/home");
-      }
-      sweetAlert({
-        title: "Error",
-        text: "Error al exportar producto",
-        icon: "error",
-      });
-    }
+    downloadFiles("/product-export", "productos");
   };
   return (
     <>
