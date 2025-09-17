@@ -52,8 +52,8 @@ export const listStores = [
     ],
   },
   {
-    value: 'ALMACEN MERCADERIA',
-    label: 'ALMACEN MERCADERIA',
+    value: 'PRODUCTO MERCADERIA',
+    label: 'PRODUCTO MERCADERIA',
     options: [
       {
         value: 'CAUCHO',

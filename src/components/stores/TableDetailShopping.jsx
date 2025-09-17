@@ -15,7 +15,7 @@ export default function TableDetailShopping({
   handleChangeValueDetail = () => {},
 }) {
   const columns = [
-    "almacen",
+    "almacen destino",
     "producto",
     "cantidad",
     "p. unitario",

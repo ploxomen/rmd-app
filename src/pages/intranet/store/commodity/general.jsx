@@ -68,7 +68,7 @@ export default function CommodityHome({ dataModules, dataUser, dataRoles }) {
               >
                 <option value="">TODOS</option>
                 {listStores
-                  .find((store) => store.label === "ALMACEN MERCADERIA")
+                  .find((store) => store.label === "PRODUCTO MERCADERIA")
                   .options_2.map((store) => (
                     <option value={store.value} key={store.value}>
                       {store.label}

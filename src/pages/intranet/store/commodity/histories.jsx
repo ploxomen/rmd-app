@@ -116,17 +116,6 @@ export default function CommodityHistories({
                   <h2 className="text-center text-lg font-bold text-green-500">
                     {nameProduct}
                   </h2>
-                  <ButtonPrimarySm
-                    title="Agregar"
-                    onClick={(e) =>
-                      handleAddHistory(
-                        idProduct,
-                        nameProduct,
-                        measurementProduct
-                      )
-                    }
-                    icon={<PlusIcon className="size-4" />}
-                  />
                 </div>
               </div>
               <div style={{ width: "300px" }}>

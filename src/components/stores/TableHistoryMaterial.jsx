@@ -6,17 +6,17 @@ import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
 
 function TableHistoryMaterial({ histories, deleteHistory, viewHistory }) {
   const columns = [
+    "fecha",
     "Código",
     "Tipo",
-    "N° Factura",
     "N° Guia",
+    "justificacion",
     "Cantidad",
     "P. Uni.",
-    "Total S/",
-    "Saldo Cant.",
-    "Saldo Cost.",
-    "Promedio",
+    "promedio almacen",
     "Total $",
+    "Tipo cambio",
+    "Total S/",
     "Usuario",
     "Acciones",
   ];
@@ -31,17 +31,31 @@ function TableHistoryMaterial({ histories, deleteHistory, viewHistory }) {
       ) : (
         histories.map((history) => (
           <tr className="bg-white dark:bg-gray-800 text-xs" key={history.id}>
+            <td className="p-1 text-center">{history.material_hist_date}</td>
             <td className="p-1 text-center">
               {history.id.toString().padStart(3, "0")}
             </td>
             <td className="p-1 text-center">{history.raw_hist_type}</td>
-            <td className="p-1 text-center">{history.material_hist_bill}</td>
-            <td className="p-1 text-center">{history.material_hist_guide}</td>
+            <td className="p-1 text-center">{history.material_hist_guide || ""}</td>
+            <td className="p-1 text-center">{history.product_finaly_description || "-"}</td>
             <td className="p-1 text-center">{history.material_hist_amount}</td>
             <td className="p-1 text-center">
               {
                 parseMoney(
                   history.material_hist_price_buy,
+                  'PEN'
+                )}
+            </td>
+            <td className="p-1 text-center">
+              {history.raw_hist_prom_weig}
+            </td>
+            <td className="p-1 text-center">
+              {parseMoney(history.material_hist_money === "USD" ? history.material_hist_total_buy_usd : 0, "USD") }
+            </td>
+            <td className="p-1 text-center">
+              {
+                parseMoney(
+                  history.material_hist_total_type_change,
                   'PEN'
                 )}
             </td>
@@ -52,22 +66,10 @@ function TableHistoryMaterial({ histories, deleteHistory, viewHistory }) {
                   'PEN'
                 )}
             </td>
-            <td className="p-1 text-center">
-              {history.raw_hist_bala_amou}
-            </td>
-            <td className="p-1 text-center">
-              {parseMoney(history.raw_hist_bala_cost,'PEN')}
-            </td>
-            <td className="p-1 text-center">
-              {history.raw_hist_prom_weig}
-            </td>
-            <td className="p-1 text-center">
-              {parseMoney(history.material_hist_total_buy_usd, "USD")}
-            </td>
             <td className="p-1 text-center">{history.user_name}</td>
             <td className="p-1">
               {history.product_final_assem_id ||
-              history.quotation_detail_id ||
+              history.guide_refer_id ||
               history.product_progres_hist_id ? (
                 "Sin acciones"
               ) : (
