@@ -1,9 +1,8 @@
-import { listIcons } from "@/helpers/listIcons";
 import { useRouter } from "next/router";
-import Link from "next/link";
 import { forwardRef, memo } from "react";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import NavModule from "./NavModule";
+import HeroIcons from "./HeroIcons";
 const NavegationFull = forwardRef(({ listModules, user, closeMenu }, ref) => {
   const router = useRouter();
   const currentRoute = router.asPath;
@@ -12,7 +11,7 @@ const NavegationFull = forwardRef(({ listModules, user, closeMenu }, ref) => {
       id: 0,
       id_module_group: null,
       module_url: "/home",
-      module_icon: "home",
+      module_icon: "HomeIcon",
       module_title: "Inicio",
     },
     ...listModules,
@@ -63,11 +62,7 @@ const NavegationFull = forwardRef(({ listModules, user, closeMenu }, ref) => {
                 <li className="relative flex flex-col gap-1" key={key}>
                   <div className={`cursor-pointer text-submenu transition-colors ease-in-out text-sm duration-300 ${openSubmodal ? "text-green-500 bg-green-100" : "bg-white text-information"} items-center hover:bg-gray-100 rounded-lg mx-2 px-4 py-2 flex justify-between gap-1`} onClick={handleSubmenus}>
                     <div className="flex gap-1 font-normal tracking-[0.15px]">
-                      {
-                        listIcons.find(
-                          (icon) => icon.name == module.module_group_icon
-                        ).Icon
-                      }
+                      <HeroIcons name={module.module_group_icon}/>
                       {module.module_group_title}
                     </div>
                     <ChevronDownIcon className={`size-4 transition-transform ease-in-out icon-submenu ${openSubmodal && "rotate-180"}`} />
@@ -82,7 +77,6 @@ const NavegationFull = forwardRef(({ listModules, user, closeMenu }, ref) => {
             } else {
               return (
                 <NavModule {...module} currentRoute={currentRoute} key={key}/>
-
               );
             }
           })}
