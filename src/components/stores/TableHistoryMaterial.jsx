@@ -9,7 +9,7 @@ function TableHistoryMaterial({ histories, deleteHistory, viewHistory }) {
     "fecha",
     "Código",
     "Tipo",
-    "N° Guia",
+    "N° Guia de entrada",
     "justificacion",
     "Cantidad",
     "P. Uni.",
