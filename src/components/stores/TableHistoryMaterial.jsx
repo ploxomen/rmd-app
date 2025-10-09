@@ -79,11 +79,6 @@ function TableHistoryMaterial({ histories, deleteHistory, viewHistory }) {
                     icon={<PencilIcon className="w-4 h-4" />}
                     title="Editar historial"
                   />
-                  <ButtonDangerSm
-                    onClick={(e) => deleteHistory(history.id)}
-                    title="Eliminar historial"
-                    icon={<TrashIcon className="w-4 h-4" />}
-                  />
                 </div>
               )}
             </td>
