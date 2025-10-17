@@ -2,8 +2,8 @@ import React from "react";
 import TableIntranet from "../TableIntranet";
 import { optionsUnitsMeasurements } from "@/helpers/listUnitsMeasurements";
 import { parseMoney } from "@/helpers/utilities";
-import { ButtonDangerSm, ButtonPrimarySm } from "../Buttons";
-import { EyeIcon, PlusIcon, TrashIcon } from "@heroicons/react/24/solid";
+import { ButtonDangerSm } from "../Buttons";
+import { EyeIcon, TrashIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 
 export default function TableGeneral({

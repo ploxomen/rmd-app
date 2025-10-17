@@ -20,6 +20,8 @@ export default function general({ dataUser, dataModules, dataRoles }) {
     useDataList({
       url: "store-shopping",
     });
+
+    console.log(data,dataTotal);
   const {
     form,
     modal,

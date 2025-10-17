@@ -18,7 +18,6 @@ function TableHistoryMaterial({ histories, deleteHistory, viewHistory }) {
     "Tipo cambio",
     "Total S/",
     "Usuario",
-    "Acciones",
   ];
   return (
     <TableIntranet columns={columns}>
@@ -67,21 +66,6 @@ function TableHistoryMaterial({ histories, deleteHistory, viewHistory }) {
                 )}
             </td>
             <td className="p-1 text-center">{history.user_name}</td>
-            <td className="p-1">
-              {history.product_final_assem_id ||
-              history.guide_refer_id ||
-              history.product_progres_hist_id ? (
-                "Sin acciones"
-              ) : (
-                <div className="flex gap-1 flex-wrap justify-center">
-                  <ButtonPrimarySm
-                    onClick={(e) => viewHistory(history.id)}
-                    icon={<PencilIcon className="w-4 h-4" />}
-                    title="Editar historial"
-                  />
-                </div>
-              )}
-            </td>
           </tr>
         ))
       )}
