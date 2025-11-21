@@ -21,6 +21,8 @@ const dataForm = {
   sub_categorie: null,
   product_store: "",
   product_label: "",
+  stock_initial: "",
+  type_money: "PEN",
   product_label_2: "",
   product_img: null,
   product_unit_measurement: "TU",
@@ -32,6 +34,7 @@ function FormProduct({
   handleSave,
   productEdit,
   categories,
+  editStock = true
 }) {
   const [form, setForm] = useState(dataForm);
   const [deleteImg, setDeleteImg] = useState(false);
@@ -44,10 +47,10 @@ function FormProduct({
     handleStore(productEdit.product_store);
   }, [productEdit]);
   useEffect(() => {
-    if(form.product_store === 'PRODUCTO TERMINADO') {
-      setForm((value) => ({...value, product_label_2: 'ENSAMBLADO'}));
+    if (form.product_store === "PRODUCTO TERMINADO") {
+      setForm((value) => ({ ...value, product_label_2: "ENSAMBLADO" }));
     }
-  },[form.product_store])
+  }, [form.product_store]);
   const hanbleSendModal = () => {
     const formProduct = document.querySelector("#form-product-submit");
     formProduct.click();
@@ -56,6 +59,7 @@ function FormProduct({
     e.preventDefault();
     const data = new FormData();
     for (const key in form) {
+      console.log(key)
       if (
         Object.hasOwnProperty.call(form, key) &&
         form[key] &&
@@ -87,6 +91,7 @@ function FormProduct({
       });
       return;
     }
+    console.log(key,value);
     setForm({
       ...form,
       [key]: value,
@@ -191,6 +196,31 @@ function FormProduct({
         </div>
         {!form.product_service && (
           <>
+            <div className="col-span-6">
+              <InputPrimary
+                label="Stock inicial"
+                step="0.01"
+                min="0"
+                disabled={!editStock && 'disabled'}
+                type="number"
+                name="stock_initial"
+                value={form.stock_initial || ""}
+                onChange={handleChangeForm}
+              />
+            </div>
+            <div className="col-span-6">
+              <SelectPrimary
+                label="Tipo moneda"
+                inputRequired="required"
+                disabled={!editStock && 'disabled'}
+                name="type_money"
+                value={form.type_money || "PEN"}
+                onChange={handleChangeForm}
+              >
+                <option value="PEN">Soles (S/)</option>
+                <option value="USD">Dolares ($)</option>
+              </SelectPrimary>
+            </div>
             <div className="col-span-6 md:col-span-4">
               <InputPrimary
                 label="P. Producción"

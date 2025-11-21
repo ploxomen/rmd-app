@@ -11,6 +11,7 @@ export const initialStateProduct = {
     categories:[],
     subcategories:[],
     productEdit:{},
+    editStock: true,
     stores : []
 }
 export const reducerProducts = (state,actions) => {
@@ -45,12 +46,14 @@ export const reducerProducts = (state,actions) => {
                     product_img: urlProduct ? actions.payload.url + '/' + urlProduct : null,
                     product_categorie: actions.payload.categorieId
                 },
+                editStock: actions.payload.editStock,
                 subcategories:actions.payload.subcategories
             }
         }
         case TYPES_PRODUCTS.RESET_EDIT:{
             return {
                 ...state,
+                editStock: true,
                 productEdit:{},
             };
         }

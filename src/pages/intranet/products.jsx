@@ -156,6 +156,7 @@ function products({ dataModules, dataUser, dataRoles }) {
           url: resp.data.data.url,
           subcategories: resp.data.data.subcategories,
           categorieId: resp.data.data.categorieId,
+          editStock: resp.data.data.updateStockInitial
         },
       });
       handleOpenModal();
@@ -277,6 +278,7 @@ function products({ dataModules, dataUser, dataRoles }) {
         handleSave={saveProduct}
         productEdit={state.productEdit}
         subcategoriesData={state.subcategories}
+        editStock={state.editStock}
       />
     </>
   );
