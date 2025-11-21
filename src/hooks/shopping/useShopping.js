@@ -10,6 +10,7 @@ const INITIAL_FORM = {
   buy_date_invoice: "",
   buy_provider: "",
   buy_number_invoice: "",
+  buy_details: "",
   buy_number_guide: "",
   buy_type: "NACIONAL",
   buy_type_money: "PEN",

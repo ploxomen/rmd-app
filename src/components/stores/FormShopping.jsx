@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import Modal from "../Modal";
 import { useFormData } from "@/hooks/useFormData";
-import { InputPrimary, SubmitForm } from "../Inputs";
+import { InputPrimary, SubmitForm, TextareaPrimary } from "../Inputs";
 import { SelectPrimary } from "../Selects";
 import Select from "react-select";
 import Label from "../Label";
@@ -134,6 +134,15 @@ export default function FormShopping({
             type="text"
             name="buy_number_invoice"
             value={form.buy_number_invoice}
+            onChange={setFormulario}
+          />
+        </div>
+        <div className="col-span-full">
+          <TextareaPrimary
+            label="Justificación"
+            inputRequired="required"
+            name="buy_details"
+            value={form.buy_details}
             onChange={setFormulario}
           />
         </div>

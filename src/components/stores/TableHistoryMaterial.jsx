@@ -36,7 +36,7 @@ function TableHistoryMaterial({ histories, deleteHistory, viewHistory }) {
             </td>
             <td className="p-1 text-center">{history.raw_hist_type}</td>
             <td className="p-1 text-center">{history.material_hist_guide || ""}</td>
-            <td className="p-1 text-center">{history.product_finaly_description || "-"}</td>
+            <td className="p-1 text-center">{history.justification || "-"}</td>
             <td className="p-1 text-center">{history.material_hist_amount}</td>
             <td className="p-1 text-center">
               {

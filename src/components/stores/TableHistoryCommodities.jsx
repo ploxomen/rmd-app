@@ -13,8 +13,8 @@ function TableHistoryCommodities({
     "fecha",
     "Código",
     "Tipo",
-    "N° Guia Entrada",
-    "N° Guia Salida",
+    "N° Guia",
+    "Justificacion",
     "Cantidad",
     "P. Uni.",
     "promedio almacen",
@@ -39,14 +39,8 @@ function TableHistoryCommodities({
               {history.id.toString().padStart(3, "0")}
             </td>
             <td className="p-1 text-center">{history.commodi_hist_type}</td>
-            <td className="p-1 text-center">
-              {history.commodi_hist_type === "ENTRADA" &&
-                history.commodi_hist_guide}
-            </td>
-            <td className="p-1 text-center">
-              {history.commodi_hist_type === "SALIDA" &&
-                history.commodi_hist_guide}
-            </td>
+            <td className="p-1 text-center">{history.commodi_hist_guide}</td>
+            <td className="p-1 text-center">{history.justification}</td>
             <td className="p-1 text-center">{history.commodi_hist_amount}</td>
             <td className="p-1 text-center">
               {parseMoney(history.commodi_hist_price_buy, "PEN")}
@@ -55,8 +49,9 @@ function TableHistoryCommodities({
               {history.commodi_hist_prom_weig}
             </td>
             <td className="p-1 text-center">
-              {history.commodi_hist_money === "USD" ?
-                parseMoney(history.commodi_hist_total_buy_usd, "USD") : parseMoney(0,"USD")}
+              {history.commodi_hist_money === "USD"
+                ? parseMoney(history.commodi_hist_total_buy_usd, "USD")
+                : parseMoney(0, "USD")}
             </td>
             <td className="p-1 text-center">
               {history.commodi_hist_type_change}

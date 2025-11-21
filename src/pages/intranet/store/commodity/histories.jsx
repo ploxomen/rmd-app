@@ -83,7 +83,7 @@ export default function CommodityHistories({
   return (
     <>
       <LoyoutIntranet
-        title="Almacen mercadería Historial"
+        title="Almacen Mercadería Historial"
         description="Historial de mercadería"
         user={dataUser}
         modules={dataModules}
