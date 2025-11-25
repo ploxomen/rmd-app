@@ -1,5 +1,5 @@
 import BanerModule from "@/components/BanerModule";
-import { ButtonDanger, ButtonPrimary } from "@/components/Buttons";
+import { ButtonDanger } from "@/components/Buttons";
 import { InputSearch } from "@/components/Inputs";
 import LoyoutIntranet from "@/components/LoyoutIntranet";
 import PaginationTable from "@/components/PaginationTable";
@@ -9,19 +9,22 @@ import { verifUser } from "@/helpers/verifUser";
 import { useShopping } from "@/hooks/shopping/useShopping";
 import { useDataList } from "@/hooks/useDataList";
 import {
-  DocumentArrowDownIcon,
   PlusCircleIcon,
 } from "@heroicons/react/24/solid";
 export async function getServerSideProps(context) {
   return await verifUser(context, "/store/shopping/general");
 }
 export default function general({ dataUser, dataModules, dataRoles }) {
-  const { data, dataTotal, serchInfomation, filters, changeFilter, reloadPage } =
-    useDataList({
-      url: "store-shopping",
-    });
-
-    console.log(data,dataTotal);
+  const {
+    data,
+    dataTotal,
+    serchInfomation,
+    filters,
+    changeFilter,
+    reloadPage,
+  } = useDataList({
+    url: "store-shopping",
+  });
   const {
     form,
     modal,
@@ -32,11 +35,10 @@ export default function general({ dataUser, dataModules, dataRoles }) {
     handleAddDetail,
     handleCloseModal,
     responseRequest,
-    handleExportShopping,
     details,
     handleChangeValueDetail,
     handleDeleteBuy,
-    handleViewBuy
+    handleViewBuy,
   } = useShopping(reloadPage);
   return (
     <>
@@ -53,18 +55,11 @@ export default function general({ dataUser, dataModules, dataRoles }) {
         />
         <div className="w-full p-6 bg-white rounded-md shadow overflow-x-auto">
           <div className="flex w-full items-center justify-between gap-2 flex-wrap mb-2">
-            <div>
-              <ButtonDanger
-                text="Agregar"
-                icon={<PlusCircleIcon className="size-5" />}
-                onClick={(e) => handleAddShopping()}
-              />
-              <ButtonPrimary
-                text="Exportar"
-                icon={<DocumentArrowDownIcon className="size-5" />}
-                onClick={(e) => handleExportShopping()}
-              />
-            </div>
+            <ButtonDanger
+              text="Agregar"
+              icon={<PlusCircleIcon className="size-5" />}
+              onClick={(e) => handleAddShopping()}
+            />
             <div style={{ width: "300px" }}>
               <InputSearch
                 placeholder="¿Que estas buscando?"
@@ -73,7 +68,11 @@ export default function general({ dataUser, dataModules, dataRoles }) {
             </div>
           </div>
           <div className="overflow-x-auto mb-4">
-            <TableShopping shopping={data} handleDeleteBuy={handleDeleteBuy} handleViewBuy={handleViewBuy}/>
+            <TableShopping
+              shopping={data}
+              handleDeleteBuy={handleDeleteBuy}
+              handleViewBuy={handleViewBuy}
+            />
           </div>
           <PaginationTable
             currentPage={filters.page}

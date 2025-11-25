@@ -1,10 +1,11 @@
 import apiAxios from "@/axios";
 import { sweetAlert } from "./getAlert";
 
-export const downloadFiles = async (urlApi = "", nameFile = "") => {
+export const downloadFiles = async (urlApi = "", nameFile = "", params = {}) => {
   try {
     const resp = await apiAxios.get(urlApi, {
       responseType: "blob",
+      params
     });
     const url = window.URL.createObjectURL(new Blob([resp.data]));
     const link = document.createElement("a");
