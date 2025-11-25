@@ -49,19 +49,19 @@ export default function Global({ dataModules, dataUser, dataRoles }) {
         </form>
         <div className="bg-white px-4 py-6 rounded-lg flex justify-center flex-wrap gap-y-4 gap-x-10">
           <ButtonReport
-            urlImg="/icons/features.png"
+            imgUrl="/img/pedido.png"
             title="Reporte de compra"
             description="Visualiza las compras realizadas"
             onClick={e => downloadFiles("/shopping-export","compras",filter)}
           />
           <ButtonReport
-            urlImg="/icons/report.png"
+            imgUrl="/img/informe-financiero.png"
             title="Movimientos - entrada"
             description="Visualiza todos los movimientos de los productos de entrada"
             onClick={e => downloadFiles("/entry-export","movimientos_entradas",filter)}
           />
           <ButtonReport
-            urlImg="/icons/report.png"
+            imgUrl="/img/globo.png"
             title="Movimientos - salida"
             description="Visualiza todos los movimientos de los productos de salida"
             onClick={e => downloadFiles("/exit-export","movimientos_salidas",filter)}
