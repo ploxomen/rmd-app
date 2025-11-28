@@ -22,7 +22,7 @@ const dataForm = {
   product_store: "",
   product_label: "",
   stock_initial: "",
-  type_money: "PEN",
+  type_money_initial: "PEN",
   product_label_2: "",
   product_img: null,
   product_unit_measurement: "TU",
@@ -59,7 +59,6 @@ function FormProduct({
     e.preventDefault();
     const data = new FormData();
     for (const key in form) {
-      console.log(key)
       if (
         Object.hasOwnProperty.call(form, key) &&
         form[key] &&
@@ -213,8 +212,8 @@ function FormProduct({
                 label="Tipo moneda"
                 inputRequired="required"
                 disabled={!editStock && 'disabled'}
-                name="type_money"
-                value={form.type_money || "PEN"}
+                name="type_money_initial"
+                value={form.type_money_initial || "PEN"}
                 onChange={handleChangeForm}
               >
                 <option value="PEN">Soles (S/)</option>
@@ -226,6 +225,8 @@ function FormProduct({
                 label="P. Producción"
                 step="0.01"
                 min="0"
+                inputRequired="required"
+                disabled={!editStock && 'disabled'}
                 type="number"
                 name="product_buy"
                 value={form.product_buy || ""}
@@ -262,6 +263,7 @@ function FormProduct({
             label="Tipos de almacén"
             inputRequired="required"
             name="product_store"
+            disabled={!editStock && 'disabled'}
             value={form.product_store || ""}
             onChange={(e) => {
               handleStore(e.target.value);

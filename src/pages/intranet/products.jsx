@@ -112,6 +112,9 @@ function products({ dataModules, dataUser, dataRoles }) {
         return route.replace(resp.data.redirect);
       }
       if (resp.data.error) {
+        if (resp.data.message) {
+          throw new Error(resp.data.message);
+        }
         resp.data.data.forEach((error) => {
           sweetAlert({ title: "Alerta", text: error, icon: "warning" });
         });
@@ -131,7 +134,7 @@ function products({ dataModules, dataUser, dataRoles }) {
       console.error(error);
       sweetAlert({
         title: "Error",
-        text: "Error al guardar el producto",
+        text: error || "Error al guardar el producto",
         icon: "error",
       });
     }
@@ -156,7 +159,7 @@ function products({ dataModules, dataUser, dataRoles }) {
           url: resp.data.data.url,
           subcategories: resp.data.data.subcategories,
           categorieId: resp.data.data.categorieId,
-          editStock: resp.data.data.updateStockInitial
+          editStock: resp.data.data.updateStockInitial,
         },
       });
       handleOpenModal();
