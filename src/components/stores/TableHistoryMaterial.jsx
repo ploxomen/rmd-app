@@ -1,8 +1,6 @@
 import React from "react";
 import TableIntranet from "../TableIntranet";
 import { parseMoney } from "@/helpers/utilities";
-import { ButtonDangerSm, ButtonPrimarySm } from "../Buttons";
-import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
 
 function TableHistoryMaterial({ histories, deleteHistory, viewHistory }) {
   const columns = [
@@ -35,35 +33,36 @@ function TableHistoryMaterial({ histories, deleteHistory, viewHistory }) {
               {history.id.toString().padStart(3, "0")}
             </td>
             <td className="p-1 text-center">{history.raw_hist_type}</td>
-            <td className="p-1 text-center">{history.material_hist_guide || ""}</td>
+            <td className="p-1 text-center">
+              {history.material_hist_guide || ""}
+            </td>
             <td className="p-1 text-center">{history.justification || "-"}</td>
             <td className="p-1 text-center">{history.material_hist_amount}</td>
             <td className="p-1 text-center">
-              {
-                parseMoney(
-                  history.material_hist_price_buy,
-                  'PEN'
-                )}
+              {parseMoney(
+                history.material_hist_money === "USD"
+                  ? parseFloat(
+                      history.material_hist_total_buy_usd /
+                        history.material_hist_amount
+                    ).toFixed(2)
+                  : history.material_hist_price_buy,
+                history.material_hist_money
+              )}
+            </td>
+            <td className="p-1 text-center">{history.raw_hist_prom_weig}</td>
+            <td className="p-1 text-center">
+              {parseMoney(
+                history.material_hist_money === "USD"
+                  ? history.material_hist_total_buy_usd
+                  : 0,
+                "USD"
+              )}
             </td>
             <td className="p-1 text-center">
-              {history.raw_hist_prom_weig}
+              {parseMoney(history.material_hist_total_type_change, "PEN")}
             </td>
             <td className="p-1 text-center">
-              {parseMoney(history.material_hist_money === "USD" ? history.material_hist_total_buy_usd : 0, "USD") }
-            </td>
-            <td className="p-1 text-center">
-              {
-                parseMoney(
-                  history.material_hist_total_type_change,
-                  'PEN'
-                )}
-            </td>
-            <td className="p-1 text-center">
-              {
-                parseMoney(
-                  history.material_hist_total_buy_pen,
-                  'PEN'
-                )}
+              {parseMoney(history.material_hist_total_buy_pen, "PEN")}
             </td>
             <td className="p-1 text-center">{history.user_name}</td>
           </tr>
