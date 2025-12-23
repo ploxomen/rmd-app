@@ -43,7 +43,15 @@ function TableHistoryCommodities({
             <td className="p-1 text-center">{history.justification}</td>
             <td className="p-1 text-center">{history.commodi_hist_amount}</td>
             <td className="p-1 text-center">
-              {parseMoney(history.commodi_hist_price_buy, "PEN")}
+              {parseMoney(
+                history.commodi_hist_money === "USD"
+                  ? parseFloat(
+                      history.commodi_hist_total_buy_usd /
+                        history.commodi_hist_amount
+                    ).toFixed(2)
+                  : history.commodi_hist_price_buy,
+                history.commodi_hist_money
+              )}
             </td>
             <td className="p-1 text-center">
               {history.commodi_hist_prom_weig}
