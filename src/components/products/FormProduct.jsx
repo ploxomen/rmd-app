@@ -11,6 +11,7 @@ import { optionsUnitsMeasurements } from "@/helpers/listUnitsMeasurements";
 import Label from "../Label";
 import { listStores } from "@/helpers/listStores";
 const dataForm = {
+  date_issue: new Date().toISOString().split('T')[0],
   product_name: "",
   product_description: "",
   product_buy: "",
@@ -34,7 +35,7 @@ function FormProduct({
   handleSave,
   productEdit,
   categories,
-  editStock = true
+  editStock = true,
 }) {
   const [form, setForm] = useState(dataForm);
   const [deleteImg, setDeleteImg] = useState(false);
@@ -90,7 +91,7 @@ function FormProduct({
       });
       return;
     }
-    console.log(key,value);
+    console.log(key, value);
     setForm({
       ...form,
       [key]: value,
@@ -193,25 +194,35 @@ function FormProduct({
             editorRef={editorDescription}
           />
         </div>
+        <div className="col-span-6 lg:col-span-4">
+          <InputPrimary
+            label="Fecha registro"
+            inputRequired="required"
+            type="date"
+            name="date_issue"
+            value={form.date_issue || ""}
+            onChange={handleChangeForm}
+          />
+        </div>
         {!form.product_service && (
           <>
-            <div className="col-span-6">
+            <div className="col-span-6 lg:col-span-4">
               <InputPrimary
                 label="Stock inicial"
                 step="0.01"
                 min="0"
-                disabled={!editStock && 'disabled'}
+                disabled={!editStock && "disabled"}
                 type="number"
                 name="stock_initial"
                 value={form.stock_initial || ""}
                 onChange={handleChangeForm}
               />
             </div>
-            <div className="col-span-6">
+            <div className="col-span-6 lg:col-span-4">
               <SelectPrimary
                 label="Tipo moneda"
                 inputRequired="required"
-                disabled={!editStock && 'disabled'}
+                disabled={!editStock && "disabled"}
                 name="type_money_initial"
                 value={form.type_money_initial || "PEN"}
                 onChange={handleChangeForm}
@@ -226,7 +237,7 @@ function FormProduct({
                 step="0.01"
                 min="0"
                 inputRequired="required"
-                disabled={!editStock && 'disabled'}
+                disabled={!editStock && "disabled"}
                 type="number"
                 name="product_buy"
                 value={form.product_buy || ""}
@@ -258,12 +269,13 @@ function FormProduct({
             </div>
           </>
         )}
+        
         <div className="col-span-6 md:col-span-4">
           <SelectPrimary
             label="Tipos de almacén"
             inputRequired="required"
             name="product_store"
-            disabled={!editStock && 'disabled'}
+            disabled={!editStock && "disabled"}
             value={form.product_store || ""}
             onChange={(e) => {
               handleStore(e.target.value);

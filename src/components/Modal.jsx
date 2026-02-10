@@ -28,7 +28,8 @@ function Modal({
             {onSave !== null && (
               <button
                 className="p-2 bg-indigo-500 rounded-md transition-colors hover:bg-indigo-400 focus:bg-indigo-600 text-white font-semibold text-sm"
-                onClick={onSave}
+                form={typeof onSave === "string" ? onSave : null}
+                onClick={typeof onSave === "function" ? onSave : null}
               >
                 <div className="flex justify-center items-center gap-1">
                   <BookmarkSquareIcon className="w-5 h-6" />

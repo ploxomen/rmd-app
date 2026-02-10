@@ -81,7 +81,7 @@ export default function FormProductProgress({
         </div>
         <div className="col-span-6">
           <InputPrimary
-            label="Fecha"
+            label="Fecha registro"
             type="date"
             name="date"
             inputRequired={true}

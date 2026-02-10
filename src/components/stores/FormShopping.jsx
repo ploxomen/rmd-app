@@ -1,4 +1,3 @@
-import React, { useEffect } from "react";
 import Modal from "../Modal";
 import { useFormData } from "@/hooks/useFormData";
 import { InputPrimary, SubmitForm, TextareaPrimary } from "../Inputs";
@@ -9,6 +8,7 @@ import { ButtonPrimarySm } from "../Buttons";
 import { PlusIcon } from "@heroicons/react/24/solid";
 import TableDetailShopping from "./TableDetailShopping";
 import SeccionForm from "../SeccionForm";
+import { sweetAlert } from "@/helpers/getAlert";
 export default function FormShopping({
   modal = "",
   providers = [],
@@ -32,8 +32,21 @@ export default function FormShopping({
     data,
     method: data?.id ? "put" : "post",
     idSubmit: "form-shopping",
-    callbackResponse: responseRequest
+    callbackResponse: responseRequest,
   });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const question = await sweetAlert({
+      title: "Mensaje",
+      text: `Usted a seleccionado como moneda de compra el valor de ${data.buy_type_money === "USD" ? "dolares" : "soles"}. Asegurate que el detalle registrado este en la misma moneda ¿Deseas continuar?`,
+      icon: "question",
+      showCancelButton: true,
+    });
+    if (!question.isConfirmed) {
+      return;
+    }
+    handleSubmitParam({ ...form, shopping_details: details });
+  };
   return (
     <Modal
       status={modal}
@@ -44,10 +57,7 @@ export default function FormShopping({
     >
       <form
         className="grid grid-cols-12 gap-x-3 gap-y-0"
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleSubmitParam({ ...form, shopping_details: details });
-        }}
+        onSubmit={handleSubmit}
       >
         <div className="col-span-full md:col-span-4">
           <SelectPrimary
@@ -110,7 +120,7 @@ export default function FormShopping({
         </div>
         <div className="col-span-full md:col-span-4">
           <InputPrimary
-            label="Fecha ingreso"
+            label="Fecha registro"
             type="date"
             inputRequired="required"
             name="buy_date"

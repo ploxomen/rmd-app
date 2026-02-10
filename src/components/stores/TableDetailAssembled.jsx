@@ -5,6 +5,7 @@ import { InputDetailsSm } from "../Inputs";
 import { ButtonDangerSm } from "../Buttons";
 import { TrashIcon } from "@heroicons/react/24/solid";
 import { optionsUnitsMeasurements } from "@/helpers/listUnitsMeasurements";
+import Select from "react-select";
 import { parseMoney } from "@/helpers/utilities";
 
 export default function TableDetailAssembled({
@@ -17,11 +18,15 @@ export default function TableDetailAssembled({
     const productFind = products.find(
       (p) =>
         p.tipo == detail.detail_store &&
-        p.product_id == detail.detail_product_id
+        p.product_id == detail.detail_product_id,
     );
     return {
       ...detail,
-      detail_price_unit: detail.hasOwnProperty('detail_product_id_old') && detail.detail_product_id_old == productFind?.product_id ? detail.detail_price_unit : productFind?.cost_unit,
+      detail_price_unit:
+        detail.hasOwnProperty("detail_product_id_old") &&
+        detail.detail_product_id_old == productFind?.product_id
+          ? detail.detail_price_unit
+          : productFind?.cost_unit,
       detail_units_measurement: productFind?.product_unit_measurement,
     };
   });
@@ -57,7 +62,7 @@ export default function TableDetailAssembled({
                   handleChangeMaterial(
                     "detail_store",
                     e.target.value,
-                    detail.detail_id
+                    detail.detail_id,
                   )
                 }
                 value={detail.detail_store}
@@ -67,32 +72,34 @@ export default function TableDetailAssembled({
               </SelectSimple>
             </td>
             <td className="p-1 text-center min-w-64">
-              <SelectSimple
+              <Select
+                instanceId="products_id"
+                placeholder="Seleccione un producto"
+                required
                 name={`products-${detail.detail_id}`}
-                value={detail.detail_product_id}
-                isRequired
-                onChange={(e) =>
+                options={products
+                  .filter((p) => p.tipo === detail.detail_store)
+                  .map((product) => ({
+                    label: product.product_name,
+                    value: product.product_id,
+                  }))}
+                onChange={(e) => {
                   handleChangeMaterial(
                     "detail_product_id",
-                    e.target.value,
-                    detail.detail_id
+                    e.value,
+                    detail.detail_id,
+                  );
+                }}
+                menuPosition="fixed"
+                value={products
+                  .filter(
+                    (product) => product.product_id == detail.detail_product_id,
                   )
-                }
-              >
-                <option value="" disabled hidden>
-                  Ninguno
-                </option>
-                {products
-                  .filter((p) => p.tipo === detail.detail_store)
-                  .map((product) => (
-                    <option
-                      key={`product-${detail.detail_id}-list-${product.product_id}`}
-                      value={product.product_id}
-                    >
-                      {product.product_name}
-                    </option>
-                  ))}
-              </SelectSimple>
+                  .map((product) => ({
+                    label: product.product_name,
+                    value: product.product_id,
+                  }))}
+              />
             </td>
             <td className="p-1 text-center w-[4px]">
               <InputDetailsSm
@@ -103,7 +110,7 @@ export default function TableDetailAssembled({
                   handleChangeMaterial(
                     "detail_stock",
                     e.target.value,
-                    detail.detail_id
+                    detail.detail_id,
                   )
                 }
                 step="0.01"
@@ -117,14 +124,14 @@ export default function TableDetailAssembled({
               <span>
                 {parseMoney(
                   parseFloat(detail.detail_price_unit) * detail.detail_stock,
-                  "PEN"
+                  "PEN",
                 )}
               </span>
             </td>
             <td className="p-1 text-center">
               {
                 optionsUnitsMeasurements.find(
-                  (unit) => unit.value === detail.detail_units_measurement
+                  (unit) => unit.value === detail.detail_units_measurement,
                 )?.label
               }
             </td>

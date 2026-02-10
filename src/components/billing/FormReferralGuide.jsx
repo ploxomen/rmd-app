@@ -71,7 +71,7 @@ export default function FormReferralGuide({
       >
         <div className="col-span-6 lg:col-span-4">
           <InputPrimary
-            label="Fecha emisión"
+            label="Fecha registro"
             type="date"
             inputRequired="required"
             name="guide_issue_date"

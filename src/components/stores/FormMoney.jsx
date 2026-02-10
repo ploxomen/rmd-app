@@ -14,7 +14,7 @@ function FormMoney({ status, valueMoney, changeMoney, closeModal}) {
   const handelSubmitChangeMoney = async e => {
     e.preventDefault();
     const response = await apiAxios.post('/money/change',{
-        money: valueMoney.money
+        change_soles: valueMoney.money
     },{headers})
     if(response.data.alert){
         return sweetAlert({ title: "Alerta", text: response.data.alert, icon: "warning" });

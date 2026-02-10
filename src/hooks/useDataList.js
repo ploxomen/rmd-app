@@ -1,11 +1,11 @@
-import apiAxios from '@/axios';
-import { useEffect, useRef, useState } from 'react';
-import { getCookie } from '@/helpers/getCookie';
-import { useRouter } from 'next/navigation';
-import { sweetAlert } from '@/helpers/getAlert';
+import apiAxios from "@/axios";
+import { useEffect, useRef, useState } from "react";
+import { getCookie } from "@/helpers/getCookie";
+import { useRouter } from "next/navigation";
+import { sweetAlert } from "@/helpers/getAlert";
 
 export const useDataList = ({
-  url = '',
+  url = "",
   currentPage = 1,
   quantityRowData = 25,
   params = {},
@@ -36,9 +36,9 @@ export const useDataList = ({
       setData(resp.data.data);
     } catch (error) {
       sweetAlert({
-        title: 'Error',
-        text: 'Error al obtener los datos',
-        icon: 'error',
+        title: "Error",
+        text: "Error al obtener los datos",
+        icon: "error",
       });
       console.error(error);
     } finally {
@@ -48,18 +48,21 @@ export const useDataList = ({
   useEffect(() => {
     getData();
   }, [filters]);
+  const handleChangeFilter = (event) => {
+    setFilters((val) => ({ ...val, [event.name]: event.value }));
+  };
   const changeFilter = (key, value) => {
     setFilters((val) => ({ ...val, [key]: value }));
   };
   const serchInfomation = (value) => {
     if (timerRef.current) clearTimeout(timerRef.current);
     timerRef.current = setTimeout(() => {
-      changeFilter('search', value);
+      changeFilter("search", value);
     }, 500);
   };
   const reloadPage = () => {
-    setFilters(val => ({...val, reload : !filters.reload}))
-  }
+    setFilters((val) => ({ ...val, reload: !filters.reload }));
+  };
   return {
     loading,
     filters,
@@ -67,6 +70,7 @@ export const useDataList = ({
     data,
     reloadPage,
     getData,
+    handleChangeFilter,
     serchInfomation,
     changeFilter,
   };

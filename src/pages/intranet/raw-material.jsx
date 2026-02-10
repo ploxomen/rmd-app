@@ -243,7 +243,7 @@ function RawMaterial({ dataModules, dataUser, dataRoles }) {
       try {
         const all = await axios.all([
           apiAxios.get("/quotation-extra/products", { headers }),
-          apiAxios.get("money/change", { headers }),
+          apiAxios.get("money/change/today", { headers }),
           apiAxios.get("/raw-material/providers/list", { headers }),
         ]);
         setProviders(all[2].data.providers);

@@ -1,4 +1,3 @@
-import React, { useEffect } from "react";
 import Modal from "../Modal";
 import { useFormData } from "@/hooks/useFormData";
 import { InputPrimary, SubmitForm, TextareaPrimary } from "../Inputs";
@@ -53,11 +52,12 @@ export default function FormProductFinalyAssem({
         </div>
         <div className="col-span-6 lg:col-span-4">
           <InputPrimary
-            label="Fecha"
+            label="Fecha registro"
             type="date"
             inputRequired="required"
-            disabled
+            name="product_finaly_created"
             value={form.product_finaly_created}
+            onChange={(e) => setFormulario(e)}
           />
         </div>
         <div className="col-span-6 lg:col-span-4">

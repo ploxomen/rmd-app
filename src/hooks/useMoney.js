@@ -14,7 +14,7 @@ export const useMoney = () => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const { data } = await apiAxios.get('/money/change', { headers });
+        const { data } = await apiAxios.get('/money/change/today', { headers });
         if(!data.value){
           return handleOpenModal();
         }
