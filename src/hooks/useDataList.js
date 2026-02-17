@@ -49,7 +49,7 @@ export const useDataList = ({
     getData();
   }, [filters]);
   const handleChangeFilter = (event) => {
-    setFilters((val) => ({ ...val, [event.name]: event.value }));
+    setFilters((val) => ({ ...val, [event.target.name]: event.target.value }));
   };
   const changeFilter = (key, value) => {
     setFilters((val) => ({ ...val, [key]: value }));

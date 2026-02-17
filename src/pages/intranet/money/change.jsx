@@ -24,6 +24,10 @@ export default function ChangeMoney({ dataModules, dataUser, dataRoles }) {
     reloadPage,
   } = useDataList({
     url: "/money/change",
+    params: {
+      date_initial : null,
+      date_finaly : null
+    }
   });
   const {
     deleteChangeMoney,
