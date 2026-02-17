@@ -9,7 +9,6 @@ export default function TableChangeMoney({
     deleteChangeMoney = () => {}
 }) {
     const columns = [
-        'n°',
         'dia',
         'tipo de cambio',
         'intentos',
@@ -26,9 +25,6 @@ export default function TableChangeMoney({
       ) : (
         data.map((money) => (
           <tr className="bg-white dark:bg-gray-800" key={money.id}>
-            <td className="py-2 px-4 text-center">
-              {money.id}
-            </td>
             <td className="py-2 px-4">{money.change_day}</td>
             <td className="py-2 px-4">{money.change_soles}</td>
             <td className="py-2 px-4">{money.change_attempts}</td>           
