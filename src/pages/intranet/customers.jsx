@@ -264,12 +264,12 @@ function customers({ dataModules, dataUser, dataRoles }) {
                 onClick={exportProducts}
                 icon={<DocumentArrowDownIcon className="w-5 h-5" />}
               />
-              <Link href="/intranet/report/customer" target="_blank">
+              {/* <Link href="/intranet/report/customer" target="_blank">
                 <ButtonDangerSm
                   text="Pdf"
                   icon={<DocumentArrowDownIcon className="w-5 h-5" />}
                 />
-              </Link>
+              </Link> */}
             </div>
             <div style={{ width: "300px" }}>
               <InputSearch
