@@ -10,8 +10,9 @@ import Select from "react-select";
 import { optionsUnitsMeasurements } from "@/helpers/listUnitsMeasurements";
 import Label from "../Label";
 import { listStores } from "@/helpers/listStores";
+import DatosProduccion from "./components/DatosProduccion";
 const dataForm = {
-  date_issue: new Date().toISOString().split('T')[0],
+  date_issue: new Date().toISOString().split("T")[0],
   product_name: "",
   product_description: "",
   product_buy: "",
@@ -31,22 +32,26 @@ const dataForm = {
 };
 function FormProduct({
   statusModal,
+  listLabels,
   closeModal,
   handleSave,
   productEdit,
   categories,
   editStock = true,
 }) {
-  const [form, setForm] = useState(dataForm);
+  const [form, setForm] = useState({
+    ...dataForm,
+    list_labels: [],
+  });
   const [deleteImg, setDeleteImg] = useState(false);
   const editorDescription = useRef(null);
   const [labels, setLabels] = useState([]);
   const edit = Object.keys(productEdit).length;
   useEffect(() => {
-    setForm(edit ? productEdit : dataForm);
+    setForm(edit ? productEdit : { ...dataForm, list_labels: listLabels });
     setDeleteImg(false);
     handleStore(productEdit.product_store);
-  }, [productEdit]);
+  }, [productEdit, listLabels]);
   useEffect(() => {
     if (form.product_store === "PRODUCTO TERMINADO") {
       setForm((value) => ({ ...value, product_label_2: "ENSAMBLADO" }));
@@ -79,6 +84,7 @@ function FormProduct({
     if (inputImage.value) {
       data.append("product_img", inputImage.files[0]);
     }
+    data.append("list_labels", JSON.stringify(form.list_labels));
     handleSave(data);
   };
   const handleChangeForm = async (e) => {
@@ -137,6 +143,7 @@ function FormProduct({
   const handleClickUpload = (e) => {
     document.querySelector("#upload-file").click();
   };
+  
   return (
     <Modal
       status={statusModal}
@@ -269,7 +276,7 @@ function FormProduct({
             </div>
           </>
         )}
-        
+
         <div className="col-span-6 md:col-span-4">
           <SelectPrimary
             label="Tipos de almacén"
@@ -390,6 +397,12 @@ function FormProduct({
               />
             )}
           </div>
+        </div>
+        <div className="col-span-full">
+          <SeccionForm title="Datos de produccion" />
+        </div>
+        <div className="col-span-full">
+          <DatosProduccion seccionesLabels={form.list_labels} onChange={setForm}/>
         </div>
         <SubmitForm id="form-product-submit" />
       </form>

@@ -4,12 +4,14 @@ export const TYPES_PRODUCTS = {
     RESET_EDIT:"RESET_EDIT",
     ALL_CATEGORIES:"ALL_CATEGORIES",
     GET_PRODUCT:"GET_PRODUCT",
-    ALL_STORES: "ALL_STORES"
+    ALL_STORES: "ALL_STORES",
+    ALL_LABELS: "ALL_LABELS"
 }
 export const initialStateProduct = {
     products:[],
     categories:[],
     subcategories:[],
+    labels: [],
     productEdit:{},
     editStock: true,
     stores : []
@@ -24,6 +26,12 @@ export const reducerProducts = (state,actions) => {
         }
         case TYPES_PRODUCTS.NO_PRODUCTS:{
             return state
+        }
+        case TYPES_PRODUCTS.ALL_LABELS:{
+            return {
+                ...state,
+                labels: actions.payload.map(item => ({...item, time_origin_minute : "" , time_origin_hours : ""}))
+            }
         }
         case TYPES_PRODUCTS.ALL_CATEGORIES:{
             return {

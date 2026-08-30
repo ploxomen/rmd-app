@@ -47,10 +47,15 @@ function products({ dataModules, dataUser, dataRoles }) {
       try {
         const resq = await axios.all([
           apiAxios.get("product-categorie", { headers }),
+          apiAxios.get("product-labels", { headers }),
         ]);
         dispatch({
           type: TYPES_PRODUCTS.ALL_CATEGORIES,
           payload: resq[0].data.data,
+        });
+        dispatch({
+          type: TYPES_PRODUCTS.ALL_LABELS,
+          payload: resq[1].data.data,
         });
       } catch (error) {
         dispatch({ type: TYPES_PRODUCTS.NO_PRODUCTS });
@@ -278,6 +283,7 @@ function products({ dataModules, dataUser, dataRoles }) {
         categories={state.categories}
         statusModal={modal}
         closeModal={closeModal}
+        listLabels={state.labels}
         handleSave={saveProduct}
         productEdit={state.productEdit}
         subcategoriesData={state.subcategories}
