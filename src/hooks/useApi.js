@@ -11,5 +11,5 @@ export function useApi(resource){
             setData(response.data);
         }).finally(() => setLoading(false));        
     },[resource])
-    return {data,loading};
+    return {data,loading, setData};
 }
