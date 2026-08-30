@@ -14,10 +14,11 @@ export default function DatosProduccion({
             if (item.id !== productLabelId) {
                 return item;
             }
-
             return {
                 ...item,
                 time_origin_minute: value,
+                time_origin_hours: (value / 60).toFixed(2) || "",
+
             };
         });
         setSecciones(nuevasSecciones);
