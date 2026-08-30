@@ -84,7 +84,8 @@ function FormProduct({
     if (inputImage.value) {
       data.append("product_img", inputImage.files[0]);
     }
-    data.append("list_labels", JSON.stringify(form.list_labels));
+    data.append("labels", JSON.stringify(form.list_labels));
+    data.delete("list_labels");
     handleSave(data);
   };
   const handleChangeForm = async (e) => {
