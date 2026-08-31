@@ -1,20 +1,19 @@
 import BanerModule from "@/components/BanerModule";
 import LoyoutIntranet from "@/components/LoyoutIntranet";
-import FormProductionOrder from "@/components/orders/production/form/FormProductionOrder";
+import ListProductionOrder from "@/components/orders/production/list/ListProductionOrder";
 import { verifUser } from "@/helpers/verifUser";
-import React from "react";
 
 export async function getServerSideProps(context) {
-  return await verifUser(context, "/order/production/form");
+  return await verifUser(context, "/order/production/list");
 }
-export default function FormOrderProduction({
+export default function ListOrderProduction({
   dataUser,
   dataModules,
   dataRoles,
 }) {
   return (
     <LoyoutIntranet
-      title="Formulario orden de producción"
+      title="Lista de orden de producción"
       description=""
       user={dataUser}
       modules={dataModules}
@@ -22,9 +21,9 @@ export default function FormOrderProduction({
     >
       <BanerModule
         imageBanner="/baners/Group 17.jpg"
-        title="Formulario Orden de producción"
+        title="Lista de orden de producción"
       />
-      <FormProductionOrder />
+      <ListProductionOrder />
     </LoyoutIntranet>
-  );
+  )
 }
