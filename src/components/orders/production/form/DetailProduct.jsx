@@ -10,7 +10,7 @@ export default function DetailProduct({
   const calcHour = (productLabel, labelId, amout) => {
     const timeHour =
       productLabel.find((prev) => prev.id === labelId)?.time_origin_hours || 0;
-    return amout * timeHour;
+    return (amout * timeHour).toFixed(2);
   };
   const calcRowTotal = (productLabel, amout) => {
     return productLabel.reduce((acumulador, label) => {
