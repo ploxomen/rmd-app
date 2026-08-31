@@ -1,10 +1,9 @@
-import { InputPrimary } from "@/components/Inputs";
+import { InputPrimary, TextareaPrimary } from "@/components/Inputs";
 import React from "react";
 
 export default function DataProductionOrde({
   form = {},
   ordersSelected = [],
-  joinDetailsOrders = () => {},
   handleChangeForm = () => {},
 }) {
   return (
@@ -106,11 +105,11 @@ export default function DataProductionOrde({
               Observaciones
             </label>
 
-            <textarea
-              readOnly
+            <TextareaPrimary
               rows={3}
-              value={joinDetailsOrders()}
-              className="w-full resize-none rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700 outline-none"
+              name="observations"
+              value={form.observations}
+              onChange={handleChangeForm}
             />
           </div>
         </div>

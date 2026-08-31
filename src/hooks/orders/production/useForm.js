@@ -2,8 +2,9 @@ import apiAxios from "@/axios";
 import { sweetAlert } from "@/helpers/getAlert";
 import { useApi } from "@/hooks/useApi";
 import { useFormData } from "@/hooks/useFormData";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getCookie } from "@/helpers/getCookie";
+import { notFound } from "next/navigation";
 
 const INITIAL_FORM = {
   id: null,
@@ -11,43 +12,49 @@ const INITIAL_FORM = {
   cod_client: "",
   name_client: "",
   date_delivery: "",
+  observations: "",
   address: "",
 };
-export const useFormOrderProduct = () => {
+export const useFormOrderProduct = (id) => {
   const { data: shortages } = useApi("/order/production/shortages");
   const callbackSubmitResponse = async (data, alertResponse) => {
     if (alertResponse.isConfirmed) {
       window.location.reload();
     }
   };
-  const { form, setFormManual, setFormulario, handleSubmitParam } = useFormData(
-    {
-      data: INITIAL_FORM,
-      url: "/order/production/generate",
-      callbackResponse: callbackSubmitResponse,
-    },
-  );
+  const {
+    form,
+    setFormManual,
+    setFormulario,
+    handleSubmitParam,
+    setFormObject,
+  } = useFormData({
+    data: INITIAL_FORM,
+    method: id ? "put" : "post",
+    url: id
+      ? `/order/production/update/${id}`
+      : "/order/production/generate",
+    callbackResponse: callbackSubmitResponse,
+  });
   const { data: labels } = useApi("/product-labels");
   const [products, setProducts] = useState([]);
-  const [detailsOrder, setDetailsOrder] = useState([]);
   const [ordersSelected, setOrdersSelected] = useState([]);
   const [errorSelectedOrder, setErrorSelectedOrder] = useState("");
-
   const headers = getCookie();
-  const joinDetailsOrders = () => {
-    return detailsOrder
-      .map(
-        (order) =>
-          `${order.order_code}: ${order.order_details || "Sin observaciones"}`,
-      )
-      .join("\n");
+  const joinDetailsOrders = (detailsOrder) => {
+    const detailString = `${detailsOrder.order_code}: ${detailsOrder.order_details || "Sin observaciones"}`;
+    setFormManual(
+      "observations",
+      form.details_order
+        ? form.details_order + "\n" + detailString
+        : detailString,
+    );
   };
   const handleSubmit = (e) => {
     e.preventDefault();
     handleSubmitParam({
       ...form,
       details: JSON.stringify(products),
-      observations: joinDetailsOrders(),
     });
   };
   const handleSelectOrder = (event) => {
@@ -77,7 +84,6 @@ export const useFormOrderProduct = () => {
     }
     setOrdersSelected(ordersSelected.filter((prev) => prev.id !== orderId));
     setProducts(products.filter((prev) => prev.order_id !== orderId));
-    setDetailsOrder(detailsOrder.filter((prev) => prev.order_id !== orderId));
   };
   const handleChangeAmountProduct = (quotationId, productId, value) => {
     setProducts(
@@ -96,7 +102,7 @@ export const useFormOrderProduct = () => {
         { headers },
       );
       setProducts(response.data.data);
-      setDetailsOrder([...detailsOrder, response.data.details]);
+      joinDetailsOrders(response.data.details);
     } catch (error) {
       console.error(error);
       return sweetAlert({
@@ -106,6 +112,37 @@ export const useFormOrderProduct = () => {
       });
     }
   };
+  useEffect(async () => {
+    if (id) {
+      const response = await apiAxios.get("/order/production/show/" + id);
+      if (!response.data?.data) {
+        notFound();
+      }
+      const data = response.data.data;
+      const products = response.data.products;
+      const objResponse = {
+        id: data.id,
+        date_issue: data.order_produc_date_issue,
+        cod_client: data.order_production_customer,
+        name_client: data.customer.customer_name,
+        date_delivery: data.order_produc_date_delive,
+        observations: data.order_production_detail,
+        address: data.order_produc_address,
+      };
+      setFormObject(objResponse);
+      setProducts(products);
+      const ordersUnique = Array.from(
+        new Map(products.map((item) => [item.order_code, item])).values(),
+      ).map((item) => ({
+        id: item.order_id,
+        order_code: item.order_code,
+        order_date_issue: null,
+        customer_name: data.customer.customer_name,
+        customer_id: data.customer.id,
+      }));
+      setOrdersSelected(ordersUnique);
+    }
+  }, []);
   return {
     form,
     shortages,
@@ -113,12 +150,10 @@ export const useFormOrderProduct = () => {
     handleSelectOrder,
     handleSubmit,
     errorSelectedOrder,
-    detailsOrder,
     handleChangeAmountProduct,
     handleDeleteOrder,
     handleSubmitParam,
     labels,
-    joinDetailsOrders,
     setFormulario,
     products,
   };

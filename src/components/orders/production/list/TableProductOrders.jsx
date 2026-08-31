@@ -39,10 +39,7 @@ export default function TableProductOrders({ productOrders = [] }) {
                 <Link
                   className="rounded-md relative overflow-hidden inline-flex group items-center justify-center px-2 py-1.5 cursor-pointer border-b-4 border-l-2 hover:bg-blue-600 font-semibold transition-all ease-in-out text-xs shadow-lg bg-gradient-to-tr bg-blue-500 text-white"
                   href={{
-                    pathname: `/intranet/store/commodity/histories`,
-                    query: {
-                      commodity: product.id,
-                    },
+                    pathname: `/intranet/order/production/form/${product.id}`,
                   }}
                   title="Ver historial"
                 >

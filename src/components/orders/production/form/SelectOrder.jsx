@@ -30,7 +30,6 @@ export default function SelectOrder({
         {/* COMBOBOX */}
         <SelectPrimary
           label="Seleccionar Orden de Servicio"
-          inputRequired={true}
           name="order_services"
           onChange={handleSelectOrder}
         >

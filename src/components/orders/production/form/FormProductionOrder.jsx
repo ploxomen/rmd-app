@@ -5,7 +5,7 @@ import DataProductionOrde from "./DataProductionOrde";
 import DetailProduct from "./DetailProduct";
 import { ButtonPrimary } from "@/components/Buttons";
 
-export default function FormProductionOrder() {
+export default function FormProductionOrder({id}) {
   const {
     shortages,
     handleSelectOrder,
@@ -18,8 +18,7 @@ export default function FormProductionOrder() {
     handleDeleteOrder,
     handleChangeAmountProduct,
     handleSubmit,
-    joinDetailsOrders
-  } = useFormOrderProduct();
+  } = useFormOrderProduct(id);
   return (
     <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
       <section className="rounded-2xl border border-slate-200 bg-white shadow-sm">
@@ -36,7 +35,6 @@ export default function FormProductionOrder() {
           form={form}
           ordersSelected={ordersSelected}
           handleChangeForm={setFormulario}
-          joinDetailsOrders={joinDetailsOrders}
         />
       </section>
       <section className="rounded-2xl border border-slate-200 bg-white shadow-sm">
@@ -46,7 +44,7 @@ export default function FormProductionOrder() {
           handleChangeAmountProduct={handleChangeAmountProduct}
         />
         <div className="px-4 py-4">
-            <ButtonPrimary type="submit" text="Generar"/>
+            <ButtonPrimary type="submit" text={id ? "Actualizar" : "Generar"}/>
         </div>
       </section>
     </form>
