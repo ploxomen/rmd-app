@@ -15,7 +15,7 @@ export default function DetailProduct({
   const calcRowTotal = (productLabel, amout) => {
     return productLabel.reduce((acumulador, label) => {
       return acumulador + label.time_origin_hours * amout;
-    }, 0);
+    }, 0).toFixed(2);
   };
   const calcTotalGeneral = (labelId) => {
     let total = 0;
@@ -32,11 +32,11 @@ export default function DetailProduct({
   };
   const calcTotalOfTotal = () => {
     let total = 0;
-    listLabels.forEach(item => {
-        total += calcTotalGeneral(item.id);
-    })
+    listLabels.forEach((item) => {
+      total += calcTotalGeneral(item.id);
+    });
     return total;
-  }
+  };
   return (
     <>
       {/* HEADER */}
@@ -67,7 +67,7 @@ export default function DetailProduct({
           <thead>
             <tr className="border-b border-slate-200 bg-slate-50">
               <th className="px-5 py-4 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
-                Orden de Servicio
+                Pedido Venta
               </th>
 
               <th className="px-5 py-4 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
@@ -78,7 +78,10 @@ export default function DetailProduct({
                 Cantidad
               </th>
               {listLabels.map((label) => (
-                <th className="border-l border-slate-200 bg-green-50 px-5 py-4 text-center" key={label.id}>
+                <th
+                  className="border-l border-slate-200 bg-green-50 px-5 py-4 text-center"
+                  key={label.id}
+                >
                   <span className="text-xs font-bold text-green-700">
                     {label.name}
                   </span>
@@ -96,6 +99,16 @@ export default function DetailProduct({
 
           {/* CUERPO */}
           <tbody className="divide-y divide-slate-100">
+            {!products.length && (
+              <tr className="transition hover:bg-slate-50">
+                <td
+                  className="whitespace-nowrap px-5 py-4 text-center"
+                  colSpan="100%"
+                >
+                  <span className="text-sm text-slate-500">Lista de productos vacía</span>
+                </td>
+              </tr>
+            )}
             {products.map((product) => (
               <tr
                 key={`${product.quota_deta_id}-${product.product_id}`}
@@ -129,7 +142,10 @@ export default function DetailProduct({
                   />
                 </td>
                 {listLabels.map((label) => (
-                  <td className="border-l border-slate-100 bg-amber-50/40 px-5 py-4 text-center" key={label.id}>
+                  <td
+                    className="border-l border-slate-100 bg-amber-50/40 px-5 py-4 text-center"
+                    key={label.id}
+                  >
                     <span className="font-semibold text-amber-700">
                       {calcHour(
                         product.list_labels,

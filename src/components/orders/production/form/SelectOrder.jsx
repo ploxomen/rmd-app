@@ -5,6 +5,7 @@ export default function SelectOrder({
   listOrders = [],
   ordersSelected = [],
   error = "",
+  productNotProduction = [],
   handleSelectOrder = () => {},
   handleDeleteOrder = () => {}
 }) {
@@ -52,6 +53,13 @@ export default function SelectOrder({
                 No se puede agregar la orden
               </p>
               <p className="mt-1 text-sm text-red-700">{error}</p>
+              {
+                productNotProduction.length > 0 && (<ul className="text-sm list-disc pl-6 mt-1 flex flex-col gap-1">
+                  {
+                    productNotProduction.map(row => <li>{row.product_name}</li>)
+                  }
+                </ul>)
+              }
             </div>
           </div>
         )}

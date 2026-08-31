@@ -39,6 +39,8 @@ export const useFormOrderProduct = (id) => {
   const { data: labels } = useApi("/product-labels");
   const [products, setProducts] = useState([]);
   const [ordersSelected, setOrdersSelected] = useState([]);
+  const [productNotProduction, setProductNotProduction] = useState([]);
+
   const [errorSelectedOrder, setErrorSelectedOrder] = useState("");
   const headers = getCookie();
   const joinDetailsOrders = (detailsOrder) => {
@@ -57,9 +59,10 @@ export const useFormOrderProduct = (id) => {
       details: JSON.stringify(products),
     });
   };
-  const handleSelectOrder = (event) => {
+  const handleSelectOrder = async (event) => {
     const orderId = event.target.value;
     setErrorSelectedOrder("");
+    setProductNotProduction([]);
     if (!orderId) {
       return;
     }
@@ -72,13 +75,17 @@ export const useFormOrderProduct = (id) => {
         "No se puede generar una orden de produccion de diferentes clientes",
       );
     }
+    const response = await getDetailProductOrder(orderId);
+    if(!response){
+      return false;
+    }
     setFormManual("name_client", order.customer_name);
     setFormManual("cod_client", order.customer_id);
-    getDetailProductOrder(orderId);
     setOrdersSelected((prev) => [...prev, order]);
   };
   const handleDeleteOrder = (orderId) => {
     setErrorSelectedOrder("");
+    setProductNotProduction([]);
     if (!orderId) {
       return;
     }
@@ -101,15 +108,22 @@ export const useFormOrderProduct = (id) => {
         `/order/production/product/${orderId}`,
         { headers },
       );
+      if(response.data.alert){
+        setErrorSelectedOrder(response.data.alert);
+        setProductNotProduction(response.data.data);
+        return false;
+      }
       setProducts(response.data.data);
       joinDetailsOrders(response.data.details);
+      return true;
     } catch (error) {
       console.error(error);
-      return sweetAlert({
+      sweetAlert({
         title: "Error",
-        text: "Error al eliminar la cotización",
+        text: "Error al obtener los productos de producción",
         icon: "error",
       });
+      return false;
     }
   };
   useEffect(async () => {
@@ -154,6 +168,7 @@ export const useFormOrderProduct = (id) => {
     handleDeleteOrder,
     handleSubmitParam,
     labels,
+    productNotProduction,
     setFormulario,
     products,
   };

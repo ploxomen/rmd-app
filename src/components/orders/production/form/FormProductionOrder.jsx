@@ -16,6 +16,7 @@ export default function FormProductionOrder({id}) {
     setFormulario,
     ordersSelected,
     handleDeleteOrder,
+    productNotProduction,
     handleChangeAmountProduct,
     handleSubmit,
   } = useFormOrderProduct(id);
@@ -26,6 +27,7 @@ export default function FormProductionOrder({id}) {
           listOrders={shortages.data}
           handleSelectOrder={handleSelectOrder}
           error={errorSelectedOrder}
+          productNotProduction={productNotProduction}
           ordersSelected={ordersSelected}
           handleDeleteOrder={handleDeleteOrder}
         />

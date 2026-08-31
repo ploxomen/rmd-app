@@ -31,7 +31,7 @@ export default function TableProductOrders({ productOrders = [] }) {
             </td>
             <td className="p-1 text-center">{product.order_produc_date_issue}</td>
             <td className="p-1 text-center">{product.customer_name}</td>
-            <td className="p-1 text-center">{product.orders_code?.split(",").map(txt => <Badge text={txt} colors="bg-blue-100 bg-blue-500"/>)}</td>
+            <td className="p-1 text-center">{product.orders_code?.split(",").map(txt => <Badge text={txt} colors="bg-blue-100 text-blue-500 text-xs"/>)}</td>
             <td className="p-1 text-center">{product.order_produc_total}h</td>
             <td className="p-1 text-center">{product.order_produc_date_delive}</td>
             <td className="p-1">

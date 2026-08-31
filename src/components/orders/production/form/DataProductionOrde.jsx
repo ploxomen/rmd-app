@@ -38,29 +38,32 @@ export default function DataProductionOrde({
       </div>
       <div className="p-6">
         {/* INFORMACIÓN DEL CLIENTE */}
-        <div className="mb-6 rounded-xl border border-indigo-100 bg-indigo-50/50 p-4">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-100 font-bold text-indigo-600">
-              {form?.name_client?.charAt(0) || "C"}
-            </div>
+        {form?.name_client && (
+          <div className="mb-6 rounded-xl border border-indigo-100 bg-indigo-50/50 p-4">
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-100 font-bold text-indigo-600">
+                {form?.name_client?.charAt(0) || "C"}
+              </div>
 
-            <div>
-              <p className="text-xs font-medium uppercase tracking-wide text-indigo-500">
-                Cliente
-              </p>
-
-              <p className="font-semibold text-slate-900">
-                {form?.name_client}
-              </p>
-
-              {form?.number_document && (
-                <p className="text-xs text-slate-500">
-                  RUC: {form.number_document}
+              <div>
+                <p className="text-xs font-medium uppercase tracking-wide text-indigo-500">
+                  Cliente
                 </p>
-              )}
+
+                <p className="font-semibold text-slate-900">
+                  {form?.name_client}
+                </p>
+
+                {form?.number_document && (
+                  <p className="text-xs text-slate-500">
+                    RUC: {form.number_document}
+                  </p>
+                )}
+              </div>
             </div>
           </div>
-        </div>
+        )}
+
         {/* CAMPOS */}
         <div className="grid grid-cols-1 gap-x-2 gap-y-1 md:grid-cols-2 xl:grid-cols-4">
           {/* FECHA EMISIÓN */}
@@ -113,30 +116,31 @@ export default function DataProductionOrde({
             />
           </div>
         </div>
+        {ordersSelected.length >= 1 && (
+          <div className="mt-6 border-t border-slate-100 pt-5">
+            <div className="mb-3 flex items-center gap-2">
+              <div className="h-2 w-2 rounded-full bg-indigo-500" />
 
+              <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                Órdenes incluidas
+              </p>
+            </div>
+
+            <div className="flex flex-wrap gap-2">
+              {ordersSelected.map((orden) => (
+                <div
+                  key={orden.id}
+                  className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2"
+                >
+                  <span className="text-sm font-semibold text-slate-700">
+                    {orden.order_code}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
         {/* ÓRDENES QUE COMPONEN LA INFORMACIÓN */}
-        <div className="mt-6 border-t border-slate-100 pt-5">
-          <div className="mb-3 flex items-center gap-2">
-            <div className="h-2 w-2 rounded-full bg-indigo-500" />
-
-            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-              Órdenes incluidas
-            </p>
-          </div>
-
-          <div className="flex flex-wrap gap-2">
-            {ordersSelected.map((orden) => (
-              <div
-                key={orden.id}
-                className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2"
-              >
-                <span className="text-sm font-semibold text-slate-700">
-                  {orden.order_code}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
       </div>
     </>
   );
