@@ -1,7 +1,12 @@
 import { InputPrimary } from "@/components/Inputs";
 import React from "react";
 
-export default function DataProductionOrde({ form = {}, ordersSelected = [] }) {
+export default function DataProductionOrde({
+  form = {},
+  ordersSelected = [],
+  joinDetailsOrders = () => {},
+  handleChangeForm = () => {},
+}) {
   return (
     <>
       <div className="border-b border-slate-200 px-6 py-5">
@@ -61,18 +66,38 @@ export default function DataProductionOrde({ form = {}, ordersSelected = [] }) {
         <div className="grid grid-cols-1 gap-x-2 gap-y-1 md:grid-cols-2 xl:grid-cols-4">
           {/* FECHA EMISIÓN */}
           <div>
-            <InputPrimary label="Fecha de emisión" type="date" />
+            <InputPrimary
+              label="Fecha de emisión"
+              inputRequired="required"
+              name="date_issue"
+              onChange={handleChangeForm}
+              type="date"
+              value={form.date_issue}
+            />
           </div>
           {/* CLIENTE */}
           <div className="col-span-2">
-            <InputPrimary label="Cliente" disabled />
+            <InputPrimary label="Cliente" disabled value={form.name_client} />
           </div>
           <div>
-            <InputPrimary label="Fecha de entrega" type="date" />
+            <InputPrimary
+              label="Fecha de entrega"
+              inputRequired="required"
+              name="date_delivery"
+              type="date"
+              value={form.date_delivery}
+              onChange={handleChangeForm}
+            />
           </div>
 
           <div className="col-span-full">
-            <InputPrimary label="Dirección" />
+            <InputPrimary
+              label="Dirección"
+              inputRequired="required"
+              name="address"
+              value={form.address}
+              onChange={handleChangeForm}
+            />
           </div>
 
           {/* OBSERVACIONES */}
@@ -84,12 +109,7 @@ export default function DataProductionOrde({ form = {}, ordersSelected = [] }) {
             <textarea
               readOnly
               rows={3}
-              // value={ordenesSeleccionadasData
-              //   .map(
-              //     (orden) =>
-              //       `${orden.numero}: ${orden.observaciones || "Sin observaciones"}`,
-              //   )
-              //   .join("\n")}
+              value={joinDetailsOrders()}
               className="w-full resize-none rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700 outline-none"
             />
           </div>

@@ -8,22 +8,48 @@ import { getCookie } from "@/helpers/getCookie";
 const INITIAL_FORM = {
   id: null,
   date_issue: "",
+  cod_client: "",
   name_client: "",
   date_delivery: "",
   address: "",
 };
 export const useFormOrderProduct = () => {
-  const { form, setFormManual } = useFormData({
-    data: INITIAL_FORM,
-    url: "/order/production",
-  });
   const { data: shortages } = useApi("/order/production/shortages");
+  const callbackSubmitResponse = async (data, alertResponse) => {
+    if (alertResponse.isConfirmed) {
+      window.location.reload();
+    }
+  };
+  const { form, setFormManual, setFormulario, handleSubmitParam } = useFormData(
+    {
+      data: INITIAL_FORM,
+      url: "/order/production/generate",
+      callbackResponse: callbackSubmitResponse,
+    },
+  );
   const { data: labels } = useApi("/product-labels");
   const [products, setProducts] = useState([]);
+  const [detailsOrder, setDetailsOrder] = useState([]);
   const [ordersSelected, setOrdersSelected] = useState([]);
   const [errorSelectedOrder, setErrorSelectedOrder] = useState("");
-  const headers = getCookie();
 
+  const headers = getCookie();
+  const joinDetailsOrders = () => {
+    return detailsOrder
+      .map(
+        (order) =>
+          `${order.order_code}: ${order.order_details || "Sin observaciones"}`,
+      )
+      .join("\n");
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    handleSubmitParam({
+      ...form,
+      details: JSON.stringify(products),
+      observations: joinDetailsOrders(),
+    });
+  };
   const handleSelectOrder = (event) => {
     const orderId = event.target.value;
     setErrorSelectedOrder("");
@@ -40,6 +66,7 @@ export const useFormOrderProduct = () => {
       );
     }
     setFormManual("name_client", order.customer_name);
+    setFormManual("cod_client", order.customer_id);
     getDetailProductOrder(orderId);
     setOrdersSelected((prev) => [...prev, order]);
   };
@@ -50,6 +77,7 @@ export const useFormOrderProduct = () => {
     }
     setOrdersSelected(ordersSelected.filter((prev) => prev.id !== orderId));
     setProducts(products.filter((prev) => prev.order_id !== orderId));
+    setDetailsOrder(detailsOrder.filter((prev) => prev.order_id !== orderId));
   };
   const handleChangeAmountProduct = (quotationId, productId, value) => {
     setProducts(
@@ -68,6 +96,7 @@ export const useFormOrderProduct = () => {
         { headers },
       );
       setProducts(response.data.data);
+      setDetailsOrder([...detailsOrder, response.data.details]);
     } catch (error) {
       console.error(error);
       return sweetAlert({
@@ -82,10 +111,15 @@ export const useFormOrderProduct = () => {
     shortages,
     ordersSelected,
     handleSelectOrder,
+    handleSubmit,
     errorSelectedOrder,
+    detailsOrder,
     handleChangeAmountProduct,
     handleDeleteOrder,
+    handleSubmitParam,
     labels,
+    joinDetailsOrders,
+    setFormulario,
     products,
   };
 };

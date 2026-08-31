@@ -38,13 +38,14 @@ export const useFormData = ({
       if (resp.data.redirect !== null) {
         return route.replace(resp.data.redirect);
       }
-      sweetAlert({
+      const alertResponse = await sweetAlert({
         title: 'Mensaje',
         text: resp.data.message,
         icon: resp.data.error ? 'error' : 'success',
       });
-      callbackResponse(resp.data);
+      callbackResponse(resp.data, alertResponse);
     } catch (error) {
+      console.error(error);
         if(error?.response?.status === 422){
             for (const key in error.response.data.errors) {
                 if (Object.prototype.hasOwnProperty.call(error.response.data.errors, key)) {

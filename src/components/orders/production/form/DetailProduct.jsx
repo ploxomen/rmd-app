@@ -78,7 +78,7 @@ export default function DetailProduct({
                 Cantidad
               </th>
               {listLabels.map((label) => (
-                <th className="border-l border-slate-200 bg-green-50 px-5 py-4 text-center">
+                <th className="border-l border-slate-200 bg-green-50 px-5 py-4 text-center" key={label.id}>
                   <span className="text-xs font-bold text-green-700">
                     {label.name}
                   </span>
@@ -129,7 +129,7 @@ export default function DetailProduct({
                   />
                 </td>
                 {listLabels.map((label) => (
-                  <td className="border-l border-slate-100 bg-amber-50/40 px-5 py-4 text-center">
+                  <td className="border-l border-slate-100 bg-amber-50/40 px-5 py-4 text-center" key={label.id}>
                     <span className="font-semibold text-amber-700">
                       {calcHour(
                         product.list_labels,
@@ -178,13 +178,13 @@ export default function DetailProduct({
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
-                  stroke-width="1.5"
+                  strokeWidth="1.5"
                   stroke="currentColor"
-                  class="size-6"
+                  className="size-6"
                 >
                   <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                     d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
                   />
                 </svg>
