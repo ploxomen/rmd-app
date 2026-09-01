@@ -84,8 +84,10 @@ export const useFormOrderProduct = (id) => {
     if (!response) {
       return false;
     }
-    setFormManual("name_client", order.customer_name);
-    setFormManual("cod_client", order.customer_id);
+    setFormObject({
+      name_client: order.customer_name,
+      cod_client: order.customer_id,
+    });
     setOrdersSelected((prev) => [...prev, order]);
   };
   const handleDeleteOrder = (orderId) => {
@@ -94,7 +96,18 @@ export const useFormOrderProduct = (id) => {
     if (!orderId) {
       return;
     }
-    setOrdersSelected(ordersSelected.filter((prev) => prev.id !== orderId));
+    setOrdersSelected((prev) => {
+      const updatedOrders = prev.filter((order) => order.id !== orderId);
+      if (updatedOrders.length === 0) {
+        setFormObject({
+          address: "",
+          date_issue: "",
+          name_client: "",
+          cod_client: "",
+        });
+      }
+      return updatedOrders;
+    });
     setProducts(products.filter((prev) => prev.order_id !== orderId));
   };
   const handleChangeAmountProduct = (quotationId, productId, value) => {
@@ -118,6 +131,12 @@ export const useFormOrderProduct = (id) => {
         setErrorSelectedOrder(response.data.alert);
         setProductNotProduction(response.data.data);
         return false;
+      }
+      if (!ordersSelected.length) {
+        setFormObject({
+          address: response.data.details.order_address,
+          date_issue: response.data.details.order_date_issue,
+        });
       }
       setProducts(response.data.data);
       joinDetailsOrders(response.data.details);
