@@ -1,13 +1,17 @@
+import { ButtonPrimary } from "@/components/Buttons";
 import { SelectPrimary } from "@/components/Selects";
+import { ArrowPathIcon, PencilIcon } from "@heroicons/react/24/solid";
 import React from "react";
 
 export default function SelectOrder({
   listOrders = [],
   ordersSelected = [],
   error = "",
+  orderIdSelect = null,
   productNotProduction = [],
   handleSelectOrder = () => {},
-  handleDeleteOrder = () => {}
+  handleDeleteOrder = () => {},
+  getProduct = () => {},
 }) {
   return (
     <>
@@ -32,7 +36,7 @@ export default function SelectOrder({
         <SelectPrimary
           label="Seleccionar Orden de Servicio"
           name="order_services"
-          onChange={handleSelectOrder}
+          onChange={(e) => handleSelectOrder(e.target.value)}
         >
           <option value="">Seleccione las ordenes</option>
           {listOrders.map((order) => (
@@ -41,7 +45,6 @@ export default function SelectOrder({
             </option>
           ))}
         </SelectPrimary>
-
         {/* ERROR */}
         {error && (
           <div className="mt-4 flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 p-4">
@@ -53,13 +56,21 @@ export default function SelectOrder({
                 No se puede agregar la orden
               </p>
               <p className="mt-1 text-sm text-red-700">{error}</p>
-              {
-                productNotProduction.length > 0 && (<ul className="text-sm list-disc pl-6 mt-1 flex flex-col gap-1">
-                  {
-                    productNotProduction.map(row => <li>{row.product_name}</li>)
-                  }
-                </ul>)
-              }
+              {productNotProduction.length > 0 && (
+                <ul className="text-sm list-disc pl-6 mt-1 flex flex-col gap-1">
+                  {productNotProduction.map((row) => (
+                    <li>
+                      <div className="flex gap-3 items-center">
+                        <span>{row.product_name}</span>
+                        <PencilIcon
+                          className="size-6 text-blue-500 cursor-pointer"
+                          onClick={(e) => getProduct(row.product_id)}
+                        />
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
           </div>
         )}

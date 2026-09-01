@@ -2,7 +2,7 @@ import apiAxios from "@/axios";
 import { sweetAlert } from "@/helpers/getAlert";
 import { useApi } from "@/hooks/useApi";
 import { useFormData } from "@/hooks/useFormData";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { getCookie } from "@/helpers/getCookie";
 import { notFound } from "next/navigation";
 
@@ -31,16 +31,14 @@ export const useFormOrderProduct = (id) => {
   } = useFormData({
     data: INITIAL_FORM,
     method: id ? "put" : "post",
-    url: id
-      ? `/order/production/update/${id}`
-      : "/order/production/generate",
+    url: id ? `/order/production/update/${id}` : "/order/production/generate",
     callbackResponse: callbackSubmitResponse,
   });
   const { data: labels } = useApi("/product-labels");
   const [products, setProducts] = useState([]);
+  const [orderIdSelect, setOrderIdSelect] = useState(null);
   const [ordersSelected, setOrdersSelected] = useState([]);
   const [productNotProduction, setProductNotProduction] = useState([]);
-
   const [errorSelectedOrder, setErrorSelectedOrder] = useState("");
   const headers = getCookie();
   const joinDetailsOrders = (detailsOrder) => {
@@ -59,9 +57,16 @@ export const useFormOrderProduct = (id) => {
       details: JSON.stringify(products),
     });
   };
-  const handleSelectOrder = async (event) => {
-    const orderId = event.target.value;
+  const removeProductNotProduction = (productId) => {
+    setProductNotProduction(
+      productNotProduction.filter(
+        (product) => product.product_id !== Number(productId),
+      ),
+    );
+  };
+  const handleSelectOrder = async (orderId) => {
     setErrorSelectedOrder("");
+    setOrderIdSelect(null);
     setProductNotProduction([]);
     if (!orderId) {
       return;
@@ -76,7 +81,7 @@ export const useFormOrderProduct = (id) => {
       );
     }
     const response = await getDetailProductOrder(orderId);
-    if(!response){
+    if (!response) {
       return false;
     }
     setFormManual("name_client", order.customer_name);
@@ -108,7 +113,8 @@ export const useFormOrderProduct = (id) => {
         `/order/production/product/${orderId}`,
         { headers },
       );
-      if(response.data.alert){
+      if (response.data.alert) {
+        setOrderIdSelect(orderId);
         setErrorSelectedOrder(response.data.alert);
         setProductNotProduction(response.data.data);
         return false;
@@ -126,8 +132,11 @@ export const useFormOrderProduct = (id) => {
       return false;
     }
   };
-  useEffect(async () => {
-    if (id) {
+  useEffect(() => {
+    const getData = async () => {
+      if (!id) {
+        return false;
+      }
       const response = await apiAxios.get("/order/production/show/" + id);
       if (!response.data?.data) {
         notFound();
@@ -155,8 +164,14 @@ export const useFormOrderProduct = (id) => {
         customer_id: data.customer.id,
       }));
       setOrdersSelected(ordersUnique);
-    }
+    };
+    getData();
   }, []);
+  useEffect(() => {
+    if (!productNotProduction.length && orderIdSelect) {
+      handleSelectOrder(orderIdSelect);
+    }
+  }, [productNotProduction]);
   return {
     form,
     shortages,
@@ -167,9 +182,11 @@ export const useFormOrderProduct = (id) => {
     handleChangeAmountProduct,
     handleDeleteOrder,
     handleSubmitParam,
+    orderIdSelect,
     labels,
     productNotProduction,
     setFormulario,
     products,
+    removeProductNotProduction,
   };
 };
