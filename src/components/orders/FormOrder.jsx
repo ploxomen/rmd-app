@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { InputPrimary, SubmitForm } from '../Inputs';
+import { InputPrimary, SubmitForm, TextareaPrimary } from '../Inputs';
 import SeccionForm from '../SeccionForm';
 import { SelectPrimary } from '../Selects';
 import Modal from '../Modal';
@@ -20,6 +20,7 @@ const initalForm = {
     id: null,
     customer_id: "",
     order_address: 0,
+    order_details: "",
     order_conditions_delivery: "",
     order_conditions_pay: "",
     order_contact_email: "",
@@ -289,6 +290,9 @@ function FormOrder({ statusModal, orderEdit, quotationsNew, departaments, distri
                         <option value="SI">SI</option>
                         <option value="NO">NO</option>
                     </SelectPrimary>
+                </div>
+                <div className='col-span-full'>
+                    <TextareaPrimary label="Observaciones" name="order_details" value={form.order_details || ''} onChange={handleForm}/>
                 </div>
                 <div className='col-span-full'>
                     <input ref={refUploadFile} type="file" hidden onChange={handleUploadFile} />

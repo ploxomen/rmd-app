@@ -13,7 +13,7 @@ import { ButtonPrimary, ButtonSecondarySm } from '@/components/Buttons';
 import { ArrowPathIcon, PaperAirplaneIcon } from '@heroicons/react/24/solid';
 import Select from 'react-select';
 import { useRouter } from 'next/navigation';
-import { InputFile, InputPrimary } from '@/components/Inputs';
+import { InputFile, InputPrimary, TextareaPrimary } from '@/components/Inputs';
 import axios from 'axios';
 import { getProvinces } from '@/helpers/getProvinces';
 import { getDistrics } from '@/helpers/getDistrics';
@@ -33,6 +33,7 @@ const initialForm = {
   order_district: "",
   order_province: "",
   order_conditions_pay: "",
+  order_details: "",
   order_conditions_delivery: "",
   order_address: "",
   order_os: "",
@@ -285,6 +286,9 @@ function OrderNew({ dataUser, dataModules, dataRoles }) {
             <option value="SI">SI</option>
             <option value="NO">NO</option>
           </SelectPrimary>
+        </div>
+         <div className='col-span-full'>
+          <TextareaPrimary label="Observaciones" name="order_details" value={form.order_details || ''} onChange={handleChangeForm}/>
         </div>
         <div className='col-span-full mb-3x'>
           <InputFile label='Cargar OC' name='order_os' inputRequired={true} onChange={handleChangeDocument} />
