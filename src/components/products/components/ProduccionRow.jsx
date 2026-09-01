@@ -1,3 +1,4 @@
+import { InputDetailsSm } from "@/components/Inputs";
 import { useMemo } from "react";
 export default function ProduccionRow({
     item,
@@ -27,7 +28,7 @@ export default function ProduccionRow({
             {/* TIEMPO DE ORIGEN */}
             <td className="px-4 py-4">
                 <div className="flex items-center gap-3">
-                    <input
+                    <InputDetailsSm 
                         type="number"
                         min="0"
                         step="1"
@@ -38,20 +39,7 @@ export default function ProduccionRow({
                                 event.target.value
                             )
                         }
-                        className="
-                            w-full
-                            rounded-xl
-                            border border-slate-200
-                            bg-white
-                            px-2 py-1
-                            text-base
-                            text-slate-800
-                            outline-none
-                            transition
-                            focus:border-emerald-500
-                            focus:ring-2
-                            focus:ring-emerald-100
-                        "
+                        required
                     />
                     <span className="shrink-0 font-semibold text-slate-500 text-sm">
                         min

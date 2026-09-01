@@ -24,9 +24,6 @@ export default function DatosProduccion({
         setSecciones(nuevasSecciones);
         onChange(value => ({...value, list_labels: nuevasSecciones}))
     };
-
-    
-
     return (
         <section
             className="
