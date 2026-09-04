@@ -122,7 +122,7 @@ export default function DataProductionOrde({
               <div className="h-2 w-2 rounded-full bg-indigo-500" />
 
               <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-                Órdenes incluidas
+                pedidos de venta
               </p>
             </div>
 

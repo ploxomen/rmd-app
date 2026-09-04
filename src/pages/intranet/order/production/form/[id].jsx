@@ -18,7 +18,7 @@ export default function FormOrderProduction({
 
   return (
     <LoyoutIntranet
-      title="Formulario orden de producción"
+      title="Generar Orden de Producción"
       description=""
       user={dataUser}
       modules={dataModules}
@@ -26,7 +26,7 @@ export default function FormOrderProduction({
     >
       <BanerModule
         imageBanner="/baners/Group 17.jpg"
-        title="Formulario Orden de producción"
+        title="Generar Orden de Producción"
       />
       <FormProductionOrder id={id} />
     </LoyoutIntranet>

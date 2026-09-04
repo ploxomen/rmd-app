@@ -278,7 +278,7 @@ function FormProduct({
           </>
         )}
 
-        <div className="col-span-6 md:col-span-4">
+        {/* <div className="col-span-6 md:col-span-4">
           <SelectPrimary
             label="Tipos de almacén"
             inputRequired="required"
@@ -297,8 +297,8 @@ function FormProduct({
               </option>
             ))}
           </SelectPrimary>
-        </div>
-        <div className="col-span-6 md:col-span-4">
+        </div> */}
+        {/* <div className="col-span-6 md:col-span-4">
           <SelectPrimary
             label="Etiqueta 1"
             name="product_label"
@@ -337,9 +337,9 @@ function FormProduct({
                 </option>
               ))}
           </SelectPrimary>
-        </div>
+        </div> */}
 
-        <div className="col-span-6 mb-2">
+        <div className="col-span-full mb-2">
           <Label text="Categoria" htmlFor="product_categorie_id" required />
           <Select
             instanceId="product_categorie_id"
@@ -353,7 +353,7 @@ function FormProduct({
             menuPosition="fixed"
           />
         </div>
-        <div className="col-span-6">
+        {/* <div className="col-span-6">
           <SelectPrimary
             label="Unidades de medida"
             inputRequired="required"
@@ -368,7 +368,7 @@ function FormProduct({
               </option>
             ))}
           </SelectPrimary>
-        </div>
+        </div> */}
         <div className="col-span-full">
           <div className="flex gap-2 items-center">
             <input

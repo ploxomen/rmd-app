@@ -13,7 +13,7 @@ export default function ListOrderProduction({
 }) {
   return (
     <LoyoutIntranet
-      title="Lista de orden de producción"
+      title="Mis Órdenes de Producción"
       description=""
       user={dataUser}
       modules={dataModules}
@@ -21,7 +21,7 @@ export default function ListOrderProduction({
     >
       <BanerModule
         imageBanner="/baners/Group 17.jpg"
-        title="Lista de orden de producción"
+        title="Lista Órdenes de Producción"
       />
       <ListProductionOrder />
     </LoyoutIntranet>

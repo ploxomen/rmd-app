@@ -19,10 +19,10 @@ export default function SelectOrder({
         <div className="flex items-center justify-between">
           <div>
             <h2 className="font-semibold text-slate-900">
-              Órdenes de Servicio
+              Pedidos de venta
             </h2>
             <p className="mt-1 text-sm text-slate-500">
-              Selecciona las órdenes de servicio que deseas incluir.
+              Selecciona los pedidos de venta que deseas incluir.
             </p>
           </div>
 

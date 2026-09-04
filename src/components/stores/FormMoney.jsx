@@ -28,22 +28,25 @@ function FormMoney({ status, valueMoney, changeMoney, closeModal}) {
 
   }
   return (
-    <Modal status={status} title="Establecer Tipo Cambio" onSave={hanbleSendModal} handleCloseModal={closeModal}>
-      <form onSubmit={handelSubmitChangeMoney}>
-        <InputPrimary
-          label="Monto"
-          type="number"
-          step="0.01"
-          min="0.01"
-          name=""
-          inputRequired="required"
-          value={valueMoney.money}
-          onChange={e => changeMoney({money : e.target.value, attempt: 0})}
-        />
-        <SubmitForm id="form-change-money" />
-      </form>
-    </Modal>
-  );
+    <></>
+  )
+  // return (
+  //   <Modal status={status} title="Establecer Tipo Cambio" onSave={hanbleSendModal} handleCloseModal={closeModal}>
+  //     <form onSubmit={handelSubmitChangeMoney}>
+  //       <InputPrimary
+  //         label="Monto"
+  //         type="number"
+  //         step="0.01"
+  //         min="0.01"
+  //         name=""
+  //         inputRequired="required"
+  //         value={valueMoney.money}
+  //         onChange={e => changeMoney({money : e.target.value, attempt: 0})}
+  //       />
+  //       <SubmitForm id="form-change-money" />
+  //     </form>
+  //   </Modal>
+  // );
 }
 
 export default FormMoney;

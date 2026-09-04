@@ -1,11 +1,13 @@
+import apiAxios from "@/axios";
 import Badge from "@/components/Badge";
-import { ButtonDangerSm } from "@/components/Buttons";
+import { ButtonLight } from "@/components/Buttons";
+import { Dropdown } from "@/components/Dropdown";
 import TableIntranet from "@/components/TableIntranet";
+import { sweetAlert } from "@/helpers/getAlert";
+import { getCookie } from "@/helpers/getCookie";
 import {
-  DocumentIcon,
-  FaceSmileIcon,
+  EllipsisVerticalIcon,
   PencilIcon,
-  TrashIcon,
 } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import React from "react";
@@ -23,7 +25,35 @@ export default function TableProductOrders({
     "Entrega",
     "Acciones",
   ];
+  const download = async (id, fileName, type = "pdf") => {
+    const headers = getCookie();
+    try {
+      const resp = await apiAxios.get(
+        "order/production/report/" + type + "/" + id,
+        {
+          responseType: "blob",
+          headers,
+        },
+      );
+      const url = window.URL.createObjectURL(new Blob([resp.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", fileName);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      return;
+    } catch (error) {
+      console.log(error);
+      sweetAlert({
+        title: "Error",
+        text: "Error al descargar el orden de pedido",
+        icon: "error",
+      });
+    }
+  };
   return (
+    
     <TableIntranet columns={columns}>
       {!productOrders.length ? (
         <tr className="bg-white dark:bg-gray-800">
@@ -51,31 +81,61 @@ export default function TableProductOrders({
             <td className="p-1">
               <div className="flex gap-1 flex-wrap justify-center">
                 <Link
-                  className="rounded-md relative overflow-hidden inline-flex group items-center justify-center px-2 py-1.5 cursor-pointer border-b-4 border-l-2 hover:bg-green-600 font-semibold transition-all ease-in-out text-xs shadow-lg bg-gradient-to-tr bg-green-500 text-white"
-                  href={{
-                    pathname: `/intranet/order/production/pdf/${product.id}`,
-                    query: {
-                      fileName: `${product.order_production_code}.pdf`,
-                    },
-                  }}
-                  title="Ver PDF"
-                  target="_blank"
-                >
-                  <DocumentIcon className="w-4 h-4" />
-                </Link>
-                <Link
                   className="rounded-md relative overflow-hidden inline-flex group items-center justify-center px-2 py-1.5 cursor-pointer border-b-4 border-l-2 hover:bg-blue-600 font-semibold transition-all ease-in-out text-xs shadow-lg bg-gradient-to-tr bg-blue-500 text-white"
                   href={{
                     pathname: `/intranet/order/production/form/${product.id}`,
                   }}
-                  title="Ver historial"
+                  title="Editar"
                 >
                   <PencilIcon className="w-4 h-4" />
                 </Link>
-                <ButtonDangerSm
-                  onClick={(e) => deleteOrderProduction(product.id)}
-                  icon={<TrashIcon className="w-4 h-4" />}
-                  title="Eliminar orden de producción"
+                <Dropdown
+                  Button={
+                    <ButtonLight
+                      icon={<EllipsisVerticalIcon className="w-4 h-4" />}
+                    />
+                  }
+                  options={[
+                    <Link
+                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-left"
+                      href={{
+                        pathname: `/intranet/order/production/pdf/${product.id}`,
+                        query: {
+                          fileName: `${product.order_production_code}.pdf`,
+                        },
+                      }}
+                      title="Ver PDF"
+                      target="_blank"
+                    >
+                      Ver pdf
+                    </Link>,
+                    <button
+                      className="block w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                      onClick={(e) =>
+                        download(product.id, product.order_production_code + ".pdf")
+                      }
+                    >
+                      Descargar PDF
+                    </button>,
+                    <button
+                      className="block w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                      onClick={(e) =>
+                        download(
+                          product.id,
+                          product.order_production_code + ".xlsx",
+                          "excel",
+                        )
+                      }
+                    >
+                      Descargar Excel
+                    </button>,
+                    <button
+                      className="block w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                      onClick={(e) => deleteOrderProduction(product.id)}
+                    >
+                      Eliminar
+                    </button>,
+                  ]}
                 />
               </div>
             </td>
