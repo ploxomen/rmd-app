@@ -28,10 +28,10 @@ export default function DataProductionOrde({
           </div>
 
           <div>
-            <h2 className="font-semibold text-slate-900">Datos de la Orden</h2>
+            <h2 className="font-semibold text-slate-900">Datos de la Orden de Producción</h2>
 
             <p className="mt-1 text-sm text-slate-500">
-              Información obtenida de las órdenes de servicio seleccionadas.
+              Información obtenida de los pedidos de venta seleccionadas.
             </p>
           </div>
         </div>
@@ -65,9 +65,9 @@ export default function DataProductionOrde({
         )}
 
         {/* CAMPOS */}
-        <div className="grid grid-cols-1 gap-x-2 gap-y-1 md:grid-cols-2 xl:grid-cols-4">
+        <div className="grid grid-cols-12 gap-2">
           {/* FECHA EMISIÓN */}
-          <div>
+          <div className="col-span-full md:col-span-6 lg:col-span-3">
             <InputPrimary
               label="Fecha de emisión"
               inputRequired="required"
@@ -78,10 +78,10 @@ export default function DataProductionOrde({
             />
           </div>
           {/* CLIENTE */}
-          <div className="col-span-2">
+          <div className="col-span-full md:col-span-6 lg:col-span-5">
             <InputPrimary label="Cliente" disabled value={form.name_client} />
           </div>
-          <div>
+          <div className="col-span-full md:col-span-6 lg:col-span-4">
             <InputPrimary
               label="Fecha de entrega"
               inputRequired="required"
@@ -103,13 +103,10 @@ export default function DataProductionOrde({
           </div>
 
           {/* OBSERVACIONES */}
-          <div className="md:col-span-2 xl:col-span-4">
-            <label className="mb-2 block text-sm font-medium text-slate-700">
-              Observaciones
-            </label>
-
+          <div className="col-span-full">
             <TextareaPrimary
               rows={3}
+              label="Observaciones"
               name="observations"
               value={form.observations}
               onChange={handleChangeForm}
@@ -117,10 +114,9 @@ export default function DataProductionOrde({
           </div>
         </div>
         {ordersSelected.length >= 1 && (
-          <div className="mt-6 border-t border-slate-100 pt-5">
+          <div className="border-t border-slate-100 pt-2">
             <div className="mb-3 flex items-center gap-2">
               <div className="h-2 w-2 rounded-full bg-indigo-500" />
-
               <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
                 pedidos de venta
               </p>

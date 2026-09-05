@@ -135,7 +135,8 @@ export const useFormOrderProduct = (id) => {
       if (!ordersSelected.length) {
         setFormObject({
           address: response.data.details.order_address,
-          date_issue: response.data.details.order_date_issue,
+          date_issue: response.data.details.order_date_created,
+          date_delivery: response.data.details.order_date_issue,
         });
       }
       setProducts(response.data.data);

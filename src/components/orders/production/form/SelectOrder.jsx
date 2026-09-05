@@ -27,18 +27,18 @@ export default function SelectOrder({
           </div>
 
           <div className="rounded-full bg-indigo-50 px-3 py-1.5 text-sm font-semibold text-indigo-700">
-            {listOrders.length} total ordenes
+            {listOrders.length} Pedidos
           </div>
         </div>
       </div>
       <div className="p-6">
         {/* COMBOBOX */}
         <SelectPrimary
-          label="Seleccionar Orden de Servicio"
+          label="Seleccionar pedidos de venta"
           name="order_services"
           onChange={(e) => handleSelectOrder(e.target.value)}
         >
-          <option value="">Seleccione las ordenes</option>
+          <option value="">Seleccione el pedido de venta</option>
           {listOrders.map((order) => (
             <option key={order.id} value={order.id}>
               {order.order_code} - {order.customer_name}
@@ -53,7 +53,7 @@ export default function SelectOrder({
             </div>
             <div>
               <p className="text-sm font-semibold text-red-800">
-                No se puede agregar la orden
+                No se puede agregar el pedido de venta
               </p>
               <p className="mt-1 text-sm text-red-700">{error}</p>
               {productNotProduction.length > 0 && (
@@ -80,11 +80,7 @@ export default function SelectOrder({
             <div className="mb-3 flex items-center justify-between">
               <div>
                 <p className="text-sm font-semibold text-slate-800">
-                  Órdenes seleccionadas
-                </p>
-
-                <p className="mt-0.5 text-xs text-slate-500">
-                  Puedes eliminar una orden utilizando la X.
+                  Pedidos seleccionados
                 </p>
               </div>
 
